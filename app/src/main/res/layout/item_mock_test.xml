@@ -1,0 +1,222 @@
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.c#EFF5FFom/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/_10sdp"
+    android:background="@color/mock_test_card_bg"
+    android:orientation="vertical"
+    app:strokeWidth="0dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@color/mock_test_card_bg"
+
+        android:padding="@dimen/_10sdp"
+        android:paddingVertical="@dimen/_20sdp">
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/gilroy_semibold"
+            android:includeFontPadding="false"
+            android:paddingVertical="@dimen/_3sdp"
+            android:text="Bharat SAT Exam  3 Mock Test"
+            android:textColor="@color/blue"
+            android:textSize="18sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.7dp"
+            android:background="#D7E6FF" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/mock_test_card_bg"
+android:layout_gravity="center_vertical"
+            android:paddingVertical="@dimen/_3sdp">
+
+
+            <TextView
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/gilroy_medium"
+                android:includeFontPadding="false"
+                android:text="Subjects:"
+                android:textColor="@color/grey"
+
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/subjects"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="@dimen/_2sdp"
+                android:fontFamily="@font/gilroy_medium"
+                android:maxLines="1"
+                android:includeFontPadding="false"
+                android:text="English, Hindi, History and 3 more fdfdkfd md,.dfmd cfdkfsdfdfdfdfdfdfdfdfd"
+                android:textColor="@color/charcoalGray"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:paddingVertical="@dimen/_3sdp">
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/gilroy_medium"
+                android:includeFontPadding="false"
+                android:text="Total Questions:"
+                android:textColor="@color/grey"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/total_questions"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="@dimen/_2sdp"
+                android:fontFamily="@font/gilroy_medium"
+                android:maxLines="1"
+                android:includeFontPadding="false"
+
+                android:text="English, Hindi, History and 3 more fdfdkfd md,.dfmd cfdkfsdfdfdfdfdfdfdfdfd"
+                android:textColor="@color/charcoalGray"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingVertical="@dimen/_3sdp">
+
+
+            <TextView
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/gilroy_medium"
+                android:includeFontPadding="false"
+                android:text="Time:"
+                android:textColor="@color/grey"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="@dimen/_2sdp"
+                android:fontFamily="@font/gilroy_medium"
+                android:maxLines="1"
+                android:includeFontPadding="false"
+
+                android:text="45 mins"
+                android:textColor="@color/charcoalGray"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingVertical="@dimen/_3sdp">
+
+
+            <TextView
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/gilroy_medium"
+                android:includeFontPadding="false"
+                android:text="No of Attempts:"
+                android:textColor="@color/grey"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/no_of_attempts"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="@dimen/_2sdp"
+                android:fontFamily="@font/gilroy_medium"
+                android:maxLines="1"
+                android:text="3"
+                android:includeFontPadding="false"
+
+                android:textColor="@color/charcoalGray"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.7dp"
+            android:background="#D7E6FF"
+            android:paddingVertical="@dimen/_3sdp" />
+
+        <TextView
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/gilroy_regular"
+            android:includeFontPadding="false"
+            android:paddingVertical="@dimen/_3sdp"
+            android:text="Note:"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            android:textStyle="italic" />
+
+        <TextView
+            android:id="@+id/note"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" Students will have access within 30 days of registration."
+
+
+            android:textSize="14sp" />
+
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/unlock_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginTop="8dp"
+            app:cardBackgroundColor="@color/primaryColor"
+            app:cardCornerRadius="@dimen/_5sdp"
+            app:strokeWidth="0dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/gilroy_medium"
+                android:includeFontPadding="false"
+                android:paddingHorizontal="@dimen/_20sdp"
+                android:paddingVertical="@dimen/_10sdp"
+                android:text="Unlock Mock Test"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+        </com.google.android.material.card.MaterialCardView>
+
+    </LinearLayout>
+
+
+</com.google.android.material.card.MaterialCardView>

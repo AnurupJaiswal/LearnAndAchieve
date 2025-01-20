@@ -1,0 +1,362 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:paddingHorizontal="@dimen/_10sdp">
+
+
+
+
+
+
+
+
+
+
+
+    <EditText
+            android:id="@+id/etFirstName"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:layout_width="match_parent"
+            android:textColorHint="@color/black"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+        app:hintEnabled="false"
+        android:autofillHints=""
+        android:maxLines="1"
+        android:importantForAutofill="no"
+        android:includeFontPadding="false"
+            android:singleLine="true"
+            android:paddingVertical="@dimen/_13sdp"
+            android:fontFamily="@font/gilroy_regular"
+            android:hint="First Name"
+
+            />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/tvErrorFirstName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/gilroy_regular"
+                android:text="@string/empty_error"
+                android:textColor="@color/red"
+                android:textSize="10sp"
+                android:includeFontPadding="false"
+                android:visibility="gone" />
+        </LinearLayout>
+
+
+
+        <EditText
+            android:id="@+id/etMiddleName"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:layout_width="match_parent"
+            android:textColorHint="@color/black"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            android:maxLines="1"
+            android:includeFontPadding="false"
+            android:singleLine="true"
+            android:paddingVertical="@dimen/_13sdp"
+            android:fontFamily="@font/gilroy_regular"
+            android:hint="Middle Name"
+            />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/tvErrorMiddleName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/gilroy_regular"
+                android:text="@string/empty_error"
+                android:textColor="@color/red"
+                android:textSize="10sp"
+                android:includeFontPadding="false"
+                android:visibility="gone" />
+        </LinearLayout>
+
+
+
+
+        <EditText
+            android:id="@+id/etLastName"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:layout_width="match_parent"
+            android:textColorHint="@color/black"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            app:hintEnabled="false"
+            android:maxLines="1"
+            android:autofillHints=""
+            android:importantForAutofill="no"
+            android:includeFontPadding="false"
+            android:singleLine="true"
+            android:paddingVertical="@dimen/_13sdp"
+            android:fontFamily="@font/gilroy_regular"
+            android:hint="Last Name"
+            />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/tvErrorLastName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/gilroy_regular"
+                android:text="@string/empty_error"
+                android:textColor="@color/red"
+                android:textSize="10sp"
+                android:includeFontPadding="false"
+                android:visibility="gone" />
+        </LinearLayout>
+
+
+
+
+    <EditText
+        android:id="@+id/etDateOfBirth"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:layout_width="match_parent"
+        android:textColorHint="@color/black"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        android:paddingVertical="@dimen/_13sdp"
+        android:singleLine="true"
+        android:maxLines="1"
+        android:focusableInTouchMode="false"
+        android:cursorVisible="false"
+        android:fontFamily="@font/gilroy_regular"
+        android:hint="Date of Birth"
+        android:drawableEnd="@drawable/ic_calendar"
+        />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp">
+        <TextView
+            android:id="@+id/tvErrorDateOfBirth"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/gilroy_regular"
+            android:text="@string/empty_error"
+            android:textColor="@color/red"
+            android:textSize="10sp"
+            android:visibility="gone" />
+    </LinearLayout>
+
+
+
+
+    <EditText
+        android:id="@+id/etGender"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:layout_width="match_parent"
+        android:textColorHint="@color/black"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        android:paddingVertical="@dimen/_13sdp"
+        android:singleLine="true"
+        android:maxLines="1"
+        android:fontFamily="@font/gilroy_regular"
+        android:hint="Gender"
+        android:focusableInTouchMode="false"
+        android:cursorVisible="false"
+        android:drawableEnd="@drawable/ic_downarrow"
+        />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp">
+        <TextView
+            android:id="@+id/tvGender"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/gilroy_regular"
+            android:text="@string/empty_error"
+            android:textColor="@color/red"
+            android:textSize="10sp"
+            android:visibility="gone" />
+
+    </LinearLayout>
+
+
+
+    <EditText
+        android:id="@+id/etSchoolName"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:layout_width="match_parent"
+        android:textColorHint="@color/black"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        android:includeFontPadding="false"
+        android:singleLine="true"
+        android:maxLines="1"
+        android:paddingVertical="@dimen/_13sdp"
+        android:fontFamily="@font/gilroy_regular"
+        android:hint="School Name"
+        />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/tvErrorSchoolName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/gilroy_regular"
+            android:text="@string/empty_error"
+            android:textColor="@color/red"
+            android:textSize="10sp"
+            android:includeFontPadding="false"
+            android:visibility="gone" />
+    </LinearLayout>
+
+
+    <EditText
+        android:id="@+id/etMedium"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:layout_width="match_parent"
+        android:textColorHint="@color/black"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        android:paddingVertical="@dimen/_13sdp"
+        android:singleLine="true"
+        android:maxLines="1"
+        android:fontFamily="@font/gilroy_regular"
+        android:hint="Medium"
+        android:focusableInTouchMode="false"
+        android:cursorVisible="false"
+        android:drawableEnd="@drawable/ic_downarrow"
+        />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp">
+        <TextView
+            android:id="@+id/tvErrorMedium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/gilroy_regular"
+            android:text="@string/empty_error"
+            android:textColor="@color/red"
+            android:textSize="10sp"
+            android:visibility="gone" />
+    </LinearLayout>
+
+
+    <EditText
+        android:id="@+id/etClass"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:layout_width="match_parent"
+        android:textColorHint="@color/black"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        android:paddingVertical="@dimen/_13sdp"
+        android:singleLine="true"
+        android:maxLines="1"
+        android:fontFamily="@font/gilroy_regular"
+        android:hint="Class"
+        android:focusableInTouchMode="false"
+        android:cursorVisible="false"
+        android:drawableEnd="@drawable/ic_downarrow"
+        />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp">
+        <TextView
+            android:id="@+id/tvErrorClass"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/gilroy_regular"
+            android:text="@string/empty_error"
+            android:textColor="@color/red"
+            android:textSize="10sp"
+            android:visibility="gone" />
+    </LinearLayout>
+
+
+
+    <EditText
+        android:id="@+id/etRegesterdBY"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:layout_width="match_parent"
+        android:textColorHint="@color/black"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        android:paddingVertical="@dimen/_13sdp"
+        android:singleLine="true"
+        android:maxLines="1"
+        android:fontFamily="@font/gilroy_regular"
+        android:hint="Regester by"
+        android:focusableInTouchMode="false"
+        android:cursorVisible="false"
+        android:drawableEnd="@drawable/ic_downarrow"
+        />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp">
+
+        <TextView
+            android:id="@+id/tvErrorRegesterdBY"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/gilroy_regular"
+            android:text="@string/empty_error"
+            android:textColor="@color/red"
+            android:textSize="10sp"
+            android:visibility="gone" />
+
+    </LinearLayout>
+
+
+
+    <EditText
+        android:id="@+id/etUniqueCode"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:layout_width="match_parent"
+        android:textColorHint="@color/black"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        app:hintEnabled="false"
+        android:importantForAutofill="no"
+        android:includeFontPadding="false"
+        android:singleLine="true"
+        android:visibility="gone"
+        android:paddingVertical="@dimen/_13sdp"
+        android:fontFamily="@font/gilroy_regular"
+        android:hint="Enter unique code"
+
+        />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/tvErrorUniqueCode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/gilroy_regular"
+            android:text="@string/empty_error"
+            android:textColor="@color/red"
+            android:textSize="10sp"
+
+            android:includeFontPadding="false"
+            android:visibility="gone" />
+    </LinearLayout>
+
+
+</LinearLayout>

@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/gradient_background"
+    tools:context=".main_package.ui.activity.LoginActivity">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="-30dp"
+        android:adjustViewBounds="true"
+        android:src="@drawable/learn_login"
+        app:tint="@color/text_gray" />
+
+    <ImageView
+        android:id="@+id/ivHand"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:layout_marginTop="@dimen/_50sdp"
+        android:adjustViewBounds="true"
+        android:src="@drawable/ic_hand" />
+
+    <TextView
+        android:id="@+id/tvWelcome"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ivHand"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:fontFamily="@font/gilroy_bold"
+        android:includeFontPadding="false"
+        android:text="@string/welcome_back"
+        android:textColor="@color/white"
+        android:textSize="25sp"
+
+        />
+
+
+    <TextView
+        android:id="@+id/tvLogin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvWelcome"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:layout_marginTop="@dimen/_40sdp"
+        android:fontFamily="@font/gilroy_bold"
+        android:includeFontPadding="false"
+        android:text="Login"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+
+        />
+
+
+    <TextView
+        android:id="@+id/tvLoginAccount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvLogin"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:fontFamily="@font/gilroy_regular"
+        android:includeFontPadding="false"
+        android:text="Login to your account"
+        android:textColor="@color/white"
+        android:textSize="12sp"
+
+        />
+
+
+    <LinearLayout
+        android:id="@+id/llCurve"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/tvLoginAccount"
+        android:layout_marginTop="@dimen/_20sdp"
+        android:background="@drawable/rounded_right_background"
+        android:backgroundTint="@color/white"
+        android:orientation="vertical">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/_10sdp">
+
+
+            <EditText
+                android:id="@+id/etEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_30sdp"
+                android:autofillHints="emailAddress"
+                android:fontFamily="@font/gilroy_regular"
+                android:hint="@string/email"
+                android:inputType="textEmailAddress"
+                android:paddingVertical="@dimen/_15sdp"
+                android:singleLine="true"
+                android:textColor="@color/black"
+                android:textColorHint="@color/black"
+                android:textSize="14sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/tvErrorEmail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/gilroy_regular"
+                    android:includeFontPadding="false"
+                    android:text="@string/empty_error"
+                    android:textColor="@color/red"
+                    android:textSize="10sp"
+                    android:visibility="gone" />
+            </LinearLayout>
+
+
+            <EditText
+                android:id="@+id/etPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:autofillHints="password"
+                android:drawableEnd="@drawable/ic_hide_eye"
+                android:drawablePadding="@dimen/_10sdp"
+                android:fontFamily="@font/gilroy_regular"
+                android:hint="@string/password"
+                android:inputType="text"
+                android:paddingVertical="@dimen/_15sdp"
+                android:singleLine="true"
+                android:textColor="@color/black"
+
+                android:textColorHint="@color/black"
+                android:textSize="14sp"
+                tools:ignore="TextFields" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp">
+
+                <TextView
+                    android:id="@+id/tvErrorPass"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/gilroy_regular"
+                    android:text="@string/empty_error"
+                    android:textColor="@color/red"
+                    android:textSize="10sp"
+                    android:visibility="gone" />
+            </LinearLayout>
+
+
+            <TextView
+                android:id="@+id/tvForgotPass"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:fontFamily="@font/poppins_medium"
+                android:includeFontPadding="false"
+                android:text="@string/forgot_password"
+                android:textColor="@color/blue"
+                android:textSize="14sp" />
+
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/mcvLogin"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_40sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                app:cardBackgroundColor="@color/primaryColor"
+                app:cardCornerRadius="@dimen/_5sdp"
+                app:strokeWidth="0dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center">
+
+                    <ProgressBar
+                        android:id="@+id/loading"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:indeterminateTint="@android:color/white"
+                        android:padding="10dp"
+                        android:visibility="gone"
+                      />
+
+                    <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:fontFamily="@font/poppins_semi_bold"
+                    android:gravity="center"
+                    android:includeFontPadding="false"
+                    android:text="Login"
+                        android:id="@+id/tvLogIN"
+                    android:textColor="@color/white"
+                    android:textSize="16sp" />
+
+
+                </RelativeLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+        </LinearLayout>
+
+
+        <RelativeLayout
+            android:id="@+id/rlDontHaveAccount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:paddingVertical="@dimen/_5sdp">
+
+            <TextView
+                android:id="@+id/tvDontHave"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+
+                android:fontFamily="@font/gilroy_medium"
+                android:includeFontPadding="false"
+                android:text="@string/don_t_have_an_account"
+                android:textColor="@color/black"
+                android:textSize="12sp" />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginStart="2dp"
+                android:layout_toEndOf="@id/tvDontHave"
+                android:fontFamily="@font/gilroy_regular"
+                android:includeFontPadding="false"
+                android:text="@string/sign_up"
+                android:textColor="@color/primaryColor"
+                android:textSize="12sp"
+
+                />
+
+
+        </RelativeLayout>
+
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/ivPencil"
+        android:layout_width="70dp"
+        android:layout_height="299dp"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="@dimen/_24sdp"
+        android:layout_marginEnd="@dimen/_25sdp"
+        android:adjustViewBounds="true"
+        android:src="@drawable/ic_pencil" />
+
+</RelativeLayout>

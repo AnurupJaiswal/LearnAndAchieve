@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginBottom="8dp"
+    android:layout_margin="@dimen/_10sdp"
+    app:cardBackgroundColor="@color/lightBg"
+    app:cardCornerRadius="@dimen/_10sdp"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="12dp">
+
+        <!-- Date -->
+        <TextView
+            android:id="@+id/tvDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Jul 4, 2024"
+            android:textSize="12sp"
+             android:fontFamily="@font/gilroy_medium"
+            android:textColor="@color/gray72" />
+
+        <!-- Title -->
+        <TextView
+            android:id="@+id/tvExamTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="BHARAT SAT EXAM  3 Mock Test"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:maxLines="2"
+            android:textColor="@color/black"
+            android:layout_marginTop="4dp" />
+
+        <!-- Marks and View Result -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:layout_marginTop="8dp"
+            >
+
+            <!-- Marks -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Marks : "
+                android:textSize="14sp"
+
+                android:textStyle="italic"
+                android:includeFontPadding="false"
+                android:fontFamily="@font/gilroy_regular"
+                android:textColor="@color/blue" />
+            <TextView
+                android:id="@+id/tvMarks"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="80/100"
+                android:includeFontPadding="false"
+                android:fontFamily="@font/gilroy_regular"
+                android:textSize="14sp"
+                android:textColor="@color/blue" />
+
+            <!-- View Result -->
+            <TextView
+                android:id="@+id/tvViewResult"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="View Result"
+                android:textColor="@color/orange"
+                android:textSize="14sp"
+                android:includeFontPadding="false"
+                android:gravity="end"
+                android:fontFamily="@font/gilroy_medium"
+                android:layout_gravity="end"/>
+        </LinearLayout>
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

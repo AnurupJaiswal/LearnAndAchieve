@@ -1,0 +1,824 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    tools:context=".main_package.ui.fragment.JoinAndEarnFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/_10sdp">
+
+
+            <!-- Title -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="@font/gilroy_semibold"
+                android:text="Join and Earn"
+                android:textColor="@color/blue"
+                android:textSize="18sp" />
+
+            <!-- Who Can Join Section -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_5sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:fontFamily="@font/gilroy_semibold"
+                android:text="Who Can Join?"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_5sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:fontFamily="@font/gilroy_regular"
+                android:text="If you're 18 years or older and have completed your 12th grade, you're eligible to join us as a Coordinator. Your age and qualification are your assets in this endeavor."
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/_5sdp"
+                android:layout_marginTop="@dimen/_15sdp"
+                android:paddingBottom="@dimen/_10sdp"
+                app:cardBackgroundColor="@color/pink"
+                app:cardCornerRadius="20dp"
+                app:strokeWidth="0dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/gilroy_regular"
+                    android:padding="@dimen/_10sdp"
+                    android:text="Are you a passionate individual looking to make a positive impact on the education landscape? Are you motivated to empower students in their quest for success? If so, we invite you to become a Coordinator with Learn and Achieve Edutech, where opportunities abound and your potential is unlimited."
+                    android:textColor="@color/black"
+                    android:textSize="14sp" />
+            </com.google.android.material.card.MaterialCardView>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#f8f4f4"
+            android:orientation="vertical"
+            android:paddingHorizontal="@dimen/_10sdp"
+            android:paddingVertical="@dimen/_10sdp">
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/gilroy_semibold"
+                android:text="Two Exciting Categories"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginTop="@dimen/_10sdp">
+
+                <View
+                    android:layout_width="@dimen/_2sdp"
+                    android:layout_height="25dp"
+                    android:background="@color/burnt_orange" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="@dimen/_4ssp"
+                    android:fontFamily="@font/gilroy_semibold"
+                    android:includeFontPadding="false"
+                    android:maxLines="1"
+                    android:text="Direct Coordinator"
+                    android:textColor="@color/midnight_blue"
+                    android:textSize="16sp" />
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_4ssp"
+                android:baselineAligned="false"
+                android:fontFamily="@font/gilroy_regular"
+                android:includeFontPadding="false"
+                android:text="As a Direct Coordinator, you'll directly engage with parents and students, helping them register for the prestigious BHARAT SAT Examination and offering our top-notch online study materials. Be the guiding light on their educational journey."
+                android:textColor="@color/midnight_blue"
+                android:textSize="14sp" />
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+
+                android:layout_marginTop="@dimen/_20sdp">
+
+                <View
+                    android:layout_width="@dimen/_2sdp"
+                    android:layout_height="25dp"
+                    android:background="@color/burnt_orange" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="@dimen/_4ssp"
+                    android:fontFamily="@font/gilroy_semibold"
+                    android:includeFontPadding="false"
+                    android:maxLines="1"
+                    android:text="Indirect Coordinator"
+                    android:textColor="@color/midnight_blue"
+                    android:textSize="16sp" />
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_4ssp"
+                android:baselineAligned="false"
+                android:fontFamily="@font/gilroy_regular"
+                android:includeFontPadding="false"
+                android:text="If you prefer working with schools, our Indirect Coordinator role is perfect for you. Collaborate with our Learn and Achieve Edutech team to enroll students in the BHARAT SAT Examination through their schools. Team up with us to make education accessible to all."
+                android:textColor="@color/midnight_blue"
+                android:textSize="14sp" />
+
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_10sdp"
+            android:background="@drawable/blue_curve_background"
+            android:elevation="3dp"
+            android:orientation="vertical"
+            android:paddingHorizontal="@dimen/_10sdp">
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:fontFamily="@font/gilroy_semibold"
+                android:includeFontPadding="false"
+                android:text="Join Us"
+                android:textColor="@color/white"
+
+                android:textSize="18sp" />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:fontFamily="@font/gilroy_semibold"
+                android:includeFontPadding="false"
+                android:text="Name"
+                android:textColor="@color/white"
+
+                android:textSize="14sp" />
+
+
+            <EditText
+                android:id="@+id/etName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/gilroy_regular"
+                android:hint="Enter your name"
+                android:includeFontPadding="false"
+                android:inputType="textPersonName"
+                android:maxLines="1"
+
+                android:paddingVertical="@dimen/_13sdp"
+                android:singleLine="true"
+                android:textColor="@color/white"
+                android:textColorHint="@color/white"
+                android:textSize="14sp"
+                app:hintEnabled="false"
+                tools:ignore="TextFields" />
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/tvErrorName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/gilroy_regular"
+                    android:includeFontPadding="false"
+                    android:text="@string/empty_error"
+                    android:textColor="@color/red"
+                    android:textSize="10sp"
+                    android:visibility="gone" />
+            </LinearLayout>
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:fontFamily="@font/gilroy_semibold"
+                android:includeFontPadding="false"
+                android:text="Email Id"
+                android:textColor="@color/white"
+
+                android:textSize="14sp" />
+
+
+            <EditText
+                android:id="@+id/etEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/gilroy_regular"
+                android:hint="Enter your Email Id"
+                android:includeFontPadding="false"
+                android:inputType="textPersonName"
+                android:maxLines="1"
+
+                android:paddingVertical="@dimen/_13sdp"
+                android:singleLine="true"
+                android:textColor="@color/white"
+                android:textColorHint="@color/white"
+                android:textSize="14sp"
+                app:hintEnabled="false"
+                tools:ignore="TextFields" />
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/tvErrorEmail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/gilroy_regular"
+                    android:includeFontPadding="false"
+                    android:text="@string/empty_error"
+                    android:textColor="@color/red"
+                    android:textSize="10sp"
+                    android:visibility="gone" />
+            </LinearLayout>
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:fontFamily="@font/gilroy_semibold"
+                android:includeFontPadding="false"
+                android:text="Mobile No."
+                android:textColor="@color/white"
+
+                android:textSize="14sp" />
+
+
+            <EditText
+                android:id="@+id/etMobile"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:fontFamily="@font/gilroy_regular"
+                android:hint="Enter your mobile No"
+                android:includeFontPadding="false"
+                android:inputType="textPersonName"
+                android:maxLines="1"
+                android:paddingVertical="@dimen/_13sdp"
+                android:singleLine="true"
+                android:textColor="@color/white"
+                android:textColorHint="@color/white"
+                android:textSize="14sp"
+                app:hintEnabled="false"
+                tools:ignore="TextFields" />
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/tvErrorMobile"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/gilroy_regular"
+                    android:includeFontPadding="false"
+                    android:text="@string/empty_error"
+                    android:textColor="@color/red"
+                    android:textSize="10sp"
+                    android:visibility="gone" />
+            </LinearLayout>
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:fontFamily="@font/gilroy_semibold"
+                android:includeFontPadding="false"
+                android:text="Date Of Birth"
+                android:textColor="@color/white"
+
+                android:textSize="14sp" />
+
+
+            <EditText
+                android:id="@+id/etDateOfBirth"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:cursorVisible="false"
+                android:drawableEnd="@drawable/ic_calendar"
+                android:drawableTint="@color/white"
+                android:focusableInTouchMode="false"
+                android:fontFamily="@font/gilroy_regular"
+                android:hint="Date of Birth"
+                android:maxLines="1"
+                android:paddingVertical="@dimen/_13sdp"
+                android:singleLine="true"
+                android:textColor="@color/white"
+                android:textColorHint="@color/white"
+                android:textSize="14sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/tvErrorDateOfBirth"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/gilroy_regular"
+                    android:text="@string/empty_error"
+                    android:textColor="@color/red"
+                    android:textSize="10sp"
+                    android:visibility="gone" />
+            </LinearLayout>
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:fontFamily="@font/gilroy_semibold"
+                android:includeFontPadding="false"
+                android:text="Qualification"
+                android:textColor="@color/white"
+
+                android:textSize="14sp" />
+
+            <EditText
+                android:id="@+id/etQualification"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:cursorVisible="false"
+                android:drawableEnd="@drawable/ic_downarrow"
+                android:drawableTint="@color/white"
+                android:focusableInTouchMode="false"
+
+                android:fontFamily="@font/gilroy_regular"
+                android:hint="Select qualification"
+                android:maxLines="1"
+                android:paddingVertical="@dimen/_13sdp"
+                android:singleLine="true"
+                android:textColor="@color/white"
+                android:textColorHint="@color/white"
+                android:textSize="14sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/tvErrorQualification"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/gilroy_regular"
+                    android:text="@string/empty_error"
+                    android:textColor="@color/red"
+                    android:textSize="10sp"
+                    android:visibility="gone" />
+            </LinearLayout>
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:fontFamily="@font/gilroy_semibold"
+                android:includeFontPadding="false"
+                android:text="Address Line- 1"
+                android:textColor="@color/white"
+
+                android:textSize="14sp" />
+
+
+            <EditText
+                android:id="@+id/etAddressLineOne"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/gilroy_regular"
+                android:hint="Enter your address"
+                android:maxLines="1"
+                android:paddingVertical="@dimen/_13sdp"
+                android:singleLine="true"
+                android:textColor="@color/white"
+                android:textColorHint="@color/white"
+                android:textSize="14sp"
+                app:hintEnabled="false" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/tvErrorAddressLineOne"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/gilroy_regular"
+                    android:includeFontPadding="false"
+                    android:text="@string/empty_error"
+                    android:textColor="@color/red"
+                    android:textSize="10sp"
+                    android:visibility="gone" />
+
+            </LinearLayout>
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:fontFamily="@font/gilroy_semibold"
+                android:includeFontPadding="false"
+                android:text="Address Line- 2"
+                android:textColor="@color/white"
+
+                android:textSize="14sp" />
+
+
+            <EditText
+                android:id="@+id/etAddressLineTwo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/gilroy_regular"
+                android:hint="Enter your address"
+                android:maxLines="1"
+                android:paddingVertical="@dimen/_13sdp"
+                android:singleLine="true"
+                android:textColor="@color/white"
+                android:textColorHint="@color/white"
+                android:textSize="14sp"
+                app:hintEnabled="false" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/tvErrorAddressLineTwo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/gilroy_regular"
+                    android:includeFontPadding="false"
+                    android:text="@string/empty_error"
+                    android:textColor="@color/red"
+                    android:textSize="10sp"
+                    android:visibility="gone" />
+
+            </LinearLayout>
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:fontFamily="@font/gilroy_semibold"
+                android:includeFontPadding="false"
+                android:text="State"
+                android:textColor="@color/white"
+
+                android:textSize="14sp" />
+
+            <EditText
+                android:id="@+id/etState"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:cursorVisible="false"
+                android:drawableEnd="@drawable/ic_downarrow"
+                android:drawableTint="@color/white"
+                android:focusableInTouchMode="false"
+                android:fontFamily="@font/gilroy_regular"
+                android:hint="Select State "
+                android:maxLines="1"
+                android:paddingVertical="@dimen/_13sdp"
+                android:singleLine="true"
+                android:textColor="@color/black"
+                android:textColorHint="@color/white"
+                android:textSize="14sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/tvErrorState"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/gilroy_regular"
+                    android:text="@string/empty_error"
+                    android:textColor="@color/red"
+                    android:textSize="10sp"
+                    android:visibility="gone" />
+            </LinearLayout>
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:fontFamily="@font/gilroy_semibold"
+                android:includeFontPadding="false"
+                android:text="District"
+                android:textColor="@color/white"
+
+                android:textSize="14sp" />
+
+
+            <EditText
+                android:id="@+id/etDistrict"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/gilroy_regular"
+                android:hint="Enter your district"
+                android:maxLines="1"
+                android:paddingVertical="@dimen/_13sdp"
+                android:singleLine="true"
+                android:textColor="@color/white"
+                android:textColorHint="@color/white"
+                android:textSize="14sp"
+                app:hintEnabled="false" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/tvErrorDistrict"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/gilroy_regular"
+                    android:includeFontPadding="false"
+                    android:text="@string/empty_error"
+                    android:textColor="@color/red"
+                    android:textSize="10sp"
+                    android:visibility="gone" />
+
+            </LinearLayout>
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:fontFamily="@font/gilroy_semibold"
+                android:includeFontPadding="false"
+                android:text="Taluka"
+                android:textColor="@color/white"
+
+                android:textSize="14sp" />
+
+
+            <EditText
+                android:id="@+id/etTaluka"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/gilroy_regular"
+                android:hint="Enter your taluka"
+                android:maxLines="1"
+                android:paddingVertical="@dimen/_13sdp"
+                android:singleLine="true"
+                android:textColor="@color/white"
+                android:textColorHint="@color/white"
+                android:textSize="14sp"
+                app:hintEnabled="false" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/tvErrorTaluka"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/gilroy_regular"
+                    android:includeFontPadding="false"
+                    android:text="@string/empty_error"
+                    android:textColor="@color/red"
+                    android:textSize="10sp"
+                    android:visibility="gone" />
+
+
+            </LinearLayout>
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:fontFamily="@font/gilroy_semibold"
+                android:includeFontPadding="false"
+                android:text="Pincode"
+                android:textColor="@color/white"
+
+                android:textSize="14sp" />
+
+
+            <EditText
+                android:id="@+id/etPincode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/gilroy_regular"
+                android:hint="Enter your pincode"
+                android:maxLines="1"
+                android:paddingVertical="@dimen/_13sdp"
+                android:singleLine="true"
+                android:textColor="@color/white"
+                android:textColorHint="@color/white"
+                android:textSize="14sp"
+                app:hintEnabled="false" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/tvErrorPincode"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/gilroy_regular"
+                    android:includeFontPadding="false"
+                    android:text="@string/empty_error"
+                    android:textColor="@color/red"
+                    android:textSize="10sp"
+                    android:visibility="gone" />
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <CheckBox
+                    android:id="@+id/checkbox_terms"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/gilroy_medium"
+                    android:gravity="center_vertical"
+                    android:includeFontPadding="false"
+                    app:buttonTint="@color/white"
+                    android:text="I agree to these"
+                    android:textColor="@color/white"
+                    android:textSize="12sp"
+                    tools:ignore="RtlSymmetry" />
+
+                <LinearLayout
+                    android:id="@+id/llTermsAndConditions"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/text_terms"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Terms and Conditions."
+                        android:textColor="@color/primaryColor"
+                        android:textSize="16sp" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/primaryColor" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+            <TextView
+                android:id="@+id/tvRegesterNow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:layout_marginBottom="@dimen/_20sdp"
+                android:background="@drawable/ic_btn_frame"
+                android:fontFamily="@font/gilroy_semibold"
+                android:gravity="center_vertical"
+                android:paddingStart="@dimen/_14sdp"
+                android:paddingEnd="@dimen/_13sdp"
+                android:text="Regeister Now"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+
+
+        </LinearLayout>
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:itemCount="4"
+            tools:listitem="@layout/item_expandable_card" />
+
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/_10sdp"
+            android:layout_marginVertical="@dimen/_20sdp"
+            app:cardBackgroundColor="@color/pink"
+
+            app:cardCornerRadius="@dimen/_20sdp"
+            app:cardElevation="@dimen/_3sdp"
+            app:strokeWidth="0dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+
+                android:padding="@dimen/_10sdp">
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:fontFamily="@font/gilroy_semibold"
+                    android:includeFontPadding="false"
+
+                    android:text="Register today and be the catalyst for change in education"
+                    android:textColor="@color/black"
+                    android:textSize="24sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:fontFamily="@font/gilroy_regular"
+                    android:gravity="start"
+                    android:includeFontPadding="false"
+                    android:text="Take the step towards a fulfilling and rewarding journey by becoming a Coordinator for BHARAT SAT Examination with Learn and Achieve Edutech. Let's shape the future of education together!"
+                    android:textColor="@color/black"
+                    android:textSize="14sp" />
+
+
+                <ImageView
+                    android:layout_width="@dimen/_180sdp"
+                    android:layout_height="@dimen/_200sdp"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/_15sdp"
+                    android:contentDescription="@string/todo"
+                    android:importantForAccessibility="no"
+                    android:src="@drawable/online_testing_3d" />
+
+            </LinearLayout>
+
+
+        </com.google.android.material.card.MaterialCardView>
+
+    </LinearLayout>
+
+
+</androidx.core.widget.NestedScrollView>
+

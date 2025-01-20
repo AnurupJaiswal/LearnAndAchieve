@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:background="@drawable/gradient_background"
+    tools:context=".main_package.ui.activity.OtpVerificationActivity">
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:src="@drawable/learn_login"
+        app:tint="@color/text_gray"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="0dp"
+        />
+
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/McvBack"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="@dimen/_20sdp"
+        app:layout_constraintBottom_toTopOf="@+id/ivPencil"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.04"
+         app:cardBackgroundColor="@color/background"
+app:strokeWidth="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_back_arrow"
+            android:padding="@dimen/_7sdp"/>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <TextView
+        android:id="@+id/tvHeading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/gilroy_regular"
+        android:includeFontPadding="false"
+        android:text="OTP Verification"
+        android:textColor="@color/white"
+        android:textSize="25dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.049"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.303" />
+
+    <TextView
+        android:id="@+id/tvSubtitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/gilroy_regular"
+        android:includeFontPadding="false"
+        android:text="Kindly check your xyz@gmail.com inbox or spam folder for OTP"
+        android:textColor="@color/white"
+        android:textSize="14dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/ivPencil"
+        app:layout_constraintHorizontal_bias="0.14"
+        app:layout_constraintStart_toStartOf="@+id/tvHeading"
+        app:layout_constraintTop_toBottomOf="@+id/tvHeading"
+        app:layout_constraintVertical_bias="0.039" />
+
+    <ImageView
+        android:id="@+id/ivPencil"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:elevation="5dp"
+        android:src="@drawable/ic_pencil"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView2"
+        app:layout_constraintEnd_toEndOf="@+id/imageView2"
+        app:layout_constraintHorizontal_bias="0.757"
+        app:layout_constraintStart_toEndOf="@+id/tvHeading"
+        app:layout_constraintTop_toTopOf="@+id/tvHeading"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/rounded_right_background"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvSubtitle"
+
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="0dp">
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_begin="70dp" />
+
+
+
+
+        <com.anurupjaiswal.learnandachieve.basic.pinview.PinView
+            android:id="@+id/PinView"
+            style="@style/PinWidget.PinView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:cursorVisible="true"
+            android:layout_marginHorizontal="@dimen/_10sdp"
+            android:elevation="@dimen/_2sdp"
+            android:fontFamily="@font/gilroy_semibold"
+            android:gravity="center_horizontal"
+            android:inputType="number"
+            android:itemBackground="@drawable/selector_pinview_background_color"
+            android:textColor="@color/primaryColor"
+            app:cursorWidth="2dp"
+            app:hideLineWhenFilled="false"
+            app:itemCount="6"
+            app:itemHeight="50dp"
+            app:itemRadius="@dimen/_5sdp"
+            app:itemSpacing="@dimen/_5sdp"
+            app:itemWidth="@dimen/_42sdp"
+            app:lineColor="@drawable/selector_line_color"
+            app:lineWidth="0.7dp"
+            app:viewType="rectangle"
+            tools:ignore="MissingClass"
+            app:layout_constraintTop_toTopOf="@+id/guideline2"
+            tools:layout_editor_absoluteX="0dp"/>
+
+
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/llError"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:layout_marginHorizontal="10dp"
+            tools:layout_editor_absoluteX="10dp"
+            app:layout_constraintTop_toBottomOf="@id/PinView">
+
+
+            <TextView
+                android:id="@+id/tvError"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/gilroy_regular"
+                android:includeFontPadding="false"
+                android:text="@string/empty_error"
+                android:textColor="@color/red"
+                android:textSize="10sp"
+                android:visibility="gone"
+                />
+
+        </LinearLayout>
+
+
+        <TextView
+            android:id="@+id/tvResendOTP"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/gilroy_semibold"
+            android:gravity="end"
+            android:includeFontPadding="false"
+            android:text="Resend OTP"
+            android:layout_marginHorizontal="@dimen/_10sdp"
+
+            android:textColor="@color/primaryColor"
+            android:textSize="12sp"
+            app:layout_constraintTop_toBottomOf="@+id/llError"
+
+           />
+
+        <com.anurupjaiswal.learnandachieve.basic.utilitytools.loadingButton.LoadingButton
+            android:id="@+id/lbVerity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/primaryColor"
+            android:drawableTint="@color/white"
+            android:fontFamily="@font/gilroy_medium"
+            android:gravity="center"
+            android:layout_marginTop="@dimen/_20sdp"
+            android:includeFontPadding="false"
+            android:paddingVertical="@dimen/_7sdp"
+            android:text="Delete Account"
+            android:layout_marginHorizontal="@dimen/_10sdp"
+            app:layout_constraintTop_toBottomOf="@+id/tvResendOTP"
+            android:textColor="@color/background"
+            app:fontFamily="@font/gilroy_semibold"
+            android:textSize="16sp"
+            app:disableClickOnLoading="true"
+            app:drawableStartHeight="@dimen/_14sdp"
+            app:drawableStartWidth="@dimen/_14sdp"
+            app:enableCenterDrawables="true"
+            app:enableRestore="true"
+            app:enableShrink="true"
+            app:loadingDrawableColor="@color/white"
+            app:loadingDrawablePosition="End"
+            app:radius="@dimen/_7sdp"
+            app:shrinkDuration="100"
+            app:shrinkShape="Oval"
+
+            tools:layout_editor_absoluteY="162dp" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

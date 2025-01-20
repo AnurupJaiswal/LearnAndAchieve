@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/gradient_background"
+    tools:context=".main_package.ui.activity.LoginActivity">
+
+
+    <TextView
+        android:id="@+id/tvCreateAccount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:layout_marginTop="@dimen/_30sdp"
+        android:fontFamily="@font/gilroy_medium"
+        android:includeFontPadding="false"
+        android:text="Create Account"
+        android:textColor="@color/white"
+        android:textSize="20sp" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="-50dp"
+        android:adjustViewBounds="true"
+        android:src="@drawable/learn_login"
+        app:tint="@color/text_gray" />
+
+    <TextView
+        android:id="@+id/tvSingupCAccount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvCreateAccount"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:fontFamily="@font/gilroy_regular"
+        android:includeFontPadding="false"
+        android:text="Sign Up  to your account"
+        android:textColor="@color/white"
+        android:textSize="12sp"
+
+        />
+
+
+    <LinearLayout
+        android:id="@+id/llCurve"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/tvSingupCAccount"
+        android:layout_marginTop="@dimen/_15sdp"
+        android:background="@drawable/rounded_right_background"
+        android:backgroundTint="@color/white"
+        android:orientation="vertical">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+
+            <include
+                android:id="@+id/custom_stepper"
+                layout="@layout/custom_stepper"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_20sdp"
+                android:layout_marginBottom="16dp"
+                
+                />
+
+
+
+
+            <androidx.core.widget.NestedScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:descendantFocusability="beforeDescendants"
+                android:fillViewport="true">
+
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+
+                    android:paddingBottom="@dimen/_30sdp">
+
+
+                    <androidx.fragment.app.FragmentContainerView
+                        android:id="@+id/fragmentContainer"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/mcvNext"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_40sdp"
+                        android:layout_marginHorizontal="@dimen/_10sdp"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        app:cardBackgroundColor="@color/primaryColor"
+                        app:cardCornerRadius="@dimen/_5sdp"
+                        app:strokeWidth="0dp">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center">
+
+                            <ProgressBar
+                                android:id="@+id/loading"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:indeterminateTint="@android:color/white"
+                                android:padding="10dp"
+                                android:visibility="gone" />
+
+                            <TextView
+                                android:id="@+id/tvNext"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_gravity="center"
+                                android:fontFamily="@font/poppins_semi_bold"
+                                android:gravity="center"
+                                android:includeFontPadding="false"
+                                android:text="Next"
+                                android:textColor="@color/white"
+                                android:textSize="16sp" />
+
+
+                        </RelativeLayout>
+
+                    </com.google.android.material.card.MaterialCardView>
+
+
+                    <RelativeLayout
+                        android:id="@+id/rlHaveAccount"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginEnd="@dimen/_10sdp"
+                        android:padding="@dimen/_15sdp">
+
+                        <TextView
+                            android:id="@+id/tvHave"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+
+                            android:fontFamily="@font/gilroy_medium"
+                            android:includeFontPadding="false"
+                            android:text="Already have an account?"
+                            android:textColor="@color/black"
+                            android:textSize="12sp" />
+
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginStart="2dp"
+                            android:layout_toEndOf="@id/tvHave"
+                            android:fontFamily="@font/gilroy_regular"
+                            android:includeFontPadding="false"
+                            android:text="Sign In"
+                            android:textColor="@color/primaryColor"
+                            android:textSize="12sp"
+
+                            />
+
+
+                    </RelativeLayout>
+
+
+                </LinearLayout>
+            </androidx.core.widget.NestedScrollView>
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>

@@ -1,0 +1,13 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="5dp"
+    android:height="5dp"
+    android:viewportWidth="20"
+    android:viewportHeight="20">
+    <!-- Checkmark Path -->
+    <path
+        android:pathData="M5,10 L8,13 L15,6"
+        android:fillColor="@color/transparent"
+        android:strokeColor="@color/primaryColor"
+        android:strokeWidth="2"/>
+
+</vector>

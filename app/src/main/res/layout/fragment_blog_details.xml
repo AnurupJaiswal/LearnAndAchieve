@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    tools:context=".main_package.ui.fragment.BlogDetailsFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingHorizontal="@dimen/_10sdp">
+
+
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
+            android:fontFamily="@font/gilroy_semibold"
+            android:includeFontPadding="false"
+            android:maxLines="2"
+            android:text="Empowering Students with Free E-Learning Services"
+            android:textColor="@android:color/black"
+            android:textSize="18sp" />
+
+
+        <TextView
+            android:id="@+id/tvBlogType"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:layout_marginEnd="8dp"
+            android:layout_weight="0.6"
+            android:text="GENERAL"
+            android:textColor="@android:color/holo_orange_dark"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+
+        <LinearLayout
+            android:id="@+id/blogHeader"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:weightSum="3">
+
+            <TextView
+                android:id="@+id/tvAuthor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:drawablePadding="@dimen/_3sdp"
+                android:gravity="center"
+                android:text="Gaurav Prabhu"
+                android:textColor="@android:color/darker_gray"
+                android:textSize="14sp"
+                app:drawableStartCompat="@drawable/ic_user" />
+
+            <!-- Calendar Icon -->
+            <ImageView
+                android:id="@+id/calendarIcon"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_weight="0.1"
+                android:src="@drawable/ic_calendar" />
+
+            <!-- Date -->
+            <TextView
+                android:id="@+id/tvDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_weight="1"
+                android:text="July 1, 2024"
+                android:textColor="@android:color/darker_gray"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+
+        <TextView
+            android:id="@+id/tvDescription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+
+            android:layout_marginVertical="@dimen/_10sdp"
+            android:fontFamily="@font/gilroy_regular"
+            android:text="Lorem ipsum  fjfid fjdfdlfjd jfdlfdjfdl klfjdlfdj jvvsdjd fjdfldjf fjdfldj lfjdfdlfj fjdfldj fefkfe fkf;lfj fjd;lgjg gjdfg;lgj jdglkjg ;jdd;gj lfjdfdfj jvdlfjdl;g lfjdfld jlfsdldjl ljfsdlfjdl fjdlfjgfldjdlddjldfjdfdlfffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff dolorfjdfdfjdldjfdfkdlfdkfd;lfkdl;dfkd dkld;dk ckdlfdk fdfldk gfg fdfd fdjfdk fjfdkf fdjfdf fdjfdf zzzzzzzzzz sit amet, consectetur adipiscing elit, sed do...."
+            android:textColor="@android:color/black"
+            android:textSize="14sp" />
+    </LinearLayout>
+
+
+</androidx.core.widget.NestedScrollView>

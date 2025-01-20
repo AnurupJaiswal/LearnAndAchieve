@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+  android:paddingVertical="@dimen/_5sdp">
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:elevation="@dimen/_10sdp"
+        app:cardCornerRadius="10dp"
+        app:strokeWidth="0dp">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:weightSum="2"
+            android:padding="@dimen/_10sdp">
+
+
+
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1.7"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvModuleName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/blue"
+                    android:textSize="14sp"
+                    android:fontFamily="@font/gilroy_regular"
+                    android:text="@string/account_valid"/>
+
+                <TextView
+                    android:id="@+id/moduleDescription"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/blue"
+                    android:textSize="14sp"
+                    android:maxLines="2"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:fontFamily="@font/gilroy_semibold"
+                    android:text="Anurup jaiswal ,ghghghg gjgjg jgjgrtor[erir[tr rrrereerekfjgjfgfjjgfgjfgfjrritr;treterterttrtttr;rtr;gfg;gfd"/>
+
+            </LinearLayout>
+
+
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.3"
+
+                android:orientation="vertical">
+
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:strokeWidth="0dp"
+                    android:elevation="@dimen/_4sdp"
+                    app:cardCornerRadius="@dimen/_20sdp"
+                    app:cardBackgroundColor="@color/white"
+                    >
+
+                    <ImageView
+                        android:layout_width="@dimen/_40sdp"
+                        android:layout_height="@dimen/_40sdp"
+                        android:padding="@dimen/_10sdp"
+                        android:src="@drawable/ic_arrow_forward"
+                        app:tint="@color/primaryColor" />
+
+
+                </com.google.android.material.card.MaterialCardView>
+
+
+
+            </LinearLayout>
+
+
+
+        </LinearLayout>
+
+
+
+    </com.google.android.material.card.MaterialCardView>
+
+</LinearLayout>

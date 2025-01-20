@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/question_number"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/gilroy_semibold"
+        android:text="Question 1"
+        android:textColor="@color/blue"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/question_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/gilroy_semibold"
+        android:text="Read Paragraph Carefully. And Answer The Questions."
+        android:textColor="@color/black"
+        android:textSize="16sp" />
+
+    <!-- Paragraph -->
+    <TextView
+        android:id="@+id/paragraph_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/gilroy_regular"
+        android:text="Lorem Ipsum is simply dummy text of the printing and typesetting industry."
+        android:textColor="@color/grayDark"
+        android:textSize="14sp" />
+
+    <!-- Options -->
+    <LinearLayout
+        android:id="@+id/options_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <CheckBox
+            android:id="@+id/option_1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/gilroy_regular"
+            android:text="A. The Industrial Revolution"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            app:buttonTint="@color/orange" />
+
+        <CheckBox
+            android:id="@+id/option_2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/gilroy_regular"
+            android:text="B. The New Deal"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            app:buttonTint="@color/orange" />
+
+        <CheckBox
+            android:id="@+id/option_3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/gilroy_regular"
+            android:text="C. James Madison"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            app:buttonTint="@color/orange" />
+
+        <CheckBox
+            android:id="@+id/option_4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/gilroy_regular"
+            android:text="D. Madam C.J. Walker"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            app:buttonTint="@color/orange" />
+
+
+    </LinearLayout>
+
+
+    <View
+        android:id="@+id/view"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginVertical="@dimen/_4sdp"
+        android:background="@color/popupViewBg" />
+
+</LinearLayout>

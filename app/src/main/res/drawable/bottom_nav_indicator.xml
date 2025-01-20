@@ -1,0 +1,18 @@
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Selected state with top indicator -->
+    <item android:state_checked="true">
+        <layer-list>
+            <item android:gravity="top|center_horizontal">
+                <shape android:shape="rectangle">
+                    <!-- Smaller height and width for the indicator -->
+                    <size android:height="2dp" android:width="@dimen/_30sdp" />
+                    <solid android:color="@color/theme" />
+                    <corners android:radius="1dp" />
+                </shape>
+            </item>
+        </layer-list>
+    </item>
+    <item android:state_checked="false">
+        <color android:color="@android:color/transparent" />
+    </item>
+</selector>

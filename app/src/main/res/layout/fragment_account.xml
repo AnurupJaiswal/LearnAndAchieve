@@ -1,0 +1,903 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".main_package.ui.fragment.AccountFragment">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+
+        <RelativeLayout
+            android:id="@+id/rlStudentDetails"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/background_image"
+            android:paddingHorizontal="@dimen/_10sdp">
+
+            <TextView
+                android:id="@+id/tvStudentName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_12sdp"
+                android:fontFamily="@font/gilroy_bold"
+                android:text="Hey Udit"
+                android:textColor="@color/white"
+
+                android:textSize="20sp" />
+
+
+            <TextView
+                android:id="@+id/tvStudentClass"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tvStudentName"
+                android:fontFamily="@font/poppins_semi_bold"
+                android:text="Class 10 (English)"
+                android:textColor="@color/white"
+
+                android:textSize="14sp" />
+
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                app:cardBackgroundColor="#CED5D8"
+                app:cardCornerRadius="@dimen/_30sdp"
+                app:strokeWidth="0dp">
+
+
+
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/ic_profile" />
+
+            </com.google.android.material.card.MaterialCardView>
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:id="@+id/rlPurchase"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingVertical="@dimen/_5sdp"
+            android:paddingHorizontal="@dimen/_10sdp">
+
+
+            <TextView
+                android:id="@+id/tvPackage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins_semi_bold"
+                android:includeFontPadding="false"
+                android:text="Purchase Packages"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tvPackage"
+                android:fontFamily="@font/gilroy_regular"
+                android:includeFontPadding="false"
+                android:paddingVertical="@dimen/_2sdp"
+                android:text="Explore Exclusive Package Tailored Just For You!"
+                android:textSize="11sp" />
+
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:src="@drawable/ic_package" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.7dp"
+            android:layout_marginHorizontal="@dimen/_10sdp"
+            android:background="#f0ecec" />
+
+
+        <RelativeLayout
+            android:id="@+id/rlStudentMaterial"
+            android:layout_width="match_parent"
+            android:paddingVertical="@dimen/_5sdp"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="@dimen/_10sdp">
+
+
+            <TextView
+                android:id="@+id/tvStudyMaterial"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins_semi_bold"
+
+                android:includeFontPadding="false"
+                android:text="Study Material"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_4sdp"
+                android:layout_toEndOf="@+id/tvStudyMaterial"
+                android:fontFamily="@font/gilroy_regular"
+                android:text="Basic"
+                android:layout_marginTop="@dimen/_2sdp"
+                android:textColor="@color/primaryColor"
+                android:textSize="12sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tvStudyMaterial"
+                android:fontFamily="@font/gilroy_regular"
+                android:includeFontPadding="false"
+                android:maxLines="1"
+                android:paddingVertical="@dimen/_2sdp"
+
+                android:text="Watch Expert-Led Tutorials With Curated Youtube Links!"
+                android:textSize="11sp" />
+
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:src="@drawable/ic_study_materials"
+                app:tint="@color/primaryColor" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.7dp"
+            android:layout_marginHorizontal="@dimen/_10sdp"
+            android:background="#f0ecec" />
+
+
+        <RelativeLayout
+            android:id="@+id/rlMockTest"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingVertical="@dimen/_5sdp"
+            android:paddingHorizontal="@dimen/_10sdp">
+
+
+            <TextView
+                android:id="@+id/tvMockTest"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins_semi_bold"
+                android:includeFontPadding="false"
+                android:text="Mock Tests"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tvMockTest"
+                android:fontFamily="@font/gilroy_regular"
+                android:includeFontPadding="false"
+                android:maxLines="1"
+                android:paddingVertical="@dimen/_2sdp"
+
+                android:text="Challenge YourSelf With Real-Time Mock Tests!"
+                android:textSize="11sp" />
+
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:src="@drawable/ic_mock"
+                app:tint="@color/primaryColor" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.7dp"
+            android:layout_marginHorizontal="@dimen/_10sdp"
+            android:background="#f0ecec" />
+
+
+        <RelativeLayout
+            android:id="@+id/rlOderHistory"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingVertical="@dimen/_5sdp"
+            android:paddingHorizontal="@dimen/_10sdp">
+
+
+            <TextView
+                android:id="@+id/tvOrderHistory"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins_semi_bold"
+
+                android:includeFontPadding="false"
+                android:text="Oder History"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tvOrderHistory"
+                android:fontFamily="@font/gilroy_regular"
+                android:includeFontPadding="false"
+                android:maxLines="1"
+                android:paddingVertical="@dimen/_2sdp"
+
+                android:text="Review Your Purchases Anytime In Oder History!"
+                android:textSize="11sp" />
+
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:src="@drawable/ic_package"
+                app:tint="@color/primaryColor" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.7dp"
+            android:layout_marginHorizontal="@dimen/_10sdp"
+            android:background="#f0ecec" />
+
+
+        <RelativeLayout
+            android:id="@+id/rlChangePass"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingVertical="@dimen/_5sdp"
+            android:paddingHorizontal="@dimen/_10sdp">
+
+
+            <TextView
+                android:id="@+id/tvChangePass"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins_semi_bold"
+
+                android:includeFontPadding="false"
+                android:text="Change Password"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tvChangePass"
+                android:fontFamily="@font/gilroy_regular"
+                android:includeFontPadding="false"
+                android:maxLines="1"
+                android:paddingVertical="@dimen/_2sdp"
+
+                android:text="Secure Your Account: Update Your Password Here !"
+                android:textSize="11sp" />
+
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:src="@drawable/ic_change_password"
+                app:tint="@color/primaryColor" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.7dp"
+            android:layout_marginHorizontal="@dimen/_10sdp"
+            android:background="#f0ecec" />
+
+        <RelativeLayout
+            android:id="@+id/rlProfile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingVertical="@dimen/_5sdp"
+            android:paddingHorizontal="@dimen/_10sdp">
+
+
+            <TextView
+                android:id="@+id/tvProfile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins_semi_bold"
+
+                android:includeFontPadding="false"
+                android:text="Profile"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tvProfile"
+                android:fontFamily="@font/gilroy_regular"
+                android:includeFontPadding="false"
+                android:maxLines="1"
+                android:paddingVertical="@dimen/_2sdp"
+
+                android:text="Manage Your Details And Preference In Your Profile !"
+                android:textSize="11sp" />
+
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:src="@drawable/ic_profile_orange"
+                app:tint="@color/primaryColor" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.7dp"
+            android:layout_marginHorizontal="@dimen/_10sdp"
+            android:background="#f0ecec" />
+
+
+        <RelativeLayout
+            android:id="@+id/rlDeleteAccount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingVertical="@dimen/_5sdp"
+            android:paddingHorizontal="@dimen/_10sdp">
+
+            <TextView
+                android:id="@+id/tvDelete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins_semi_bold"
+                android:includeFontPadding="false"
+                android:text="Delete Account"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tvDelete"
+                android:layout_alignParentStart="true"
+                android:layout_toStartOf="@+id/ic_Delete"
+                android:fontFamily="@font/gilroy_regular"
+                android:includeFontPadding="false"
+                android:maxLines="2"
+                android:paddingVertical="@dimen/_2sdp"
+                android:text="Take control of your data—easily delete your account anytime."
+                android:textSize="11sp" />
+
+
+            <ImageView
+                android:id="@+id/ic_Delete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:src="@drawable/ic_delete_bin"
+                app:tint="@color/primaryColor" />
+        </RelativeLayout>
+
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#EBEBEB"
+            android:orientation="vertical">
+
+
+            <RelativeLayout
+                android:id="@+id/rlJoinAndEarn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingVertical="@dimen/_10sdp"
+                android:paddingHorizontal="@dimen/_10sdp">
+
+
+                <TextView
+                    android:id="@+id/tvJoinAndEarn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/poppins_semi_bold"
+
+                    android:includeFontPadding="false"
+                    android:text="Join and Earn"
+                    android:textColor="@color/black"
+                    android:textSize="14sp" />
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tvJoinAndEarn"
+                    android:fontFamily="@font/gilroy_regular"
+                    android:includeFontPadding="false"
+                    android:maxLines="1"
+                    android:paddingVertical="@dimen/_2sdp"
+                    android:text="Join Now And Start Earning Rewards For Your Learning!"
+                    android:textSize="11sp" />
+
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:src="@drawable/ic_join_earn"
+                    app:tint="@color/primaryColor" />
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.7dp"
+                android:layout_marginHorizontal="@dimen/_10sdp"
+                android:background="#DADADA" />
+
+
+            <RelativeLayout
+                android:id="@+id/rlBharatSATScholar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingVertical="@dimen/_10sdp"
+                android:paddingHorizontal="@dimen/_10sdp">
+
+
+                <TextView
+                    android:id="@+id/tvBharatSATScholar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/poppins_semi_bold"
+
+                    android:includeFontPadding="false"
+                    android:text="Bharat-SAT ScholarShip"
+                    android:textColor="@color/black"
+                    android:textSize="14sp" />
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tvBharatSATScholar"
+                    android:fontFamily="@font/gilroy_regular"
+                    android:includeFontPadding="false"
+                    android:maxLines="2"
+                    android:paddingVertical="@dimen/_2sdp"
+                    android:text="The Bharat SAT Scholarship And Unlock Your Potential!"
+                    android:textSize="11sp" />
+
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:src="@drawable/ic_bharat_scholor"
+                    app:tint="@color/primaryColor" />
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.7dp"
+                android:layout_marginHorizontal="@dimen/_10sdp"
+                android:background="#DADADA" />
+
+
+            <RelativeLayout
+                android:id="@+id/rlBharatSAT"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingVertical="@dimen/_10sdp"
+                android:paddingHorizontal="@dimen/_10sdp">
+                <TextView
+                    android:id="@+id/tvBharatSAT"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/poppins_semi_bold"
+
+                    android:includeFontPadding="false"
+                    android:text="Bharat-SAT"
+                    android:textColor="@color/black"
+                    android:textSize="14sp" />
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tvBharatSAT"
+                    android:fontFamily="@font/gilroy_regular"
+                    android:includeFontPadding="false"
+                    android:maxLines="2"
+                    android:paddingVertical="@dimen/_2sdp"
+                    android:text="Discover Key Deatails About The Bharat SAT EXAM Here !"
+                    android:textSize="11sp" />
+
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:src="@drawable/ic_bharat_sat"
+                    app:tint="@color/primaryColor" />
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.7dp"
+                android:layout_marginHorizontal="@dimen/_10sdp"
+                android:background="#DADADA" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/black"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:paddingHorizontal="@dimen/_15sdp"
+            android:paddingBottom="@dimen/_15sdp">
+
+            <!-- Logo -->
+            <ImageView
+                android:id="@+id/logo"
+                android:layout_width="60dp"
+                android:layout_height="28dp"
+                android:contentDescription="Logo"
+                android:scaleType="centerCrop"
+                android:layout_marginVertical="@dimen/_10sdp"
+                android:src="@drawable/learn_and_achieve_logo" />
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="3">
+
+                <!-- About Us -->
+                <LinearLayout
+                    android:id="@+id/llAboutUs"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:layout_margin="8dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="@dimen/_30sdp"
+                        android:layout_height="@dimen/_30sdp"
+                        app:strokeWidth="0dp"
+                        app:cardBackgroundColor="#3D3D3D"
+                        app:cardCornerRadius="@dimen/_15sdp">
+
+
+
+
+                        <ImageView
+                            android:layout_width="@dimen/_20sdp"
+                            android:layout_height="@dimen/_20sdp"
+                            android:layout_gravity="center"
+                            android:padding="@dimen/_3sdp"
+                            android:src="@drawable/logo"
+                            tools:ignore="ContentDescription" />
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:fontFamily="@font/gilroy_medium"
+                        android:gravity="center"
+                        android:text="About Us"
+                        android:textColor="#FFFFFF"
+                        android:textSize="12sp" />
+                </LinearLayout>
+
+                <!-- Our Services -->
+                <LinearLayout
+                    android:id="@+id/llOurServices"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="end"
+                    android:layout_margin="8dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="@dimen/_30sdp"
+                        android:layout_height="@dimen/_30sdp"
+                        app:strokeWidth="0dp"
+                        app:cardBackgroundColor="#3D3D3D"
+                        app:cardCornerRadius="@dimen/_15sdp">
+
+
+
+
+                        <ImageView
+                            android:layout_width="@dimen/_20sdp"
+                            android:layout_height="@dimen/_20sdp"
+                            android:layout_gravity="center"
+                            android:padding="@dimen/_3sdp"
+                            android:src="@drawable/ic_services"
+                            tools:ignore="ContentDescription" />
+                    </com.google.android.material.card.MaterialCardView>
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:fontFamily="@font/gilroy_medium"
+                        android:gravity="center"
+
+                        android:text="Our Services"
+                        android:textColor="#FFFFFF"
+                        android:textSize="12sp" />
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="end"
+                    android:layout_margin="8dp"
+                    android:layout_weight="1"
+                    android:id="@+id/llFAQ"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+
+
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="@dimen/_30sdp"
+                        android:layout_height="@dimen/_30sdp"
+                        app:strokeWidth="0dp"
+                        app:cardBackgroundColor="#3D3D3D"
+                        app:cardCornerRadius="@dimen/_15sdp">
+
+
+
+
+                        <ImageView
+                            android:layout_width="@dimen/_20sdp"
+                            android:layout_height="@dimen/_20sdp"
+                            android:layout_gravity="center"
+                            android:padding="@dimen/_3sdp"
+                            android:src="@drawable/ic_faq"
+                            tools:ignore="ContentDescription" />
+                    </com.google.android.material.card.MaterialCardView>
+
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:fontFamily="@font/gilroy_medium"
+                        android:gravity="center"
+                        android:text="FAQ’s"
+                        android:textColor="#FFFFFF"
+                        android:textSize="12sp" />
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:orientation="horizontal"
+                android:weightSum="3"
+                android:baselineAligned="false">
+
+                <LinearLayout
+                    android:id="@+id/llTermsAndConditions"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:layout_margin="8dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+
+
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="@dimen/_30sdp"
+                        android:layout_height="@dimen/_30sdp"
+                        app:strokeWidth="0dp"
+                        app:cardBackgroundColor="#3D3D3D"
+                        app:cardCornerRadius="@dimen/_15sdp">
+
+
+
+                        <ImageView
+                            android:layout_width="@dimen/_20sdp"
+                            android:layout_height="@dimen/_20sdp"
+                            android:layout_gravity="center"
+                            android:padding="@dimen/_3sdp"
+                            android:src="@drawable/ic_terms" />
+
+
+
+                    </com.google.android.material.card.MaterialCardView>
+
+
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:fontFamily="@font/gilroy_medium"
+                        android:gravity="center"
+                        android:text="Terms and Conditions"
+                        android:textColor="#FFFFFF"
+                        android:textSize="12sp" />
+                </LinearLayout>
+
+                <!-- Privacy Policy -->
+
+
+                <LinearLayout
+                    android:id="@+id/llPrivacyPolicy"
+
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:layout_margin="8dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="@dimen/_30sdp"
+                        android:layout_height="@dimen/_30sdp"
+                        app:strokeWidth="0dp"
+                        app:cardBackgroundColor="#3D3D3D"
+                        app:cardCornerRadius="@dimen/_15sdp">
+
+
+
+
+                    <ImageView
+                        android:layout_width="@dimen/_20sdp"
+                        android:layout_height="@dimen/_20sdp"
+                        android:layout_gravity="center"
+                        android:padding="@dimen/_3sdp"
+                        android:src="@drawable/ic_privacy_policy"
+                        tools:ignore="ContentDescription" />
+                    </com.google.android.material.card.MaterialCardView>
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:fontFamily="@font/gilroy_medium"
+                        android:gravity="center"
+                        android:text="Privacy Policy"
+                        android:textColor="#FFFFFF"
+                        android:textSize="12sp" />
+                </LinearLayout>
+
+
+                <!-- Refund and Cancellation Policy -->
+                <LinearLayout
+                    android:id="@+id/llcancellationPolicy"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="end"
+                    android:layout_margin="8dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="@dimen/_30sdp"
+                        android:layout_height="@dimen/_30sdp"
+                        app:strokeWidth="0dp"
+                        app:cardBackgroundColor="#3D3D3D"
+                        app:cardCornerRadius="@dimen/_15sdp">
+
+
+
+
+                        <ImageView
+                            android:layout_width="@dimen/_20sdp"
+                            android:layout_height="@dimen/_20sdp"
+                            android:layout_gravity="center"
+                            android:padding="@dimen/_3sdp"
+                            android:src="@drawable/ic_refund"
+                            tools:ignore="ContentDescription" />
+                    </com.google.android.material.card.MaterialCardView>
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:fontFamily="@font/gilroy_medium"
+                        android:gravity="center"
+                        android:text="Refund and Cancellation Policy"
+                        android:textColor="#FFFFFF"
+                        android:textSize="12sp" />
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+
+            <com.anurupjaiswal.learnandachieve.basic.utilitytools.loadingButton.LoadingButton
+                android:id="@+id/lbSend"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_20sdp"
+                android:background="@color/primaryColor"
+                android:drawableTint="@color/white"
+                android:fontFamily="@font/poppins_semi_bold"
+                android:gravity="center"
+                android:includeFontPadding="false"
+                android:paddingVertical="@dimen/_4sdp"
+                android:text="Logout"
+                android:textColor="@color/background"
+
+                android:textSize="16sp"
+                app:disableClickOnLoading="true"
+                app:drawableStartHeight="@dimen/_14sdp"
+                app:drawableStartWidth="@dimen/_14sdp"
+                app:enableCenterDrawables="true"
+                app:enableRestore="true"
+                app:enableShrink="true"
+                app:loadingDrawableColor="@color/white"
+                app:loadingDrawablePosition="End"
+                app:radius="@dimen/_7sdp"
+                app:shrinkDuration="100"
+                app:shrinkShape="Oval"
+                tools:layout_editor_absoluteY="162dp" />
+        </LinearLayout>
+
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

@@ -1,0 +1,87 @@
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:strokeColor="@color/white"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="4dp"
+    android:background="@color/white">
+
+    <RelativeLayout
+        android:id="@+id/rlProfileOptions"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:padding="20dp">
+
+        <!-- Indicator -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/mcvIndicator"
+            android:layout_width="45dp"
+            android:layout_height="7dp"
+            android:layout_centerHorizontal="true"
+            app:cardBackgroundColor="#465D61"
+            app:strokeColor="@color/white" />
+
+        <!-- Change Profile Option -->
+        <RelativeLayout
+            android:id="@+id/rlChangeProfile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/mcvIndicator"
+            android:layout_marginTop="20dp">
+
+            <TextView
+                android:id="@+id/tvChangeProfile"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="3dp"
+                android:text="@string/change_profile"
+                android:textColor="#0D1B1D"
+                android:textSize="14sp"
+                android:fontFamily="@font/gilroy_medium" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tvChangeProfile"
+                android:layout_marginStart="8dp"
+                android:text="@string/change_your_profile_photo"
+                android:textColor="#465D61"
+                android:textSize="12sp"
+                android:fontFamily="@font/gilroy_regular" />
+        </RelativeLayout>
+
+        <!-- Delete Profile Option -->
+        <RelativeLayout
+            android:id="@+id/rlDeleteProfile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/rlChangeProfile"
+            android:layout_marginTop="10dp">
+
+            <TextView
+                android:id="@+id/tvDeleteProfile"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="3dp"
+                android:text="@string/delete_profile"
+                android:textColor="#0D1B1D"
+                android:textSize="14sp"
+                android:fontFamily="@font/gilroy_medium" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tvDeleteProfile"
+                android:layout_marginStart="8dp"
+                android:text="@string/remove_your_profile_photo"
+                android:textColor="#465D61"
+                android:textSize="12sp"
+                android:fontFamily="@font/gilroy_regular" />
+        </RelativeLayout>
+    </RelativeLayout>
+</com.google.android.material.card.MaterialCardView>

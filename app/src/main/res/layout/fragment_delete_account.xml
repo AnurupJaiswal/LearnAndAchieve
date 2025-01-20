@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="@dimen/_10sdp"
+    android:orientation="vertical"
+    tools:context=".main_package.ui.fragment.DeleteAccountFragment">
+
+
+
+    <TextView
+        android:id="@+id/tvDeleteAccount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/gilroy_semibold"
+        android:includeFontPadding="false"
+        android:text="Delete Account"
+        android:layout_marginTop="@dimen/_20sdp"
+ android:layout_centerHorizontal="true"
+        android:textColor="@color/black"
+
+        android:textSize="16sp" />
+
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvDeleteAccount"
+        android:fontFamily="@font/gilroy_semibold"
+        android:includeFontPadding="false"
+        android:layout_marginTop="@dimen/_20sdp"
+        android:textColor="@color/black"
+        android:gravity="center"
+        android:layout_centerHorizontal="true"
+        android:text="Are you Sure you want to delete your account?  This action  is permanent and can not be undone. All your data include progress ,achievements,and personal information,will be permanaently deleted"
+        android:textSize="12sp"
+        />
+
+
+
+
+    <com.anurupjaiswal.learnandachieve.basic.utilitytools.loadingButton.LoadingButton
+        android:id="@+id/lbDeleteAccount"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/primaryColor"
+        android:drawableTint="@color/white"
+        android:fontFamily="@font/poppins_semi_bold"
+        android:gravity="center"
+        android:layout_marginHorizontal="@dimen/_10sdp"
+        android:paddingVertical="@dimen/_7sdp"
+        android:text="@string/delete_account"
+        android:textColor="@color/background"
+        android:textSize="16sp"
+
+        app:drawableStartHeight="@dimen/_14sdp"
+        app:drawableStartWidth="@dimen/_14sdp"
+        app:disableClickOnLoading="true"
+        app:enableCenterDrawables="true"
+        app:enableRestore="true"
+        app:enableShrink="true"
+        app:radius="@dimen/_7sdp"
+        app:loadingDrawablePosition="End"
+        android:includeFontPadding="false"
+        app:loadingDrawableColor="@color/white"
+        app:shrinkDuration="100"
+        app:shrinkShape="Oval"/>
+
+</RelativeLayout>

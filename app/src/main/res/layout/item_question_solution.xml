@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+    <TextView
+        android:id="@+id/tvQuestionNumber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Question 1"
+        android:textStyle="bold"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/tvMarks"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="(+2 Marks)"
+        android:textStyle="bold"
+        android:textColor="#008000"
+        android:textSize="14sp" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvQuestion"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard"
+        android:layout_marginTop="8dp"
+        android:includeFontPadding="false"
+        android:fontFamily="@font/gilroy_semibold"
+        android:textSize="16sp" />
+
+    <!-- Options (RadioGroup) -->
+    <RadioGroup
+        android:id="@+id/radioGroupOptions"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp" />
+
+    <!-- Correct / Incorrect Result -->
+    <TextView
+        android:id="@+id/tvResult"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Correct Answer"
+        android:textColor="@android:color/holo_green_dark"
+        android:visibility="gone" />
+
+    <!-- Solution Toggle -->
+    <TextView
+        android:id="@+id/tvSolutionToggle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Show Solution"
+        android:textColor="@android:color/holo_blue_dark"
+        android:layout_marginTop="8dp"
+        android:clickable="true"
+        android:focusable="true" />
+
+    <!-- Solution Text -->
+    <TextView
+        android:id="@+id/tvSolution"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Solution Text"
+        android:visibility="gone"
+        android:layout_marginTop="4dp" />
+</LinearLayout>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@color/white"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginVertical="@dimen/_7sdp"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:id="@+id/tvQuestion"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:includeFontPadding="false"
+            android:text="What is Learn and Achieve Edutech Project?"
+            android:textSize="14sp"
+            android:layout_gravity="center_vertical"
+            android:fontFamily="@font/gilroy_semibold"
+            android:textColor="@color/black" />
+
+        <ImageView
+            android:id="@+id/imgArrow"
+            android:layout_gravity="center"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:src="@drawable/ic_arrow_forward"
+            android:contentDescription="Arrow" />
+
+
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvAnswer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Learn and Achieve is an educational initiative aimed at providing innovative learning solutions to students across India."
+        android:fontFamily="@font/gilroy_regular"
+        android:textSize="14sp"
+        android:visibility="gone"
+        android:paddingTop="8dp"
+        android:layout_marginBottom="@dimen/_10sdp"
+        android:textColor="@color/black" />
+
+    <View
+        android:id="@+id/viewCategory"
+        android:layout_width="match_parent"
+        android:layout_height="0.4dp"
+        android:background="#D2D2D2"
+        />
+</LinearLayout>

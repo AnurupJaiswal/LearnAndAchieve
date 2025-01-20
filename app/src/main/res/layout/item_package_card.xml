@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="@dimen/_250sdp"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingVertical="@dimen/_10sdp"
+    android:paddingStart="@dimen/_10sdp"
+    android:paddingEnd="@dimen/_10sdp"
+    android:paddingBottom="@dimen/_10sdp">
+
+
+    <TextView
+        android:id="@+id/tvBadge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/rectangle_531"
+        android:drawableStart="@drawable/ic_fire"
+        android:fontFamily="@font/gilroy_semibold"
+        android:gravity="center"
+        android:includeFontPadding="false"
+        android:paddingVertical="@dimen/_2sdp"
+        android:text="Popular"
+        android:paddingHorizontal="@dimen/_4sdp"
+        android:textColor="#E64649"
+        android:textSize="11sp" />
+
+
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:fontFamily="@font/gilroy_semibold"
+        android:includeFontPadding="false"
+        android:maxLines="1"
+        android:text="Lorem Ipsum is simply dummy text of the printing and typesetting industry."
+        android:textColor="@color/black"
+
+        android:textSize="14sp" />
+
+    <!-- Description -->
+    <TextView
+        android:id="@+id/tvDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:fontFamily="@font/gilroy_regular"
+        android:includeFontPadding="false"
+        android:maxLines="2"
+        android:minLines="2"
+        android:text="Lorem Ipsum is simply dummy text of the printing and typesetting industry."
+        android:textColor="#666"
+        android:textSize="14sp" />
+
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:elevation="@dimen/_10sdp"
+        app:cardCornerRadius="10dp"
+        app:strokeWidth="0dp">
+
+        <!--
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+
+                <ImageView
+                    android:id="@+id/imagePackage"
+                    android:layout_width="0dp"
+                    android:layout_height="140dp"
+                    android:layout_weight="1"
+                    android:src="@drawable/banner"
+                    android:scaleType="centerCrop"/>
+
+                </RelativeLayout>
+        -->
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/imagePackage"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:layout_alignParentTop="true"
+                android:scaleType="centerCrop"
+                android:src="@drawable/young_boy" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@id/imagePackage"
+                android:background="#80000000"
+                android:orientation="horizontal"
+                android:padding="@dimen/_4sdp">
+
+
+                <TextView
+                    android:id="@+id/discountedPrice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:fontFamily="@font/gilroy_semibold"
+                    android:includeFontPadding="false"
+                    android:text="₹299"
+                    android:textColor="#FFFFFF"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/priceDivider"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/_3sdp"
+                    android:layout_marginTop="@dimen/_7sdp"
+                    android:layout_toRightOf="@+id/discountedPrice"
+                    android:includeFontPadding="false"
+                    android:text="/"
+                    android:textColor="#FFFFFF"
+                    android:textSize="16sp" />
+
+                <!-- Original Price with Strike-through -->
+                <TextView
+                    android:id="@+id/originalPrice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:layout_toRightOf="@+id/priceDivider"
+                    android:alpha="0.8"
+                    android:fontFamily="@font/gilroy_regular"
+                    android:includeFontPadding="false"
+                    android:text="₹599"
+                    android:textColor="#FFFFFF"
+                    android:textSize="12sp" />
+
+                <!-- Buy Now Button -->
+
+
+                <TextView
+                    android:id="@+id/buyNowText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:background="@drawable/btn"
+                    android:fontFamily="@font/gilroy_semibold"
+                    android:gravity="center_vertical"
+                    android:includeFontPadding="false"
+                    android:padding="@dimen/_5sdp"
+                    android:text="Add To Card"
+                    android:textColor="#FFFFFF"
+
+                    android:textSize="9sp" />
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+
+    <!-- Image and Buy Button Row -->
+    <!--
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="8dp"
+
+            android:gravity="center_vertical">
+
+
+
+
+
+            &lt;!&ndash; Image &ndash;&gt;
+            <ImageView
+                android:id="@+id/imagePackage"
+                android:layout_width="0dp"
+                android:layout_height="80dp"
+                android:layout_weight="1"
+                android:src="@drawable/banner"
+                android:scaleType="centerCrop"
+                android:layout_marginEnd="8dp"/>
+
+            &lt;!&ndash; Price and Buy Button &ndash;&gt;
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="end">
+
+                &lt;!&ndash; Price &ndash;&gt;
+                <TextView
+                    android:id="@+id/tvPrice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="₹299 / ₹599"
+                    android:textColor="#FF5722"
+                    android:textStyle="bold"
+                    android:textSize="16sp"
+                    android:layout_marginBottom="4dp" />
+
+                &lt;!&ndash; Buy Button &ndash;&gt;
+                <Button
+                    android:id="@+id/btnBuy"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Buy Now"
+                    android:textSize="14sp"
+                    android:backgroundTint="#FF5722"
+                    android:textColor="#FFF" />
+            </LinearLayout>
+        </LinearLayout>
+    -->
+</LinearLayout>

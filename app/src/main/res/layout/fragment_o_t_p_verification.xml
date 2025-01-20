@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingHorizontal="@dimen/_10sdp"
+    tools:context=".main_package.ui.fragment.OTPVerificationFragment">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/gilroy_regular"
+        android:includeFontPadding="false"
+        android:maxLines="3"
+        android:text="A One-Time Password has been sent to XXXXXXXX83 and  leaXXXXXXXXXXX@gmail.com"
+        android:textSize="16sp" />
+
+
+    <com.anurupjaiswal.learnandachieve.basic.pinview.PinView
+        android:id="@+id/PinView"
+        style="@style/PinWidget.PinView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/_15sdp"
+        android:cursorVisible="true"
+        android:elevation="@dimen/_2sdp"
+        android:fontFamily="@font/gilroy_medium"
+        android:gravity="center_horizontal"
+        android:inputType="number"
+        android:itemBackground="@drawable/selector_pinview_background_color"
+        android:textColor="@color/primaryColor"
+        app:cursorWidth="2dp"
+        app:hideLineWhenFilled="false"
+        app:itemCount="6"
+        app:itemHeight="50dp"
+        app:itemRadius="@dimen/_5sdp"
+        app:itemSpacing="@dimen/_5sdp"
+        app:itemWidth="@dimen/_42sdp"
+        app:lineColor="@drawable/selector_line_color"
+        app:lineWidth="0.7dp"
+        app:viewType="rectangle"
+        tools:ignore="MissingClass" />
+
+
+    <TextView
+        android:id="@+id/tvErrorName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginStart="3dp"
+
+        android:elevation="@dimen/_minus2sdp"
+        android:fontFamily="@font/gilroy_regular"
+        android:text="@string/empty_error"
+        android:textColor="@color/red"
+        android:textSize="11sp"
+        android:visibility="gone"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_20sdp"
+        android:paddingHorizontal="@dimen/_5sdp"
+        android:paddingBottom="@dimen/_30sdp">
+
+        <TextView
+            android:id="@+id/tvTimeRemaning"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/gilroy_semibold"
+            android:includeFontPadding="false"
+            android:text="02 : 54"
+android:visibility="invisible"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/tvResendOtp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/gilroy_semibold"
+            android:gravity="end"
+            android:includeFontPadding="false"
+            android:text="Resend OTP"
+            android:clickable="true"
+            android:focusable="true"
+            android:textColor="@color/primaryColor"
+            android:textSize="12sp" />
+
+    </LinearLayout>
+
+
+</LinearLayout>

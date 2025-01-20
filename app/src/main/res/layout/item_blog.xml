@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    app:cardElevation="2dp"
+  app:cardCornerRadius="@dimen/_10sdp">
+
+
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+           app:strokeWidth="0dp"
+            android:layout_marginBottom="8dp"
+            app:cardCornerRadius="@dimen/_10sdp"
+            >
+
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:src="@drawable/image_blog_test"
+            android:scaleType="centerCrop" />
+
+        </com.google.android.material.card.MaterialCardView>
+
+
+        <TextView
+            android:id="@+id/titleTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
+            android:maxLines="2"
+            android:includeFontPadding="false"
+            android:fontFamily="@font/gilroy_semibold"
+            android:text="Empowering Students with Free E-Learning Services"
+            android:textColor="@android:color/black"
+            android:textSize="18sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+            <TextView
+                android:id="@+id/tvPostBy"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:gravity="center"
+                android:padding="@dimen/_2sdp"
+                android:text="Anurup Jaiswal"
+                android:textColor="@android:color/darker_gray"
+                android:textSize="12sp"
+                android:drawablePadding="@dimen/_3sdp"
+                app:drawableStartCompat="@drawable/ic_user" />
+
+            <TextView
+                android:id="@+id/dateTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginBottom="8dp"
+                android:padding="@dimen/_2sdp"
+                android:text="July 1, 2024"
+                android:drawablePadding="@dimen/_3sdp"
+                android:textColor="@android:color/darker_gray"
+                android:textSize="12sp"
+                app:drawableStartCompat="@drawable/ic_calendar" />
+
+        </LinearLayout>
+
+        <!-- Description -->
+        <TextView
+            android:id="@+id/descriptionTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:maxLines="2"
+            android:text="Lorem ipsum dolorfjdfdfjdldjfdfkdlfdkfd;lfkdl;dfkd dkld;dk ckdlfdk fdfldk gfg fdfd fdjfdk fjfdkf fdjfdf fdjfdf zzzzzzzzzz sit amet, consectetur adipiscing elit, sed do...."
+            android:textColor="@android:color/black"
+            android:textSize="14sp" />
+
+
+        <TextView
+            android:id="@+id/tvReadMore"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:background="?android:attr/selectableItemBackground"
+            android:text="Read more >"
+            android:gravity="end"
+            android:includeFontPadding="false"
+            android:fontFamily="@font/gilroy_semibold"
+            android:textColor="@android:color/holo_blue_dark" />
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

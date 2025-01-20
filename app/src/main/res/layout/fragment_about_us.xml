@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context="main_package.ui.fragment.AboutUsFragment">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:fontFamily="@font/gilroy_semibold"
+            android:text="About Us"
+
+            android:textColor="@color/blue"
+            android:textSize="18sp" />
+
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardBackgroundColor="@color/Peach"
+            app:strokeWidth="0dp"
+            android:layout_margin="@dimen/_20sdp"
+            android:layout_marginTop="@dimen/_10sdp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="@dimen/_10sdp">
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/gilroy_semibold"
+                    android:includeFontPadding="false"
+                    android:text="Building Strong Educational Foundations"
+                    android:textColor="@color/black"
+
+                    android:textSize="22sp" />
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:fontFamily="@font/gilroy_regular"
+                    android:includeFontPadding="false"
+                    android:text="At Learn and Achieve, we are a passionate group of young individuals with diverse backgrounds and dynamic personalities who share a common vision: to revolutionize the Indian educational system. We remember the challenges and hurdles we faced during our academic journeys, and we are determined to ensure that the new generation doesn’t have to go through the same struggles. Our primary focus is on establishing a strong foundation for child education, empowering them with essential skills that will prepare them for the competitive world ahead."
+                    android:textColor="@color/black"
+                    android:textSize="14sp" />
+
+
+                <ImageView
+                    android:layout_width="@dimen/_150sdp"
+                    android:layout_height="@dimen/_140sdp"
+                    android:layout_gravity="end"
+                    android:src="@drawable/ic_graduation_cap" />
+
+
+            </LinearLayout>
+
+
+        </com.google.android.material.card.MaterialCardView>
+
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_20sdp"
+            app:cardBackgroundColor="@color/lightSkyBlue"
+            app:strokeWidth="0dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="@dimen/_10sdp">
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/gilroy_semibold"
+                    android:includeFontPadding="false"
+                    android:text="Empowering the Next Generation"
+                    android:textColor="@color/black"
+
+                    android:textSize="22sp" />
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:fontFamily="@font/gilroy_regular"
+                    android:includeFontPadding="false"
+                    android:text="We believe in equipping children with the knowledge and skills they need to confidently face the challenges of an AI-driven future. Our mission is to make every child academically and mentally robust, arming them with fundamental skills that will be their pillars of strength as they navigate the modern world. We understand the importance of early exposure to competitive examinations like IIT JEE, NEET, AIIMS, AFMC, CAT, SAT, GRE, NATA, CET and GMAT. Therefore, we are dedicated to providing students with the awareness and resources they need from the early years of their academic lives."
+                    android:textColor="@color/black"
+                    android:textSize="14sp" />
+
+
+                <ImageView
+                    android:layout_width="@dimen/_140sdp"
+                    android:layout_height="@dimen/_140sdp"
+                    android:layout_gravity="end"
+                    android:padding="0dp"
+                    android:src="@drawable/ic_student_next_gen" />
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_20sdp"
+            app:cardBackgroundColor="#539E94"
+            app:strokeWidth="0dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/gradient_aboutuscard"
+                android:orientation="vertical"
+                android:paddingHorizontal="@dimen/_10sdp"
+                android:paddingBottom="@dimen/_10sdp">
+
+
+                <ImageView
+                    android:layout_width="@dimen/_140sdp"
+                    android:layout_height="@dimen/_140sdp"
+                    android:layout_gravity="start"
+                    android:padding="0dp"
+
+                    android:src="@drawable/ic_swing_student" />
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/gilroy_semibold"
+                    android:gravity="start"
+                    android:includeFontPadding="false"
+                    android:maxLines="2"
+                    android:text="Bharat SAT:A Path to Success"
+                    android:textColor="@color/black"
+                    android:textSize="22sp" />
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:fontFamily="@font/gilroy_regular"
+                    android:includeFontPadding="false"
+                    android:text="One of our significant initiatives is the Bharat SAT, a scientifically designed, skill-based all-India level scholarship examination. Bharat SAT is not only competitive but also diagnostic in nature. It plays a crucial role in helping students identify their strengths and weaknesses, enabling them to improve their skills continually. This initiative is part of our commitment to creating a generation of students who are not only academically proficient but also well-rounded individuals who can adapt to the evolving educational landscape."
+                    android:textColor="@color/black"
+                    android:textSize="14sp" />
+
+
+            </LinearLayout>
+
+
+        </com.google.android.material.card.MaterialCardView>
+
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_20sdp"
+            app:strokeWidth="0dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@drawable/gradient_joinus"
+                android:padding="@dimen/_10sdp">
+
+
+                <TextView
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/gilroy_semibold"
+                    android:gravity="start"
+                    android:includeFontPadding="false"
+                    android:maxLines="2"
+                    android:text="Join Us on the Journey"
+                    android:textColor="@color/black"
+                    android:textSize="22sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:fontFamily="@font/gilroy_regular"
+                    android:includeFontPadding="false"
+                    android:text="Learn and Achieve is dedicated to enhancing the educational experience of students across India. We invite you to join us on this remarkable journey to build a brighter future for the next generation. Together, we can make a significant impact by nurturing young minds, instilling them with a passion for learning, and empowering them to thrive in the AI-based new world. With a focus on strong educational foundations and the tools needed to excel in competitive examinations, we are determined to help students Learn and Achieve their dreams."
+                    android:textColor="@color/black"
+                    android:textSize="14sp" />
+
+
+                <ImageView
+                    android:layout_width="@dimen/_140sdp"
+                    android:layout_height="@dimen/_140sdp"
+                    android:layout_gravity="end"
+                    android:src="@drawable/student_character" />
+
+            </LinearLayout>
+
+
+        </com.google.android.material.card.MaterialCardView>
+
+
+    </LinearLayout>
+
+</androidx.core.widget.NestedScrollView>

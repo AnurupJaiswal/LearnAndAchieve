@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <color name="bright_blue">#007BC3</color>
+
+    <color name="themeBlack">#00808B</color>
+    <color name="pinViewBg">#F5F6F7</color>
+    <color name="background">#ffffff</color>
+    <color name="logoColor">#00808B</color>
+    <color name="primaryColor">#F6821F</color>
+
+    <color name="inactiveBlueColor">#1D64DA</color>
+    <color name="theme">#F6821F</color>
+    <color name="strokeColor">#D1D1D1</color>
+    <color name="red">#CC1F29</color>
+
+
+    <color name="brightOrange">#f8841c</color>
+    <color name="blue">#084ca2</color>
+    <color name="navyBlue">#032E75</color>
+    <color name="tealGreen">#04885b</color>
+    <color name="green31">#006031</color>
+    <color name="inactiveGreen">#1DB269</color>
+    <color name="purple">#800080</color>
+    <color name="burntOrange">#B15200</color>
+    <color name="inactiveOrange">#D7662A</color>
+    <color name="green">#008000</color>
+    <color name="orange">#FFA500</color>
+    <color name="gray">#D3D3D3</color>
+    <color name="popupViewBg">#F0F0F0</color>
+
+    <color name="secondaryColorC7">#465D61</color>
+    <color name="color_button_default">#FFA500</color>
+    <color name="transparent">#00000000</color>
+    <color name="subText">#808080</color>
+    <color name="unfocusedLineColor">#D9D9D9</color> <!-- Your desired unfocused color -->
+    <color name="alert_background">#ffffff</color>
+    <color name="grey">#8D8D8D</color>
+
+    <color name="text_wheel_text_color">@android:color/black</color>
+    <color name="text_wheel_disable_text_color">#ACACAC</color>
+    <color name="text_wheel_highlight_bg_color">#11000000</color>
+    <color name="wheel_action_sheet_bg_color">@android:color/white</color>
+    <color name="activity_bg">#F1F3F7</color>
+    <color name="lightBg">#F3F3F3</color>
+    <color name="Peach">#FBC388</color>
+    <color name="lightSkyBlue">#8CD4F8</color>
+    <color name="pastelYellow">#FFFDDD</color>
+    <color name="pastelYellow60">#99FFFDDD</color>
+
+    <color name="text_gray">#666666</color>
+    <color name="pink">#ffe4cb</color>
+    <color name="burnt_orange">#E05A33</color>
+    <color name="midnight_blue">#001D39</color>
+    <color name="checkbox_tick_color">#FFFFFFFF</color>
+    <color name="charcoalGray">#4E4E4E</color>
+    <color name="grayDark">#353535</color>
+    <color name="gray72">#727272</color>
+    <color name="mock_test_card_bg">#EFF5FF</color>
+
+
+</resources>

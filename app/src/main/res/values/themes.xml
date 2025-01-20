@@ -1,0 +1,52 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.LearnAndAchieve" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customize your light theme here. -->
+
+        <item name="colorPrimary">@color/primaryColor</item>
+        <item name="colorControlActivated">@color/primaryColor</item>
+        <item name="colorControlNormal">@color/unfocusedLineColor</item>
+        <item name="android:statusBarColor">@color/white</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowBackground">@color/white
+        </item> <!-- Use this for setting background color -->
+
+        <item name="android:overScrollMode">never</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:autofilledHighlight" tools:targetApi="o">@android:color/transparent
+        </item>
+
+
+    </style>
+
+    <style name="Theme.LearnAndAchieve" parent="Base.Theme.LearnAndAchieve" />
+
+
+    <style name="AppBottomSheetDialogTheme" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/AppModalStyle</item>
+    </style>
+
+    <style name="AppModalStyle" parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@drawable/bottom_sheet_bg</item>
+    </style>
+
+
+
+
+
+    <style name="BottomNavigationView" parent="Widget.MaterialComponents.BottomNavigationView">
+        <item name="itemTextColor">@color/grey</item>
+        <item name="android:textSize">@dimen/_8ssp</item>
+        <item name="android:textColor">@color/primaryColor</item>
+        <item name="itemRippleColor">@color/lightBg</item>
+
+    </style>
+
+    <style name="BottomNavText" parent="TextAppearance.MaterialComponents.Caption">
+        <item name="android:textSize">12sp</item> <!-- Adjust text size -->
+        <item name="android:gravity">center</item> <!-- Center the text -->
+        <item name="android:textColor">@color/bottom_nav_item_color</item>
+    </style>
+
+
+</resources>

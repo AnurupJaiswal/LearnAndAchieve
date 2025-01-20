@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Focused state -->
+    <item android:state_focused="true">
+        <shape>
+            <size android:height="2dp"/> <!-- Set the height of the line when focused -->
+            <solid android:color="@color/primaryColor"/> <!-- Color when focused -->
+        </shape>
+    </item>
+
+    <!-- Default/Unfocused state -->
+    <item>
+        <shape>
+            <size android:height="1dp"/> <!-- Set the height of the line when unfocused -->
+            <solid android:color="#D9D9D9"/> <!-- Color when unfocused -->
+        </shape>
+    </item>
+</selector>
