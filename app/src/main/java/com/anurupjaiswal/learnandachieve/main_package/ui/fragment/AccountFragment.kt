@@ -1,12 +1,15 @@
 package com.anurupjaiswal.learnandachieve.main_package.ui.fragment
 
+import android.health.connect.datatypes.units.Energy
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.anurupjaiswal.learnandachieve.R
 import com.anurupjaiswal.learnandachieve.basic.utilitytools.NavigationManager
+import com.anurupjaiswal.learnandachieve.basic.utilitytools.Utils
 import com.anurupjaiswal.learnandachieve.databinding.FragmentAccountBinding
+import com.anurupjaiswal.learnandachieve.main_package.ui.activity.LoginActivity
 
 class AccountFragment : Fragment(R.layout.fragment_account), View.OnClickListener {
 
@@ -17,6 +20,8 @@ class AccountFragment : Fragment(R.layout.fragment_account), View.OnClickListene
         super.onViewCreated(view, savedInstanceState)
 
         _binding = FragmentAccountBinding.bind(view)
+
+
 
 
         binding.llOurServices.setOnClickListener(this)
@@ -36,6 +41,7 @@ class AccountFragment : Fragment(R.layout.fragment_account), View.OnClickListene
         binding.rlBharatSATScholar.setOnClickListener(this)
         binding.rlBharatSAT.setOnClickListener(this)
         binding.rlStudentMaterial.setOnClickListener(this)
+        binding.lbLogout.setOnClickListener(this)
     }
 
     override fun onClick(view: View) {
@@ -68,7 +74,7 @@ class AccountFragment : Fragment(R.layout.fragment_account), View.OnClickListene
             )
 
             binding.rlPurchase -> NavigationManager.navigateToFragment(
-                findNavController(), R.id.PurchasePackageFragment
+                findNavController(), R.id.PurchasePackage
             )
 
             binding.rlChangePass -> NavigationManager.navigateToFragment(
@@ -106,8 +112,23 @@ class AccountFragment : Fragment(R.layout.fragment_account), View.OnClickListene
             binding.rlBharatSAT -> NavigationManager.navigateToFragment(
                 findNavController(), R.id.BharatSatFragment
             )
+
+             binding.lbLogout ->{
+                 showLogoutDialog()
+             }
         }
 
+    }
+
+    private fun showLogoutDialog() {
+        Utils.showLogoutDialog(
+            context = requireContext(),
+            onLogoutConfirmed = {
+
+                Utils.UnAuthorizationToken(requireContext())
+               Utils.I_clear(requireContext(), LoginActivity::class.java, null)
+            }
+        )
     }
 
     override fun onDestroyView() {

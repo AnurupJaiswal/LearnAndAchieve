@@ -1,0 +1,103 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/curve_background"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+
+    <TextView
+        android:id="@+id/tvDialogTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start"
+        android:fontFamily="@font/gilroy_bold"
+        android:paddingBottom="8dp"
+        android:text="Log Out?"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/tvDialogMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start"
+        android:layout_marginVertical="@dimen/_5sdp"
+        android:text="Are you sure you want to log out?"
+        android:textSize="16sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:paddingVertical="@dimen/_5sdp"
+android:weightSum="2"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:orientation="horizontal">
+
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_weight="1">
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/mcvLogout"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:outlineSpotShadowColor="@color/black"
+                app:cardBackgroundColor="@color/primaryColor"
+                app:cardCornerRadius="5dp"
+                app:cardElevation="5dp"
+                app:strokeColor="#f9faf9"
+                app:strokeWidth="0dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:paddingHorizontal="@dimen/_30sdp"
+                    android:text="Log Out"
+                    android:fontFamily="@font/gilroy_bold"
+                    android:textColor="@color/white"
+                    android:textSize="14dp" />
+            </com.google.android.material.card.MaterialCardView>
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+
+            android:layout_weight="1">
+
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/mcvCancel"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            app:cardBackgroundColor="@color/white"
+            app:cardCornerRadius="5dp"
+            app:cardElevation="5dp"
+
+            app:strokeColor="@color/primaryColor"
+            app:strokeWidth="1dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:paddingHorizontal="@dimen/_30sdp"
+                android:text="cancel"
+                android:fontFamily="@font/gilroy_bold"
+
+                android:textColor="@color/primaryColor"
+                android:textSize="14dp" />
+
+        </com.google.android.material.card.MaterialCardView>
+        </LinearLayout>
+
+    </LinearLayout>
+</LinearLayout>

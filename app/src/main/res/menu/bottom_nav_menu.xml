@@ -6,10 +6,10 @@
             android:icon="@drawable/ic_home"
             />
         <item
-            android:id="@+id/studyMaterial"
-            android:title="Study Material"
+            android:id="@+id/PurchasePackage"
+            android:title="Packages"
 
-            android:icon="@drawable/ic_study_materials"
+            android:icon="@drawable/ic_package"
             />
         <item
             android:id="@+id/mockTest"

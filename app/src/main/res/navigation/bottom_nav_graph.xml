@@ -66,9 +66,9 @@
         android:label="Cancellation Policy"
         tools:layout="@layout/fragment_cancellation_policy" />
     <fragment
-        android:id="@+id/PurchasePackageFragment"
+        android:id="@+id/PurchasePackage"
         android:name="com.anurupjaiswal.learnandachieve.main_package.ui.fragment.PurchasePackageFragment"
-        android:label="Cancellation Policy"
+        android:label="Packages"
         tools:layout="@layout/fragment_purchase_package" />
 
 

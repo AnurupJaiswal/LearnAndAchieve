@@ -100,6 +100,7 @@
             android:fontFamily="@font/gilroy_semibold"
             android:gravity="center_horizontal"
             android:inputType="number"
+
             android:itemBackground="@drawable/selector_pinview_background_color"
             android:textColor="@color/primaryColor"
             app:cursorWidth="2dp"

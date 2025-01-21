@@ -50,7 +50,7 @@ class DashboardActivity : BaseActivity() {
         // AppBarConfiguration for top-level destinations
 
         val appBarConfiguration = AppBarConfiguration(
-            setOf(R.id.home, R.id.studyMaterial, R.id.mockTest, R.id.account)
+            setOf(R.id.home, R.id.PurchasePackage, R.id.mockTest, R.id.account)
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         binding.bottomNavigationView.setupWithNavController(navController)
@@ -78,7 +78,7 @@ class DashboardActivity : BaseActivity() {
                     ) // Hide Back Button
                 }
 
-                R.id.studyMaterial, R.id.mockTest, R.id.account -> {
+                R.id.PurchasePackage, R.id.mockTest, R.id.account -> {
                     setViewsVisibility(
                         isBottomNavVisible = true,
                         isToolbarVisible = true,
