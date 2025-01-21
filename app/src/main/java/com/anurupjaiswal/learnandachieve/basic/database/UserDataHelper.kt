@@ -94,6 +94,7 @@ class UserDataHelper(cx: Context) {
         open()
         val values = ContentValues().apply {
             put(UserData.KEY_UserId, userData._id)
+            put(UserData.Key_Token,userData.token)
             put(UserData.Key_FirstName, userData.firstName)
             put(UserData.Key_MiddleName, userData.middleName)
             put(UserData.Key_LastName, userData.lastName)
@@ -121,6 +122,7 @@ class UserDataHelper(cx: Context) {
             put(UserData.KEY_UpdatedDate, userData.updatedDate)
             put(UserData.Key_Password, userData.password)
             put(UserData.Key_ClassName, userData.className)
+
         }
 
         if (!isExist(userData)) {
@@ -180,6 +182,7 @@ class UserDataHelper(cx: Context) {
                         updatedDate = cursor.getString(cursor.getColumnIndex(UserData.KEY_UpdatedDate))
                         password = cursor.getString(cursor.getColumnIndex(UserData.Key_Password))
                         className = cursor.getString(cursor.getColumnIndex(UserData.Key_ClassName))
+                        token = cursor.getString(cursor.getColumnIndex(UserData.Key_Token))
                     }
                     userList.add(userData)
                 } while (cursor.moveToNext())

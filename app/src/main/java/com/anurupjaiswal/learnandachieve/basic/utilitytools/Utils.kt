@@ -45,6 +45,7 @@ import com.anurupjaiswal.learnandachieve.basic.database.UserDataHelper
 import com.anurupjaiswal.learnandachieve.basic.retrofit.Const
 import com.anurupjaiswal.learnandachieve.basic.utilitytools.loadingButton.LoadingButton
 import com.anurupjaiswal.learnandachieve.databinding.AlertdialogBinding
+import com.anurupjaiswal.learnandachieve.databinding.DialogLogoutBinding
 
 import com.squareup.picasso.NetworkPolicy
 import com.squareup.picasso.Picasso
@@ -600,7 +601,38 @@ object Utils {
         }
     }
 
+    fun showLogoutDialog(
+    context: Context,
+    onLogoutConfirmed: () -> Unit, // Callback for logout
+    onCancel: () -> Unit = {}     // Optional callback for cancel
+    ) {
+        // Use ViewBinding to inflate the dialog layout
+        val binding = DialogLogoutBinding.inflate(LayoutInflater.from(context))
 
+        // Create an AlertDialog
+        val dialog = AlertDialog.Builder(context)
+            .setView(binding.root)
+            .setCancelable(false) // Prevent back press and outside touch
+            .create()
+
+        // Prevent dialog dismissal on outside touch
+        dialog.setCanceledOnTouchOutside(false)
+
+        // Handle Logout button click
+        binding.mcvLogout.setOnClickListener {
+            onLogoutConfirmed()
+            dialog.dismiss()
+        }
+
+        // Handle Cancel button click
+        binding.mcvCancel.setOnClickListener {
+            onCancel()
+            dialog.dismiss()
+        }
+
+        // Show the dialog
+        dialog.show()
+    }
 
 
 }

@@ -133,6 +133,7 @@ class UserData {
         const val KEY_UpdatedDate = "updated_date"
         const val Key_Password = "password"
         const val Key_ClassName = "class_name"
+        const val Key_Token = "token"
 
         @JvmStatic
         fun CreateTable(db: SQLiteDatabase) {
@@ -165,6 +166,7 @@ class UserData {
                     KEY_CreatedDate + " TEXT," +
                     KEY_UpdatedDate + " TEXT," +
                     Key_Password + " TEXT," +
+                    Key_Token + " TEXT," +
                     Key_ClassName + " TEXT" +
                     " )")
             E("CreateTableQuery::$CreateTableQuery")

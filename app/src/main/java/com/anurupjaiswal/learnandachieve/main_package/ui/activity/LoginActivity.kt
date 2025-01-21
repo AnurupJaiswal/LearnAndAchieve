@@ -208,51 +208,41 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
         E("" + binding.etEmail.text.toString())
         E("" + binding.etPassword.text.toString())
         apiservice?.userLogin(hm)?.enqueue(object : retrofit2.Callback<LoginData> {
-            override fun onResponse(
-                call: Call<LoginData>, response: Response<LoginData>
-            ) {
+
+
+            override fun onResponse(call: Call<LoginData>, response: Response<LoginData>) {
                 Utils.toggleProgressBarAndText(false, binding.loading, binding.tvLogIN)
                 try {
                     if (response.code() == StatusCodeConstant.OK) {
-                        assert(response.body() != null)
-                        Utils.T(activity, "Login Successfully")
                         val userModel = response.body()
                         if (userModel != null) {
+                            val user = userModel.user
+                            if (user != null) {
+                                // Set token manually
+                                user.token = userModel.token
 
-                            E("Token::::::::" + userModel.token)
-                            E("Token::::::::" + userModel.user)
-                            E("Token::::::::" + userModel.message)
+                                // Log data for verification
+                                E("User ID: ${user._id}")
+                                E("Token: ${user.token}")
 
+                                // Insert into local database
+                                UserDataHelper.instance.insertData(user)
+                                E("User data inserted into local database successfully.")
+                            }
 
-                            UserDataHelper.instance.insertData(userModel.user)
+                            // Navigate to dashboard
+                            Utils.I_clear(activity, DashboardActivity::class.java, null)
                         }
-
-                        /*val bundle=Bundle()
-                        bundle.putString(Constants.email,binding.etUserNamEmail.text.toString())
-                        bundle.putString(Constants.password,binding.etPassword.text.toString())
-                        bundle.putString("from",Constants.Login)
-                        */
-                        Utils.I_clear(activity, DashboardActivity::class.java, null)
                     } else {
-                        if (response.code() == StatusCodeConstant.BAD_REQUEST) {
-                            assert(response.errorBody() != null)
-                            val message = Gson().fromJson(
-                                response.errorBody()!!.charStream(), APIError::class.java
-                            )
-                            Utils.T(activity, message.message)
-                        } else if (response.code() == StatusCodeConstant.UNAUTHORIZED) {
-                            assert(response.errorBody() != null)
-                            val message = Gson().fromJson(
-                                response.errorBody()!!.charStream(), APIError::class.java
-                            )
-                            Utils.T(activity, message.message)
-                            Utils.UnAuthorizationToken(activity)
-                        }
+                        handleErrorResponse(response)
                     }
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
             }
+
+
+
 
             override fun onFailure(call: Call<LoginData>, t: Throwable) {
                 call.cancel()
@@ -266,5 +256,18 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
         })
     }
 
+    private fun handleErrorResponse(response: Response<LoginData>) {
+        if (response.code() == StatusCodeConstant.BAD_REQUEST || response.code() == StatusCodeConstant.UNAUTHORIZED) {
+            assert(response.errorBody() != null)
+            val message = Gson().fromJson(
+                response.errorBody()!!.charStream(),
+                APIError::class.java
+            )
+            Utils.T(activity, message.message)
+            if (response.code() == StatusCodeConstant.UNAUTHORIZED) {
+                Utils.UnAuthorizationToken(activity)
+            }
+        }
+    }
 
 }

@@ -5,6 +5,7 @@ import com.anurupjaiswal.learnandachieve.model.ClassResponse
 import com.anurupjaiswal.learnandachieve.model.DistrictApiResponse
 import com.anurupjaiswal.learnandachieve.model.ForgetPasswordResponse
 import com.anurupjaiswal.learnandachieve.model.LoginData
+import com.anurupjaiswal.learnandachieve.model.PackageResponse
 import com.anurupjaiswal.learnandachieve.model.PincodeApiResponse
 import com.anurupjaiswal.learnandachieve.model.RegistrationVerifyOtpResponse
 import com.anurupjaiswal.learnandachieve.model.SignupResponse
@@ -78,16 +79,28 @@ interface ApiService {
     fun forgotPassword(@Body body: RequestBody): Call<ForgetPasswordResponse>
 
 
+
+
+
     @POST(Const.VERIFY_OTP)
     fun verifyOtp(@Body params: Map<String, String?>): Call<VerifyOtpResponse>
 
 
+
+
+
+
     @POST(Const.RESET_PASSWORD)
-    fun resetPassword(
-        @Header(Constants.Authorization) token: String, @Body requestBody: Map<String, String>
-    ): Call<ForgetPasswordResponse>
+    fun resetPassword(@Header(Constants.Authorization)
+                      token: String,
+                      @Body requestBody: Map<String, String>): Call<ForgetPasswordResponse>
 
-
+    @GET(Const.PACKAGE_GET_ALL)
+    fun getPackages(@Header(Constants.Authorization)
+                    token: String,
+                    @Query(Const.LIMIT) limit: Int,
+        @Query(Const.OFFSET) offset: Int
+    ):  Call<PackageResponse>
 }
 
 

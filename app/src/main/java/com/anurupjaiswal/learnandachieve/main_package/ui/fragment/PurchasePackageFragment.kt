@@ -7,20 +7,29 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.anurupjaiswal.learnandachieve.R
+import com.anurupjaiswal.learnandachieve.basic.database.UserDataHelper
+import com.anurupjaiswal.learnandachieve.basic.retrofit.ApiService
+import com.anurupjaiswal.learnandachieve.basic.retrofit.RetrofitClient
+import com.anurupjaiswal.learnandachieve.basic.utilitytools.Constants
+import com.anurupjaiswal.learnandachieve.basic.utilitytools.SavedData
+import com.anurupjaiswal.learnandachieve.basic.utilitytools.StatusCodeConstant
+import com.anurupjaiswal.learnandachieve.basic.utilitytools.Utils
+import com.anurupjaiswal.learnandachieve.basic.utilitytools.Utils.E
 import com.anurupjaiswal.learnandachieve.databinding.FragmentPurchasePackageBinding
 import com.anurupjaiswal.learnandachieve.main_package.adapter.PurchasePackageAdapter
+import com.anurupjaiswal.learnandachieve.main_package.ui.activity.DashboardActivity
+import com.anurupjaiswal.learnandachieve.model.PackageResponse
 import com.anurupjaiswal.learnandachieve.model.PackageModel
+import retrofit2.Call
+import retrofit2.Response
 
 class PurchasePackageFragment : Fragment() {
 
     private var _binding: FragmentPurchasePackageBinding? = null
     private val binding get() = _binding!!
+    private var apiservice: ApiService? = null
 
-    // Sample data for the packages
-    private val packageList = listOf(
-        PackageModel("BHARAT SAT EXAM & 3 Mock Test", "1359", "1599", R.drawable.colosseum, "Build 16 web development projects for your portfolio, ready to apply for junior developer jobs."),
-        PackageModel("BHARAT SAT EXAM & 5 Mock Test", "1459", "1759", R.drawable.ic_student_next_gen, "Build 16 web development projects for your portfolio, ready to apply for junior developer jobs.")
-    )
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -32,19 +41,61 @@ class PurchasePackageFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        // Setup RecyclerView
-        setupRecyclerView()
+        apiservice = RetrofitClient.client
+        init()
     }
 
-    private fun setupRecyclerView() {
-        binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
-        val adapter = PurchasePackageAdapter(packageList)
-        binding.recyclerView.adapter = adapter
-    }
+
+     fun init() {
+         apiservice = RetrofitClient.client
+         binding.recyclerView.layoutManager = LinearLayoutManager(context)
+
+         getPackages()
+     }
+
+
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
+
+    private fun getPackages() {
+
+   val token = Utils.GetSession().token
+        val userId = Utils.GetSession()._id
+  E("token $token")
+E("userId $userId")
+        val authToken = "Bearer $token"
+
+        apiservice?.getPackages(authToken,limit = 10, offset= 0)?.enqueue(object : retrofit2.Callback<PackageResponse> {
+            override fun onResponse(call: Call<PackageResponse>, response: Response<PackageResponse>) {
+                try {
+                    if (response.code() == StatusCodeConstant.OK) {
+                        val packageResponse = response.body()
+                        if (packageResponse != null) {
+
+
+
+                            val packageList = packageResponse.packages
+                            val adapter = PurchasePackageAdapter(requireContext(), packageList)
+                            binding.recyclerView.adapter = adapter
+                            adapter.notifyDataSetChanged()  // Notify that the data has been updated
+
+                        }
+                    }
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            }
+
+            override fun onFailure(call: Call<PackageResponse>, t: Throwable) {
+                call.cancel()
+                t.printStackTrace()
+                Utils.T(activity, t.message)
+                E("getMessage::" + t.message)
+            }
+        })
+    }
+
 }

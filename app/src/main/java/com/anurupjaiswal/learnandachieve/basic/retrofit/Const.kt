@@ -36,7 +36,7 @@ interface Const {
         const val TALUKA_ID = "taluka_id"
 const val VERIFY_OTP = "user/verifyOtp"
         const val RESET_PASSWORD = "user/resetPassword"
-
+const val PACKAGE_GET_ALL = "package/getAll"
 
 
 

@@ -3,7 +3,6 @@ package com.anurupjaiswal.learnandachieve.main_package.ui.activity
 import android.app.Activity
 import android.net.Uri
 import android.os.Bundle
-import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
@@ -14,10 +13,9 @@ import com.anurupjaiswal.learnandachieve.R
 import com.anurupjaiswal.learnandachieve.basic.utilitytools.Utils
 import com.anurupjaiswal.learnandachieve.databinding.ActivitySplashScreenBinding
 
-
 class SplashScreenActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivitySplashScreenBinding  // ViewBinding instance
+    private lateinit var binding: ActivitySplashScreenBinding
 
     val activity: Activity = this@SplashScreenActivity
 
@@ -28,27 +26,28 @@ class SplashScreenActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         hideSystemUI()
-
         setupVideoView()
 
+        // Check if onboarding is completed
+        val sharedPreferences = getSharedPreferences("app_preferences", MODE_PRIVATE)
+        val isOnboardingCompleted = sharedPreferences.getBoolean("onboarding_completed", false)
 
-
-
-
-
-        // Start a new thread to handle login and screen transition after the video finishes
+        // Start a new thread to handle the delay and transition
         val thread: Thread = object : Thread() {
             override fun run() {
                 try {
-                    sleep(5000)
+                    sleep(5000) // Wait for 5 seconds
                 } catch (e: Exception) {
                     e.printStackTrace()
                 } finally {
-                    // Check if the user is logged in and navigate accordingly
-                    Utils.E("Utils.IS_LOGIN()::" + Utils.IS_LOGIN())
-                    if (Utils.IS_LOGIN()) {
+                    if (!isOnboardingCompleted) {
+                        // Redirect to OnboardingActivity if onboarding is not completed
+                        Utils.I_clear(activity, OnboardingActivity::class.java, null)
+                    } else if (Utils.IS_LOGIN()) {
+                        // Redirect to DashboardActivity if logged in
                         Utils.I_clear(activity, DashboardActivity::class.java, null)
                     } else {
+                        // Redirect to LoginActivity if not logged in
                         Utils.I_clear(activity, LoginActivity::class.java, null)
                     }
                 }
@@ -56,35 +55,6 @@ class SplashScreenActivity : AppCompatActivity() {
         }
         thread.start()
     }
-
-
-
-
-/*
-    private fun setupVideoView() {
-        val videoView = binding.videoView
-
-        // Create the URI to access the video from the raw folder
-        val videoUri: Uri = Uri.parse("android.resource://" + packageName + "/" + R.raw.splash_video)
-
-        // Set the video URI
-        videoView.setVideoURI(videoUri)
-
-        // Set the layout parameters to make the video fill the screen vertically
-        val layoutParams = videoView.layoutParams
-        layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT // Make the video view match the height of the screen
-        layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT  // Make the video view match the width of the screen
-        videoView.layoutParams = layoutParams
-
-        // Start the video when it is ready
-        videoView.setOnPreparedListener { mediaPlayer ->
-            mediaPlayer.isLooping = true // Optionally, loop the video
-            videoView.start()
-        }
-    }
-*/
-
-
 
     private fun setupVideoView() {
         val videoView = binding.videoView
@@ -121,8 +91,6 @@ class SplashScreenActivity : AppCompatActivity() {
             true
         }
     }
-
-
 
     private fun hideSystemUI() {
         WindowCompat.setDecorFitsSystemWindows(window, false)
