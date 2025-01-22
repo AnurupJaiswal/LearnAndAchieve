@@ -115,10 +115,12 @@ class OtpVerificationActivity : BaseActivity(), View.OnClickListener {
             "type" to "forgot-password"
         )
         apiservice?.verifyOtp(params)?.enqueue(object : retrofit2.Callback<VerifyOtpResponse> {
+
+
             override fun onResponse(
                 call: Call<VerifyOtpResponse>, response: Response<VerifyOtpResponse>
             ) {
-                Utils.toggleProgressBarAndText(true, binding.loading, binding.tvOtpVerification)
+                Utils.toggleProgressBarAndText(true, binding.loading, binding.tvOtpVerification,binding.root)
                 try {
                     if (response.code() == StatusCodeConstant.OK) {
                         val verifyOtpResponse = response.body()
@@ -134,7 +136,7 @@ class OtpVerificationActivity : BaseActivity(), View.OnClickListener {
                     } else if (response.code() == StatusCodeConstant.BAD_REQUEST) {
 
 
-                        Utils.toggleProgressBarAndText(false, binding.loading, binding.tvOtpVerification)
+                        Utils.toggleProgressBarAndText(false, binding.loading, binding.tvOtpVerification,binding.root)
 
 
                         response.errorBody()?.let { errorBody ->
@@ -145,7 +147,7 @@ class OtpVerificationActivity : BaseActivity(), View.OnClickListener {
                                     Toast.makeText(activity, displayMessage, Toast.LENGTH_SHORT).show()
                             }
                     }else if (response.code() == StatusCodeConstant.UNAUTHORIZED) {
-                        Utils.toggleProgressBarAndText(false, binding.loading, binding.tvOtpVerification)
+                        Utils.toggleProgressBarAndText(false, binding.loading, binding.tvOtpVerification,binding.root)
 
                         response.errorBody()?.let { errorBody ->
                             val message = Gson().fromJson(errorBody.charStream(), APIError::class.java)
@@ -163,7 +165,7 @@ class OtpVerificationActivity : BaseActivity(), View.OnClickListener {
 
 
                     else if (response.code() == StatusCodeConstant.NOT_FOUND) {
-                        Utils.toggleProgressBarAndText(false, binding.loading, binding.tvOtpVerification)
+                        Utils.toggleProgressBarAndText(false, binding.loading, binding.tvOtpVerification,binding.root)
 
 
                     }
@@ -176,7 +178,7 @@ class OtpVerificationActivity : BaseActivity(), View.OnClickListener {
             override fun onFailure(call: Call<VerifyOtpResponse>, t: Throwable) {
                 call.cancel()
                 t.printStackTrace()
-                Utils.toggleProgressBarAndText(false, binding.loading, binding.tvOtpVerification)
+                Utils.toggleProgressBarAndText(false, binding.loading, binding.tvOtpVerification,binding.root)
 
                     Toast.makeText(activity, t.message ?: "Request failed Try Again Later", Toast.LENGTH_SHORT).show()
             }

@@ -1,10 +1,13 @@
 package com.anurupjaiswal.learnandachieve.basic.retrofit
 
 import com.anurupjaiswal.learnandachieve.basic.utilitytools.Constants
+import com.anurupjaiswal.learnandachieve.model.AllCartResponse
+import com.anurupjaiswal.learnandachieve.model.CartResponse
 import com.anurupjaiswal.learnandachieve.model.ClassResponse
 import com.anurupjaiswal.learnandachieve.model.DistrictApiResponse
 import com.anurupjaiswal.learnandachieve.model.ForgetPasswordResponse
 import com.anurupjaiswal.learnandachieve.model.LoginData
+import com.anurupjaiswal.learnandachieve.model.PackageDetailsResponse
 import com.anurupjaiswal.learnandachieve.model.PackageResponse
 import com.anurupjaiswal.learnandachieve.model.PincodeApiResponse
 import com.anurupjaiswal.learnandachieve.model.RegistrationVerifyOtpResponse
@@ -101,6 +104,22 @@ interface ApiService {
                     @Query(Const.LIMIT) limit: Int,
         @Query(Const.OFFSET) offset: Int
     ):  Call<PackageResponse>
+
+
+
+    @POST(Const.ADD_TO_CART)
+    fun addToCart(
+        @Header(Constants.Authorization) token: String?,   // Pass the token in the header
+        @Body body: Map<String, String?>          // Use a Map for the request body
+    ): Call<CartResponse>
+
+    @GET(Const.GET_PACKAGE_DETAILS_BY_ID)
+    fun getPackageDetails(
+        @Header(Constants.Authorization) token: String?,   // Pass the token in the header
+        @Query(Constants.PackageId) packageId: String?): Call<PackageDetailsResponse>
+
+    @GET("package/getAllCart")
+    fun getCartData(@Header("Authorization") token: String): Call<AllCartResponse>
 }
 
 

@@ -80,21 +80,31 @@
 
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/mcvAddToCart"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="130dp"
+                    android:layout_height="50dp"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     app:cardBackgroundColor="@color/primaryColor"
                     app:cardCornerRadius="5dp"
                     app:strokeWidth="0dp">
 
+                    <ProgressBar
+                        android:id="@+id/loading"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_centerInParent="true"
+                        android:padding="@dimen/_5sdp"
+                        android:indeterminateTint="@android:color/white"
+                        android:visibility="invisible" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/gilroy_semibold"
-                        android:padding="@dimen/_10sdp"
-                        android:text="Buy Now"
+                        android:text="Add To Card"
+                        android:id="@+id/tvAddTOCard"
+                        android:layout_gravity="center"
                         android:includeFontPadding="false"
                         android:textColor="@color/white"
                         android:textSize="18sp" />

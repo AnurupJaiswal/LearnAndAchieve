@@ -1,8 +1,6 @@
 package com.anurupjaiswal.learnandachieve.basic.utilitytools
 
 
-
-
 interface Constants {
 
     companion object {
@@ -101,6 +99,7 @@ interface Constants {
         const val clientId = "clientId"
         const val Email = "email"
         const val android = "android"
+
         //String device_type = "device_type";
         const val PdfDocument = "Pdf Document"
         const val Images = "Images"
@@ -133,7 +132,6 @@ interface Constants {
         const val Update = "Update"
 
 
-
         // User Registration Constants
         const val firstName = "firstName"
         const val middleName = "middleName"
@@ -154,13 +152,11 @@ interface Constants {
         const val registerBy = "registerBy"
         const val referralCode = "referralCode"
         const val Type = "Type"
-
+        const val PackageId = "package_id"
         // Other constants for Media Type
 
         //new
-        const val Login="Login"
-
-
+        const val Login = "Login"
 
 
     }

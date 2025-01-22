@@ -5,12 +5,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.NavController
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.anurupjaiswal.learnandachieve.R
 import com.anurupjaiswal.learnandachieve.basic.database.UserDataHelper
 import com.anurupjaiswal.learnandachieve.basic.retrofit.ApiService
 import com.anurupjaiswal.learnandachieve.basic.retrofit.RetrofitClient
 import com.anurupjaiswal.learnandachieve.basic.utilitytools.Constants
+import com.anurupjaiswal.learnandachieve.basic.utilitytools.NavigationManager
 import com.anurupjaiswal.learnandachieve.basic.utilitytools.SavedData
 import com.anurupjaiswal.learnandachieve.basic.utilitytools.StatusCodeConstant
 import com.anurupjaiswal.learnandachieve.basic.utilitytools.Utils
@@ -30,7 +33,6 @@ class PurchasePackageFragment : Fragment() {
     private var apiservice: ApiService? = null
 
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -46,13 +48,12 @@ class PurchasePackageFragment : Fragment() {
     }
 
 
-     fun init() {
-         apiservice = RetrofitClient.client
-         binding.recyclerView.layoutManager = LinearLayoutManager(context)
+    fun init() {
+        apiservice = RetrofitClient.client
+        binding.recyclerView.layoutManager = LinearLayoutManager(context)
 
-         getPackages()
-     }
-
+        getPackages()
+    }
 
 
     override fun onDestroyView() {
@@ -62,40 +63,59 @@ class PurchasePackageFragment : Fragment() {
 
     private fun getPackages() {
 
-   val token = Utils.GetSession().token
+        val token = Utils.GetSession().token
         val userId = Utils.GetSession()._id
-  E("token $token")
-E("userId $userId")
+        E("token $token")
+        E("userId $userId")
         val authToken = "Bearer $token"
 
-        apiservice?.getPackages(authToken,limit = 10, offset= 0)?.enqueue(object : retrofit2.Callback<PackageResponse> {
-            override fun onResponse(call: Call<PackageResponse>, response: Response<PackageResponse>) {
-                try {
-                    if (response.code() == StatusCodeConstant.OK) {
-                        val packageResponse = response.body()
-                        if (packageResponse != null) {
+        apiservice?.getPackages(authToken, limit = 10, offset = 0)
+            ?.enqueue(object : retrofit2.Callback<PackageResponse> {
+                override fun onResponse(
+                    call: Call<PackageResponse>,
+                    response: Response<PackageResponse>
+                ) {
+                    try {
+                        if (response.code() == StatusCodeConstant.OK) {
+                            val packageResponse = response.body()
+                            if (packageResponse != null) {
 
 
+                                val packageList = packageResponse.packages
+                                val adapter =
+                                    PurchasePackageAdapter(requireContext(), packageList, authToken,
+                                        onPackageDetailsClick = { packageId, token ->
+                                            navigateToPackageDetails(packageId, token)
+                                        }
+                                    )
+                                binding.recyclerView.adapter = adapter
+                                adapter.notifyDataSetChanged()  // Notify that the data has been updated
 
-                            val packageList = packageResponse.packages
-                            val adapter = PurchasePackageAdapter(requireContext(), packageList)
-                            binding.recyclerView.adapter = adapter
-                            adapter.notifyDataSetChanged()  // Notify that the data has been updated
-
+                            }
                         }
+                    } catch (e: Exception) {
+                        e.printStackTrace()
                     }
-                } catch (e: Exception) {
-                    e.printStackTrace()
                 }
-            }
 
-            override fun onFailure(call: Call<PackageResponse>, t: Throwable) {
-                call.cancel()
-                t.printStackTrace()
-                Utils.T(activity, t.message)
-                E("getMessage::" + t.message)
-            }
-        })
+                override fun onFailure(call: Call<PackageResponse>, t: Throwable) {
+                    call.cancel()
+                    t.printStackTrace()
+                    Utils.T(activity, t.message)
+                    E("getMessage::" + t.message)
+                }
+            })
     }
 
+    fun navigateToPackageDetails(packageId: String, token: String) {
+        val bundle = Bundle().apply {
+            putString("packageId", packageId)
+            putString("token", token)
+        }
+
+        // Navigate to PackageDetailsFragment with the Bundle
+        NavigationManager.navigateToFragment(findNavController(), R.id.packageDetailsFragment, bundle)
+
+    }
 }
+

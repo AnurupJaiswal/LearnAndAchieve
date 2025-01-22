@@ -45,6 +45,7 @@ import com.anurupjaiswal.learnandachieve.basic.database.UserDataHelper
 import com.anurupjaiswal.learnandachieve.basic.retrofit.Const
 import com.anurupjaiswal.learnandachieve.basic.utilitytools.loadingButton.LoadingButton
 import com.anurupjaiswal.learnandachieve.databinding.AlertdialogBinding
+import com.anurupjaiswal.learnandachieve.databinding.CustomToastBinding
 import com.anurupjaiswal.learnandachieve.databinding.DialogLogoutBinding
 
 import com.squareup.picasso.NetworkPolicy
@@ -249,13 +250,13 @@ object Utils {
     }
 
     fun Picasso(Url: String, imageView: ImageView?, dummy: Int) {
-        Picasso.get().load(Const.HOST_URL + Url).fetch(object : com.squareup.picasso.Callback {
+        Picasso.get().load(Const.baseUrlForImage + Url).fetch(object : com.squareup.picasso.Callback {
             override fun onSuccess() {
                 if (dummy == 0) Picasso.get()
-                    .load(Const.HOST_URL + Url)
+                    .load(Const.baseUrlForImage + Url)
                     .networkPolicy(NetworkPolicy.OFFLINE)
                     .into(imageView) else Picasso.get()
-                    .load(Const.HOST_URL + Url)
+                    .load(Const.baseUrlForImage + Url)
                     .error(dummy)
                     .networkPolicy(NetworkPolicy.OFFLINE)
                     .into(imageView)
@@ -263,9 +264,9 @@ object Utils {
 
             override fun onError(e: Exception) {
                 if (dummy == 0) Picasso.get()
-                    .load(Const.HOST_URL + Url)
+                    .load(Const.baseUrlForImage + Url)
                     .into(imageView) else Picasso.get()
-                    .load(Const.HOST_URL + Url)
+                    .load(Const.baseUrlForImage + Url)
                     .error(dummy)
                     .into(imageView)
             }
@@ -485,14 +486,22 @@ object Utils {
 
     @SuppressLint("InflateParams")
     fun T(c: Context?, msg: String?) {
-        //  val toast = Toast(c)
-        Toast.makeText(c, msg, Toast.LENGTH_SHORT).show()
-        /*   val view = LayoutInflater.from(c).inflate(R.layout.custom_toast, null)
-           val textView = view.findViewById<TextView>(R.id.tvText)
-           textView.text = msg
-           toast.view = view
-           toast.duration = Toast.LENGTH_SHORT
-           toast.show()*/
+        // Inflate the custom layout for the toast using ViewBinding
+        val binding = CustomToastBinding.inflate(LayoutInflater.from(c))
+
+        // Set the message to the TextView in the custom layout
+        binding.toastMessage.text = msg
+
+        // Set the logo if needed (optional)
+        // binding.toastLogo.setImageResource(R.drawable.ic_logo)
+
+        // Create the custom toast
+        val toast = Toast(c)
+        toast.duration = Toast.LENGTH_SHORT
+        toast.view = binding.root  // Set the custom layout to the toast
+
+        // Show the custom toast
+        toast.show()
     }
 
 
@@ -591,15 +600,23 @@ object Utils {
 
 
 
-    fun toggleProgressBarAndText(showProgressBar: Boolean, progressBar: ProgressBar, textView: TextView) {
+    fun toggleProgressBarAndText(
+        showProgressBar: Boolean,
+        progressBar: ProgressBar,
+        textView: TextView,
+        rootView: View
+    ) {
         if (showProgressBar) {
             progressBar.visibility = View.VISIBLE
             textView.visibility = View.GONE
+            rootView.isEnabled = false // Disable interaction
         } else {
             progressBar.visibility = View.GONE
             textView.visibility = View.VISIBLE
+            rootView.isEnabled = true // Enable interaction
         }
     }
+
 
     fun showLogoutDialog(
     context: Context,

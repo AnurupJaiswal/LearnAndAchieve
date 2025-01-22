@@ -197,7 +197,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
 
 
     private fun userLogin() {
-        Utils.toggleProgressBarAndText(true, binding.loading, binding.tvLogIN)
+        Utils.toggleProgressBarAndText(true, binding.loading, binding.tvLogIN,binding.root)
 
         val fcmid = SavedData.getFirebaseToken()
         val hm = HashMap<String, String?>()
@@ -211,7 +211,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
 
 
             override fun onResponse(call: Call<LoginData>, response: Response<LoginData>) {
-                Utils.toggleProgressBarAndText(false, binding.loading, binding.tvLogIN)
+                Utils.toggleProgressBarAndText(false, binding.loading, binding.tvLogIN,binding.root)
                 try {
                     if (response.code() == StatusCodeConstant.OK) {
                         val userModel = response.body()
@@ -248,7 +248,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
                 call.cancel()
                 t.printStackTrace()
 
-                Utils.toggleProgressBarAndText(false, binding.loading, binding.tvLogIN)
+                Utils.toggleProgressBarAndText(false, binding.loading, binding.tvLogIN,binding.root)
 
                 Utils.T(activity, t.message)
                 E("getMessage::" + t.message)

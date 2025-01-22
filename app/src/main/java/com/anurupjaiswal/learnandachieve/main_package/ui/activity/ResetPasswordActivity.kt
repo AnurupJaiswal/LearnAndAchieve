@@ -166,7 +166,7 @@ var token :String? =null
                 override fun onResponse(
                     call: Call<ForgetPasswordResponse>, response: Response<ForgetPasswordResponse>
                 ) {
-                    Utils.toggleProgressBarAndText(true, binding.loading, binding.tvOtpVerification)
+                    Utils.toggleProgressBarAndText(true, binding.loading, binding.tvOtpVerification,binding.root)
                     try {
                         if (response.code() == StatusCodeConstant.OK) {
                             val resetPasswordResponse = response.body()
@@ -179,7 +179,7 @@ var token :String? =null
 
 
                             Utils.toggleProgressBarAndText(
-                                false, binding.loading, binding.tvOtpVerification
+                                false, binding.loading, binding.tvOtpVerification,binding.root
                             )
 
 
@@ -192,7 +192,7 @@ var token :String? =null
 
                         } else if (response.code() == StatusCodeConstant.UNAUTHORIZED) {
                             Utils.toggleProgressBarAndText(
-                                false, binding.loading, binding.tvOtpVerification
+                                false, binding.loading, binding.tvOtpVerification,binding.root
                             )
 
                             response.errorBody()?.let { errorBody ->
@@ -218,7 +218,7 @@ var token :String? =null
                     call.cancel()
                     t.printStackTrace()
                     Utils.toggleProgressBarAndText(
-                        false, binding.loading, binding.tvOtpVerification
+                        false, binding.loading, binding.tvOtpVerification,binding.root
                     )
 
                     Toast.makeText(

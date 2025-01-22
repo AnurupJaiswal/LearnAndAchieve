@@ -13,8 +13,7 @@ interface Const {
         //Debug
         const val HOST_URL = "https://stage-api.learnandachieve.in/"
 
-
-
+        const val baseUrlForImage = "https://stage-api.learnandachieve.in/uploads/";
 
 
         const val USER_LOGIN = "user/login"
@@ -38,9 +37,9 @@ const val VERIFY_OTP = "user/verifyOtp"
         const val RESET_PASSWORD = "user/resetPassword"
 const val PACKAGE_GET_ALL = "package/getAll"
 
+const val ADD_TO_CART = "package/addToCart"
 
-
-
+const val GET_PACKAGE_DETAILS_BY_ID ="package/getDetailById"
 
 
 

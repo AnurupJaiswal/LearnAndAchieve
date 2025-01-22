@@ -98,12 +98,12 @@ class SignUpActivity : BaseActivity() {
             is ContactDetailsFragment -> {
                 if (currentFragment.validateFields()) {
                     // Show progress bar and hide the text view
-                    toggleProgressBarAndText(true, binding.loading, binding.tvNext)
+                    toggleProgressBarAndText(true, binding.loading, binding.tvNext,binding.root)
 
                     // Call the API and check the response
                     currentFragment.callApi { isSuccess, contactDetailsBundle ->
                         // Hide the progress bar and show the text view after the API response
-                        toggleProgressBarAndText(false, binding.loading, binding.tvNext)
+                        toggleProgressBarAndText(false, binding.loading, binding.tvNext,binding.root)
 
                         if (isSuccess) {
                             // Combine personalDetailsBundle and contactDetailsBundle
@@ -130,11 +130,11 @@ class SignUpActivity : BaseActivity() {
         }    is OTPVerificationFragment -> {
             if (currentFragment.validateFields()) {
                 // Show progress bar while verifying OTP
-                toggleProgressBarAndText(true, binding.loading, binding.tvNext)
+                toggleProgressBarAndText(true, binding.loading, binding.tvNext,binding.root)
 
                 // Call the API for OTP verification
                 currentFragment.callApi { isSuccess ->
-                    toggleProgressBarAndText(false, binding.loading, binding.tvNext)
+                    toggleProgressBarAndText(false, binding.loading, binding.tvNext,binding.root)
 
                     if (isSuccess) {
                         Utils.T(this, "OTP verified successfully")

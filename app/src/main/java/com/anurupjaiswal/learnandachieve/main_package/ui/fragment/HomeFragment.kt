@@ -52,7 +52,7 @@ class HomeFragment : Fragment() {
 
 
         binding.tvViewAllPackages.setOnClickListener {
-            NavigationManager.navigateToFragment(findNavController(), R.id.PurchasePackageFragment)
+            NavigationManager.navigateToFragment(findNavController(), R.id.PurchasePackage)
         }
 
 

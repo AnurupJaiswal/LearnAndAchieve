@@ -1,6 +1,7 @@
 package com.anurupjaiswal.learnandachieve.main_package.ui.activity
 
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
 import androidx.activity.OnBackPressedCallback
@@ -9,21 +10,31 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.anurupjaiswal.learnandachieve.R
+import com.anurupjaiswal.learnandachieve.basic.retrofit.ApiService
+import com.anurupjaiswal.learnandachieve.basic.retrofit.RetrofitClient
 import com.anurupjaiswal.learnandachieve.basic.utilitytools.BaseActivity
 import com.anurupjaiswal.learnandachieve.basic.utilitytools.NavigationManager
+import com.anurupjaiswal.learnandachieve.basic.utilitytools.StatusCodeConstant
 import com.anurupjaiswal.learnandachieve.basic.utilitytools.Utils
 import com.anurupjaiswal.learnandachieve.databinding.ActivityDashboardBinding
+import com.anurupjaiswal.learnandachieve.model.AllCartResponse
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class DashboardActivity : BaseActivity() {
     private val BhartSTA: Boolean = false
     private val premiumIcons = listOf(R.drawable.ic_premium, R.drawable.ic_premium2)
     private val premiumIconChangeInterval = 1_000L
     private var currentIconIndex = 0
+    private var cartCount = 0 // Directly store the cart count here
+    lateinit var apiService: ApiService
+    var Token: String? = null
 
     internal lateinit var binding: ActivityDashboardBinding
 
@@ -33,9 +44,8 @@ class DashboardActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityDashboardBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
         setSupportActionBar(binding.toolbar)
-
+        apiService = RetrofitClient.client
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as? NavHostFragment
         val navController = navHostFragment?.navController
@@ -60,10 +70,10 @@ class DashboardActivity : BaseActivity() {
         binding.shopIcon.setOnClickListener {
             NavigationManager.navigateToFragment(navController, R.id.cartFragment)
         }
-   binding.shopBadge.setOnClickListener {
+        binding.shopBadge.setOnClickListener {
             NavigationManager.navigateToFragment(navController, R.id.cartFragment)
         }
-
+        getCartAllCount()
 
 
 
@@ -103,6 +113,7 @@ class DashboardActivity : BaseActivity() {
                 }
             }
         }
+        updateCartBadge()
 
 
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
@@ -166,4 +177,53 @@ class DashboardActivity : BaseActivity() {
         premiumIconJob?.cancel()
     }
 
+    @SuppressLint("SetTextI18n")
+    private fun updateCartBadge() {
+
+        binding.shopBadge.text = cartCount.toString()
+
+        if (cartCount > 0) {
+            binding.shopBadge.visibility = View.VISIBLE
+        } else {
+            binding.shopBadge.visibility = View.GONE
+        }
+    }
+
+    fun updateCartCount(count: Int) {
+        cartCount = count
+        updateCartBadge()
+    }
+
+
+    fun getCartAllCount() {
+
+        Token = Utils.GetSession().token
+        val authToken = "Bearer $Token"
+
+        apiService.getCartData(authToken).enqueue(object :
+            Callback<AllCartResponse> {
+            override fun onResponse(call: Call<AllCartResponse>, response: Response<AllCartResponse>) {
+                // Hide loading state
+                try {
+                    if (response.code() == StatusCodeConstant.OK) {
+                        val allCartResponse = response.body()
+
+                        updateCartCount(allCartResponse!!.cartCount)
+
+                    } else {
+                    }
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            }
+
+            override fun onFailure(call: Call<AllCartResponse>, t: Throwable) {
+                call.cancel()
+
+                t.printStackTrace()
+            }
+        })
+
+
+    }
 }
