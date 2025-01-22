@@ -1,4 +1,4 @@
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -9,15 +9,17 @@
 
 
     <LinearLayout
+        android:id="@+id/llCartContent"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
+        android:paddingVertical="@dimen/_10sdp"
 
-        android:paddingVertical="@dimen/_10sdp">
+
+        android:visibility="gone">
 
 
         <TextView
-            android:id="@+id/tvCart"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/gilroy_semibold"
@@ -248,5 +250,80 @@
 
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/llEmptyCartLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:orientation="vertical"
+        android:paddingVertical="@dimen/_10sdp"
+        android:visibility="gone">
 
-</androidx.core.widget.NestedScrollView>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/gilroy_semibold"
+            android:maxLines="1"
+            android:text="Cart"
+            android:textColor="@color/black"
+            android:textSize="22sp" />
+
+
+        <ImageView
+            android:layout_width="@dimen/_250sdp"
+            android:layout_height="@dimen/_250sdp"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/_50sdp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/empty_cart" />
+
+        <TextView
+            android:id="@+id/tvCart"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:fontFamily="@font/gilroy_semibold"
+            android:maxLines="1"
+            android:text="No Records Found"
+            android:textColor="@color/black"
+            android:textSize="22sp" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/mcvGotoPackages"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/_15sdp"
+            app:cardBackgroundColor="@color/primaryColor"
+            app:cardCornerRadius="5dp"
+            app:strokeWidth="0dp">
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/_20sdp"
+                android:fontFamily="@font/gilroy_semibold"
+                android:includeFontPadding="false"
+                android:padding="@dimen/_10sdp"
+                android:text="Go to packages"
+                android:textColor="@color/white"
+                android:textSize="18sp" />
+
+
+        </com.google.android.material.card.MaterialCardView>
+
+    </LinearLayout>
+
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="@style/Widget.AppCompat.ProgressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
+
+
+</RelativeLayout>

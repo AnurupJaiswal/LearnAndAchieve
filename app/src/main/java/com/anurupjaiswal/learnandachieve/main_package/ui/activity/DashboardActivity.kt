@@ -3,8 +3,10 @@ package com.anurupjaiswal.learnandachieve.main_package.ui.activity
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.activity.OnBackPressedCallback
+import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
@@ -33,8 +35,10 @@ class DashboardActivity : BaseActivity() {
     private val premiumIconChangeInterval = 1_000L
     private var currentIconIndex = 0
     private var cartCount = 0 // Directly store the cart count here
-    lateinit var apiService: ApiService
+    private lateinit var apiService: ApiService
     var Token: String? = null
+
+    lateinit var navController: NavController
 
     internal lateinit var binding: ActivityDashboardBinding
 
@@ -48,14 +52,9 @@ class DashboardActivity : BaseActivity() {
         apiService = RetrofitClient.client
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as? NavHostFragment
-        val navController = navHostFragment?.navController
+        navController = navHostFragment?.navController ?: throw IllegalStateException("NavController not found!")
 
-        if (navController == null) {
 
-            Utils.E("NavController is null. Check FragmentContainerView setup.")
-            return
-
-        }
 
         // AppBarConfiguration for top-level destinations
 
@@ -63,6 +62,7 @@ class DashboardActivity : BaseActivity() {
             setOf(R.id.home, R.id.PurchasePackage, R.id.mockTest, R.id.account)
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
+
         binding.bottomNavigationView.setupWithNavController(navController)
 
 
@@ -81,6 +81,7 @@ class DashboardActivity : BaseActivity() {
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
                 R.id.home -> {
+
                     setViewsVisibility(
                         isBottomNavVisible = true,
                         isToolbarVisible = true,
@@ -179,6 +180,7 @@ class DashboardActivity : BaseActivity() {
 
     @SuppressLint("SetTextI18n")
     private fun updateCartBadge() {
+        Log.d("CartDebug", "Updating cart badge with count: $cartCount")
 
         binding.shopBadge.text = cartCount.toString()
 
@@ -190,6 +192,8 @@ class DashboardActivity : BaseActivity() {
     }
 
     fun updateCartCount(count: Int) {
+        Log.d("CartDebug", "Cart count updated to: $cartCount")
+
         cartCount = count
         updateCartBadge()
     }
@@ -226,4 +230,7 @@ class DashboardActivity : BaseActivity() {
 
 
     }
+
+
+
 }

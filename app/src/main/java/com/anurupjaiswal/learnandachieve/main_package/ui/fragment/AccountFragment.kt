@@ -4,23 +4,28 @@ import android.health.connect.datatypes.units.Energy
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
+import androidx.navigation.NavController
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.anurupjaiswal.learnandachieve.R
 import com.anurupjaiswal.learnandachieve.basic.utilitytools.NavigationManager
 import com.anurupjaiswal.learnandachieve.basic.utilitytools.Utils
 import com.anurupjaiswal.learnandachieve.databinding.FragmentAccountBinding
+import com.anurupjaiswal.learnandachieve.main_package.ui.activity.DashboardActivity
 import com.anurupjaiswal.learnandachieve.main_package.ui.activity.LoginActivity
 
 class AccountFragment : Fragment(R.layout.fragment_account), View.OnClickListener {
 
     private var _binding: FragmentAccountBinding? = null
     private val binding get() = _binding!!
+    private lateinit var navController: NavController
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         _binding = FragmentAccountBinding.bind(view)
-
+        val dashboardActivity = requireActivity() as DashboardActivity
+        navController = dashboardActivity.navController
 
 
 
@@ -45,72 +50,74 @@ class AccountFragment : Fragment(R.layout.fragment_account), View.OnClickListene
     }
 
     override fun onClick(view: View) {
+
+
         when (view) {
             binding.llOurServices -> NavigationManager.navigateToFragment(
-                findNavController(), R.id.ourServiceFragment
+                navController, R.id.ourServiceFragment
             )
             binding.rlStudentMaterial -> NavigationManager.navigateToFragment(
-                findNavController(), R.id.studyMaterial
+                navController, R.id.studyMaterial
             )
 
             binding.llAboutUs -> NavigationManager.navigateToFragment(
-                findNavController(), R.id.aboutUsFragment
+                navController, R.id.aboutUsFragment
             )
 
             binding.llTermsAndConditions -> NavigationManager.navigateToFragment(
-                findNavController(), R.id.termsAndConditionsFragment
+                navController, R.id.termsAndConditionsFragment
             )
 
             binding.llFAQ -> NavigationManager.navigateToFragment(
-                findNavController(), R.id.FAQFragment
+                navController, R.id.FAQFragment
             )
 
             binding.llPrivacyPolicy -> NavigationManager.navigateToFragment(
-                findNavController(), R.id.PrivacyPolicyFragment
+                navController, R.id.PrivacyPolicyFragment
             )
 
             binding.llcancellationPolicy -> NavigationManager.navigateToFragment(
-                findNavController(), R.id.cancellationPolicyFragment
+                navController, R.id.cancellationPolicyFragment
             )
 
             binding.rlPurchase -> NavigationManager.navigateToFragment(
-                findNavController(), R.id.PurchasePackage
+                navController, R.id.PurchasePackage
             )
 
             binding.rlChangePass -> NavigationManager.navigateToFragment(
-                findNavController(), R.id.ChangePasswordFragment
+                navController, R.id.ChangePasswordFragment
             )
 
             binding.rlJoinAndEarn -> NavigationManager.navigateToFragment(
-                findNavController(), R.id.JoinAndEarnFragment
+                navController, R.id.JoinAndEarnFragment
             )
 
             binding.rlMockTest -> NavigationManager.navigateToFragment(
-                findNavController(), R.id.mockTest
+                navController, R.id.mockTest
             )
 
             binding.rlOderHistory -> NavigationManager.navigateToFragment(
-                findNavController(), R.id.OrderHistoryFragment
+                navController, R.id.OrderHistoryFragment
             )
 
             binding.rlProfile -> NavigationManager.navigateToFragment(
-                findNavController(), R.id.ProfileDetailsFragment
+                navController, R.id.ProfileDetailsFragment
             )
 
             binding.rlStudentDetails -> NavigationManager.navigateToFragment(
-                findNavController(), R.id.ProfileDetailsFragment
+                navController, R.id.ProfileDetailsFragment
             )
 
             binding.rlDeleteAccount -> NavigationManager.navigateToFragment(
-                findNavController(), R.id.DeleteAccountFragment
+                navController, R.id.DeleteAccountFragment
             )
 
             binding.rlBharatSATScholar -> NavigationManager.navigateToFragment(
-                findNavController(), R.id.BharatSatScholarShipFragment
+                navController, R.id.BharatSatScholarShipFragment
             )
 
             binding.rlBharatSAT -> NavigationManager.navigateToFragment(
-                findNavController(), R.id.BharatSatFragment
+                navController, R.id.BharatSatFragment
             )
 
              binding.lbLogout ->{

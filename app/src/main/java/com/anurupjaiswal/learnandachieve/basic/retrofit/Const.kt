@@ -41,6 +41,8 @@ const val ADD_TO_CART = "package/addToCart"
 
 const val GET_PACKAGE_DETAILS_BY_ID ="package/getDetailById"
 
+        const val GET_ALL_CARDS = "package/getAllCart"
+        const val DELETE_CART_API = "package/deleteCart/{cart_id}"
 
 
     }

@@ -4,6 +4,7 @@ import com.anurupjaiswal.learnandachieve.basic.utilitytools.Constants
 import com.anurupjaiswal.learnandachieve.model.AllCartResponse
 import com.anurupjaiswal.learnandachieve.model.CartResponse
 import com.anurupjaiswal.learnandachieve.model.ClassResponse
+import com.anurupjaiswal.learnandachieve.model.DeleteCartResponse
 import com.anurupjaiswal.learnandachieve.model.DistrictApiResponse
 import com.anurupjaiswal.learnandachieve.model.ForgetPasswordResponse
 import com.anurupjaiswal.learnandachieve.model.LoginData
@@ -19,11 +20,13 @@ import com.google.gson.JsonObject
 import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.FieldMap
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.POST
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 
@@ -118,8 +121,15 @@ interface ApiService {
         @Header(Constants.Authorization) token: String?,   // Pass the token in the header
         @Query(Constants.PackageId) packageId: String?): Call<PackageDetailsResponse>
 
-    @GET("package/getAllCart")
-    fun getCartData(@Header("Authorization") token: String): Call<AllCartResponse>
+    @GET(Const.GET_ALL_CARDS)
+    fun getCartData(@Header(Constants.Authorization) token: String): Call<AllCartResponse>
+
+
+    @DELETE(Const.DELETE_CART_API)
+    fun deleteCartItem(
+        @Header("Authorization") authToken: String, // Authentication token for the request
+        @Path("cart_id") cart_id: String // Cart item ID to be deleted
+    ): Call<DeleteCartResponse>
 }
 
 
