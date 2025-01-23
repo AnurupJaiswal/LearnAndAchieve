@@ -7,7 +7,10 @@ import com.anurupjaiswal.learnandachieve.model.ClassResponse
 import com.anurupjaiswal.learnandachieve.model.DeleteCartResponse
 import com.anurupjaiswal.learnandachieve.model.DistrictApiResponse
 import com.anurupjaiswal.learnandachieve.model.ForgetPasswordResponse
+import com.anurupjaiswal.learnandachieve.model.GetAllStudyMaterial
 import com.anurupjaiswal.learnandachieve.model.LoginData
+import com.anurupjaiswal.learnandachieve.model.Module
+import com.anurupjaiswal.learnandachieve.model.ModuleResponse
 import com.anurupjaiswal.learnandachieve.model.PackageDetailsResponse
 import com.anurupjaiswal.learnandachieve.model.PackageResponse
 import com.anurupjaiswal.learnandachieve.model.PincodeApiResponse
@@ -130,6 +133,20 @@ interface ApiService {
         @Header("Authorization") authToken: String, // Authentication token for the request
         @Path("cart_id") cart_id: String // Cart item ID to be deleted
     ): Call<DeleteCartResponse>
+
+    @GET("studyMaterials/getAll")
+    fun getStudyMaterials(
+        @Query(Const.LIMIT) limit: Int,
+        @Query(Const.OFFSET) offset: Int,
+        @Header(Constants.Authorization) authorization: String
+    ): Call<GetAllStudyMaterial>
+
+    @GET("studyMaterials/getAllModuleBySubject")
+    fun getAllModulesBySubject(
+        @Header(Constants.Authorization) authorization: String,
+        @Query("subject_id") subjectId: String,
+        @Query("medium") medium: String
+    ): Call<ModuleResponse>
 }
 
 

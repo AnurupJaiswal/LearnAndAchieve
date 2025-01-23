@@ -31,23 +31,23 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/tvModuleName"
+                    android:id="@+id/tvChapter"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/blue"
-                    android:textSize="14sp"
+                    android:textSize="16sp"
                     android:fontFamily="@font/gilroy_regular"
                     android:text="@string/account_valid"/>
 
                 <TextView
-                    android:id="@+id/moduleDescription"
+                    android:id="@+id/tvModuleName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/blue"
                     android:textSize="14sp"
                     android:maxLines="2"
                     android:layout_marginTop="@dimen/_10sdp"
-                    android:fontFamily="@font/gilroy_semibold"
+                    android:fontFamily="@font/gilroy_bold"
                     android:text="Anurup jaiswal ,ghghghg gjgjg jgjgrtor[erir[tr rrrereerekfjgjfgfjjgfgjfgfjrritr;treterterttrtttr;rtr;gfg;gfd"/>
 
             </LinearLayout>

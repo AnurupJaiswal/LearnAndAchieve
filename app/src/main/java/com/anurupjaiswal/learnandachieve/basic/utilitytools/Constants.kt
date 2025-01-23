@@ -141,7 +141,6 @@ interface Constants {
         const val schoolName = "schoolName"
         const val className = "class" // Changed to avoid conflict with Kotlin keyword 'class'
         const val classId = "classId"
-        const val medium = "medium"
 
         const val addressLineOne = "addressLineOne"
         const val addressLineTwo = "addressLineTwo"
@@ -153,6 +152,9 @@ interface Constants {
         const val referralCode = "referralCode"
         const val Type = "Type"
         const val PackageId = "package_id"
+        const val subjectId = "subject_id"
+        const val subject_name = "subject_name"
+        const val medium = "medium"
         // Other constants for Media Type
 
         //new

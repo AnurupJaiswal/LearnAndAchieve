@@ -47,6 +47,7 @@ import com.anurupjaiswal.learnandachieve.basic.utilitytools.loadingButton.Loadin
 import com.anurupjaiswal.learnandachieve.databinding.AlertdialogBinding
 import com.anurupjaiswal.learnandachieve.databinding.CustomToastBinding
 import com.anurupjaiswal.learnandachieve.databinding.DialogLogoutBinding
+import com.anurupjaiswal.learnandachieve.main_package.ui.activity.LoginActivity
 
 import com.squareup.picasso.NetworkPolicy
 import com.squareup.picasso.Picasso
@@ -143,7 +144,9 @@ object Utils {
     @JvmStatic
     fun UnAuthorizationToken(cx: Context) {
         UserDataHelper.instance.deleteAll()
-      //  I_clear(cx, LoginActivity::class.java, null)
+
+        T(cx,"Session expired. Please log in again.")
+        I_clear(cx, LoginActivity::class.java, null)
     }
     fun hideKeyboard(activity: Activity) {
         val imm: InputMethodManager =

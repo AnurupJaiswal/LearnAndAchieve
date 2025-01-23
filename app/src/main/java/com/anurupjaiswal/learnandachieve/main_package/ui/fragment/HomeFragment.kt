@@ -11,6 +11,8 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
+import android.view.animation.Animation
+import android.view.animation.ScaleAnimation
 import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.cardview.widget.CardView
@@ -21,12 +23,27 @@ import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import androidx.viewpager2.widget.ViewPager2
 import com.anurupjaiswal.learnandachieve.R
+import com.anurupjaiswal.learnandachieve.basic.retrofit.APIError
+import com.anurupjaiswal.learnandachieve.basic.retrofit.ApiService
+import com.anurupjaiswal.learnandachieve.basic.retrofit.RetrofitClient
+import com.anurupjaiswal.learnandachieve.basic.utilitytools.Constants
 import com.anurupjaiswal.learnandachieve.basic.utilitytools.NavigationManager
+import com.anurupjaiswal.learnandachieve.basic.utilitytools.StatusCodeConstant
+import com.anurupjaiswal.learnandachieve.basic.utilitytools.Utils
+import com.anurupjaiswal.learnandachieve.basic.utilitytools.Utils.E
 import com.anurupjaiswal.learnandachieve.databinding.FragmentHomeBinding
 import com.anurupjaiswal.learnandachieve.main_package.adapter.HomeViewPagerAdapter
 import com.anurupjaiswal.learnandachieve.main_package.adapter.PopularPackagesAdapter
+import com.anurupjaiswal.learnandachieve.main_package.adapter.PurchasePackageAdapter
+import com.anurupjaiswal.learnandachieve.main_package.adapter.StudyMaterialAdapter
+import com.anurupjaiswal.learnandachieve.model.GetAllStudyMaterial
 import com.anurupjaiswal.learnandachieve.model.HomeViewpagerIteam
+import com.anurupjaiswal.learnandachieve.model.PackageResponse
 import com.anurupjaiswal.learnandachieve.model.PopularPackageItem
+import com.google.gson.Gson
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import kotlin.math.abs
 
 class HomeFragment : Fragment() {
@@ -37,14 +54,14 @@ class HomeFragment : Fragment() {
     private var currentCardIndex = 0
     private lateinit var gestureDetector: GestureDetector
     private var isAutoScrollingPaused = false // Flag to check if auto-scroll is paused
-
+    private var apiservice: ApiService? = null
+    var token: String? = null
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
-
+        init()
         setUpShopNowViewpager()
-        setUpMostPopularPackageRecyclerView()
 
         binding.tvViewAllBlogs.setOnClickListener {
             NavigationManager.navigateToFragment(findNavController(), R.id.BlogsFragment)
@@ -91,12 +108,32 @@ class HomeFragment : Fragment() {
 
     }
 
+
+    fun init() {
+
+        token = Utils.GetSession().token
+        binding.rcvStudyMaterial.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+
+        apiservice = RetrofitClient.client
+        binding.mostPopularPackageRecyclerView.layoutManager = LinearLayoutManager(
+            context, // Context
+            LinearLayoutManager.HORIZONTAL,
+            false
+        )
+
+        fetchStudyMaterials()
+        getPackages()
+    }
+
     private fun setUpShopNowViewpager() {
         // Prepare the data for ViewPager
         val homeViewpagerItems = arrayListOf<HomeViewpagerIteam>().apply {
-            repeat(3) {
-                add(HomeViewpagerIteam(R.drawable.banner))
-            }
+
+            add(HomeViewpagerIteam(R.drawable.banner))
+            add(HomeViewpagerIteam(R.drawable.banner_two))
+            add(HomeViewpagerIteam(R.drawable.banner_three))
+
         }
 
         // Set adapter for ViewPager
@@ -134,6 +171,7 @@ class HomeFragment : Fragment() {
             }
         })
     }
+
 
     private fun setupDots(numOfDots: Int) {
         binding.dotsContainer.removeAllViews()
@@ -179,46 +217,56 @@ class HomeFragment : Fragment() {
             val params = activeDot.layoutParams as LinearLayout.LayoutParams
             params.height = heightInPx
             activeDot.layoutParams = params
+
         }
     }
 
-    private fun setUpMostPopularPackageRecyclerView() {
 
-        val popularPackages = listOf(
-            PopularPackageItem(
-                title = "All The Skills You Need In One Place and need to  testing string to test only the data that was coming is rioght or not  w ",
-                description = "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-                discountedPrice = "₹299",
-                originalPrice = "₹599",
-                imageUrl = "https://example.com/image1.jpg",
-                showPopular = true
-            ), PopularPackageItem(
-                title = "Skill Building Bundle",
-                description = "Enhance your skills with our premium package.",
-                discountedPrice = "₹599",
-                originalPrice = "₹999",
-                imageUrl = "https://example.com/image2.jpg"
-            ), PopularPackageItem(
-                title = "Complete Learning Pack",
-                description = "Get access to all our resources in one pack.",
-                discountedPrice = "₹499",
-                originalPrice = "₹799",
-                imageUrl = "https://example.com/image3.jpg"
-            )
-        )
+    private fun getPackages() {
+
+        val userId = Utils.GetSession()._id
+        E("token $token")
+        E("userId $userId")
+        val authToken = "Bearer $token"
+
+        apiservice?.getPackages(authToken, limit = 10, offset = 0)
+            ?.enqueue(object : retrofit2.Callback<PackageResponse> {
+                override fun onResponse(
+                    call: Call<PackageResponse>,
+                    response: Response<PackageResponse>
+                ) {
+                    try {
+                        if (response.code() == StatusCodeConstant.OK) {
+                            val packageResponse = response.body()
+                            if (packageResponse != null) {
 
 
+                                val packageList = packageResponse.packages
+                                val adapter =
+                                    PopularPackagesAdapter(requireContext(), packageList, authToken,
+                                        onPackageDetailsClick = { packageId, token ->
+                                            navigateToPackageDetails(packageId, token)
+                                        }
+                                    )
+                                binding.mostPopularPackageRecyclerView.adapter = adapter
+                                adapter.notifyDataSetChanged()  // Notify that the data has been updated
 
+                            }
+                        }
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+                }
 
-
-
-
-        binding.mostPopularPackageRecyclerView.apply {
-            adapter = PopularPackagesAdapter(popularPackages)
-            layoutManager =
-                LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-        }
+                override fun onFailure(call: Call<PackageResponse>, t: Throwable) {
+                    call.cancel()
+                    t.printStackTrace()
+                    Utils.T(activity, t.message)
+                    E("getMessage::" + t.message)
+                }
+            })
     }
+
 
     private fun observeLayoutChanges(cards: List<CardView>) {
         val cardHeights = mutableListOf<Float>()
@@ -375,5 +423,89 @@ class HomeFragment : Fragment() {
         _binding = null // Nullify binding to prevent memory leaks
     }
 
+    fun navigateToPackageDetails(packageId: String, token: String) {
+        val bundle = Bundle().apply {
+            putString("packageId", packageId)
+            putString("token", token)
+        }
 
+        NavigationManager.navigateToFragment(
+            findNavController(),
+            R.id.packageDetailsFragment,
+            bundle
+        )
+    }
+
+    fun navigateTOModule(subjectId: String, medium: String, subjectName: String) {
+        val bundle = Bundle().apply {
+            putString(Constants.subjectId, subjectId)
+            putString(Constants.subject_name, subjectName)
+            putString(Constants.medium, medium)
+        }
+
+        NavigationManager.navigateToFragment(
+            findNavController(),
+            R.id.moduleFragment,
+            bundle
+        )
+
+    }
+
+
+    private fun fetchStudyMaterials() {
+
+        apiservice?.getStudyMaterials(
+            limit = 10,
+            offset = 0,
+            authorization = "Bearer $token"
+        )?.enqueue(object : Callback<GetAllStudyMaterial> {
+            override fun onResponse(
+                call: Call<GetAllStudyMaterial>,
+                response: Response<GetAllStudyMaterial>
+            ) {
+                try {
+                    if (response.code() == StatusCodeConstant.OK) { // Explicitly check for OK status
+                        val studyMaterialsResponse = response.body()
+
+                        studyMaterialsResponse?.data?.let { studyMaterials ->
+                            val adapter =
+                                StudyMaterialAdapter(studyMaterials) { subjectId, medium, subjectName ->
+
+                                    navigateTOModule(subjectId, medium, subjectName)
+                                }
+
+                            binding.rcvStudyMaterial.adapter = adapter
+                        }
+                    } else {
+                        // Handle error for non-200 responses
+                        handleStudyMaterialsApiError(response)
+                    }
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    Utils.T(context, "Error processing the request.")
+                }
+            }
+
+            override fun onFailure(call: Call<GetAllStudyMaterial>, t: Throwable) {
+                call.cancel()
+                t.printStackTrace()
+                Utils.T(context, t.message ?: "Request failed. Please try again later.")
+            }
+        })
+    }
+
+    private fun handleStudyMaterialsApiError(response: Response<GetAllStudyMaterial>) {
+        when (response.code()) {
+            StatusCodeConstant.UNAUTHORIZED -> {
+                response.errorBody()?.let { errorBody ->
+                    val message = Gson().fromJson(errorBody.charStream(), APIError::class.java)
+                    Utils.UnAuthorizationToken(requireContext())
+                }
+            }
+
+            else -> {
+                Utils.T(context, "Unknown error occurred.")
+            }
+        }
+    }
 }

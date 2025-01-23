@@ -113,7 +113,6 @@ class PurchasePackageFragment : Fragment() {
             putString("token", token)
         }
 
-        // Navigate to PackageDetailsFragment with the Bundle
         NavigationManager.navigateToFragment(findNavController(), R.id.packageDetailsFragment, bundle)
 
     }

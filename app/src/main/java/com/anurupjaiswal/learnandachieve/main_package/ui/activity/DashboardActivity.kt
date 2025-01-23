@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.navigation.NavController
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
@@ -80,6 +81,9 @@ class DashboardActivity : BaseActivity() {
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
+
+
+
                 R.id.home -> {
 
                     setViewsVisibility(
@@ -89,12 +93,29 @@ class DashboardActivity : BaseActivity() {
                     ) // Hide Back Button
                 }
 
-                R.id.PurchasePackage, R.id.mockTest, R.id.account -> {
+                 R.id.account -> {
+                     navController.popBackStack(R.id.account,false)
+
+                     NavigationManager.navigateToFragment(navController,R.id.account)
+
                     setViewsVisibility(
                         isBottomNavVisible = true,
                         isToolbarVisible = true,
                         isBackButtonVisible = true
                     ) // Show Back Button
+
+
+                }
+
+                R.id.PurchasePackage, R.id.mockTest, -> {
+
+                    setViewsVisibility(
+                        isBottomNavVisible = true,
+                        isToolbarVisible = true,
+                        isBackButtonVisible = true
+                    ) // Show Back Button
+
+
                 }
 
                 R.id.DeleteAccountOtpVerificationFragment -> {

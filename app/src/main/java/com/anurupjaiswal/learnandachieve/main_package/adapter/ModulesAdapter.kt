@@ -13,12 +13,14 @@ import com.anurupjaiswal.learnandachieve.model.Module
 
 
 class ModulesAdapter(
+    private val context: Context,
+
     private val modules: List<Module>,
     private val onModuleClick: (Module) -> Unit
 ) : RecyclerView.Adapter<ModulesAdapter.ModuleViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ModuleViewHolder {
-        val binding = ItemModuleBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding = ItemModuleBinding.inflate(LayoutInflater.from(context), parent, false)
         return ModuleViewHolder(binding)
     }
 
@@ -33,12 +35,13 @@ class ModulesAdapter(
 
         fun bind(module: Module) {
             // Bind module data to views
-            binding.tvModuleName.text = module.chapterName
- binding.moduleDescription.text = module.topic
-            // Set click listener
+            binding.tvModuleName.text = module.module_name
+            binding.tvChapter.text = "Chapter ${position + 1}: "
             binding.root.setOnClickListener {
                 onModuleClick(module)
             }
         }
     }
+
+
 }

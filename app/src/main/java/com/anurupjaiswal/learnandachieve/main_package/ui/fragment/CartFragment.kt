@@ -36,7 +36,7 @@ class CartFragment : Fragment() {
 
     private lateinit var navController: NavController
 
-    private var Token: String? = null
+    private var token: String? = null
 
     private lateinit var apiService: ApiService
 
@@ -47,7 +47,7 @@ class CartFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentCartBinding.inflate(inflater, container, false)
-        Token = Utils.GetSession().token
+        token = Utils.GetSession().token
         val dashboardActivity = requireActivity() as DashboardActivity
         navController = dashboardActivity.navController
         binding.lbProceed.setOnClickListener {
@@ -80,7 +80,7 @@ class CartFragment : Fragment() {
     }
 
     private fun setupRecyclerView() {
-        val cartAdapter = CartAdapter(cartItems) { position ->
+        val cartAdapter = CartAdapter(cartItems,true) { position ->
 
                   handleDelete(position)
         }
@@ -91,7 +91,7 @@ class CartFragment : Fragment() {
     private fun fetchCartData() {
         showLoading()
 
-        val authToken = "Bearer $Token"
+        val authToken = "Bearer $token"
 
         apiService.getCartData(authToken).enqueue(object : Callback<AllCartResponse> {
             override fun onResponse(call: Call<AllCartResponse>, response: Response<AllCartResponse>) {
@@ -143,11 +143,11 @@ class CartFragment : Fragment() {
         binding.tvTotal.text = "₹${summary.grandTotal ?: "0.0"}"
     }
 
-    private fun handleDelete(cart_id :String) {
+    private fun handleDelete(cartID :String) {
         showLoading()
 
-        val authToken = "Bearer $Token"  // Assuming your token is stored in the Token variable
-        val packageId = cart_id // The ID of the item to delete
+        val authToken = "Bearer $token"  // Assuming your token is stored in the Token variable
+        val packageId = cartID // The ID of the item to delete
 
         // Make the DELETE API call
         apiService.deleteCartItem(authToken, packageId).enqueue(object : Callback<DeleteCartResponse> {
@@ -167,11 +167,6 @@ class CartFragment : Fragment() {
                 Toast.makeText(requireContext(), "Error: ${t.message}", Toast.LENGTH_SHORT).show()
             }
         })
-    }
-
-
-    private fun navigateBack() {
-        findNavController().popBackStack()
     }
 
     override fun onDestroyView() {

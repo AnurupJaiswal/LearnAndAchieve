@@ -1,5 +1,8 @@
 package com.anurupjaiswal.learnandachieve.main_package.adapter
 
+import android.annotation.SuppressLint
+import android.content.Context
+import android.graphics.Paint
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.StrikethroughSpan
@@ -11,48 +14,153 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.anurupjaiswal.learnandachieve.R
+import com.anurupjaiswal.learnandachieve.basic.retrofit.APIError
+import com.anurupjaiswal.learnandachieve.basic.retrofit.RetrofitClient
+import com.anurupjaiswal.learnandachieve.basic.utilitytools.Constants
+import com.anurupjaiswal.learnandachieve.basic.utilitytools.StatusCodeConstant
+import com.anurupjaiswal.learnandachieve.basic.utilitytools.Utils
+import com.anurupjaiswal.learnandachieve.basic.utilitytools.Utils.E
 import com.anurupjaiswal.learnandachieve.databinding.ItemPackageCardBinding
-import com.anurupjaiswal.learnandachieve.model.PopularPackageItem
+import com.anurupjaiswal.learnandachieve.main_package.ui.activity.DashboardActivity
+import com.anurupjaiswal.learnandachieve.model.CartResponse
+import com.anurupjaiswal.learnandachieve.model.PackageData
+import com.google.gson.Gson
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 
 class PopularPackagesAdapter(
-    private val packageList: List<PopularPackageItem>
+    private val context: Context,
+    private val packages: List<PackageData>,
+    private val token: String,
+    private val onPackageDetailsClick: (String,String) -> Unit // Add a callback for the details click
+
 ) : RecyclerView.Adapter<PopularPackagesAdapter.PackageViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PackageViewHolder {
-        val binding = ItemPackageCardBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding = ItemPackageCardBinding.inflate(
+            LayoutInflater.from(context),
+            parent,
+            false
+        )
         return PackageViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: PackageViewHolder, position: Int) {
-        val packageItem = packageList[position]
-        holder.bind(packageItem)
+        val packageData = packages[position]
+        holder.bind(packageData)
     }
 
-    override fun getItemCount(): Int = packageList.size
+    override fun getItemCount(): Int {
+        return packages.size
+    }
 
-    inner class PackageViewHolder(private val binding: ItemPackageCardBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class PackageViewHolder(private val binding: ItemPackageCardBinding) :
+        RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(popularPackageItem: PopularPackageItem) {
-            with(binding) {
-                // Set text values
-                tvTitle.text = popularPackageItem.title
-                tvDescription.text = popularPackageItem.description
-                discountedPrice.text = popularPackageItem.discountedPrice
+        @SuppressLint("SetTextI18n")
+        fun bind(packageData: PackageData) {
+            binding.tvBadge.visibility = if (position == 0) View.VISIBLE else View.INVISIBLE
 
-                // Set strikethrough on original price
-                val originalPriceText = popularPackageItem.originalPrice
-                val spannableString = SpannableString(originalPriceText).apply {
-                    setSpan(StrikethroughSpan(), 0, originalPriceText.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                }
-                originalPrice.text = spannableString
+            binding.tvTitle.text = packageData.packageName
 
-                // Show or hide the "Popular" label based on `showPopular`
-               tvBadge .visibility = if (popularPackageItem.showPopular) View.VISIBLE else View.INVISIBLE
+            // Load image using Glide or Picasso
+            Utils.Picasso(packageData.mainImage, binding.imagePackage, R.drawable.ic_package)
 
-                // Load image using Glide (if you're using it)
-                // Glide.with(itemView.context).load(popularPackageItem.imageUrl).into(imagePackage)
+            // Set price
+            binding.discountedPrice.text = "₹${packageData.discountedPrice}"
+            binding.originalPrice.text = "₹${packageData.actualPrice}"
+            binding.originalPrice.paintFlags =
+                binding.originalPrice.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+
+            // Handle Add to Cart button click
+            binding.buyNowText.setOnClickListener {
+                E("Package ID: ${packageData.package_id}")
+                addToCart(packageData.package_id,binding)
+            }
+
+
+            binding.root.setOnClickListener {
+
+
+                onPackageDetailsClick(packageData.package_id,token)
             }
         }
     }
+
+    private fun addToCart(packageId: String,binding: ItemPackageCardBinding) {
+        val apiService = RetrofitClient.client
+
+
+        val requestBody = mapOf(Constants.PackageId to packageId)
+
+        apiService.addToCart(token, requestBody).enqueue(object : Callback<CartResponse> {
+            override fun onResponse(call: Call<CartResponse>, response: Response<CartResponse>) {
+                // Hide loading state
+
+                try {
+                    if (response.code() == StatusCodeConstant.OK) {
+                        val cartResponse = response.body()
+
+                        Utils.T(context, "Add To Cart Successfully")
+                        if (cartResponse != null) {
+                            cartResponse.cartData?.let { updateCartCount(it.cartCount) }
+                        }
+                    } else {
+                        handleApiError(response,binding)
+                    }
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    Utils.T(context, "Error processing the request.")
+                }
+            }
+
+            override fun onFailure(call: Call<CartResponse>, t: Throwable) {
+                call.cancel()
+                // Hide loading state
+                t.printStackTrace()
+                Utils.T(context, t.message ?: "Request failed. Please try again later.")
+            }
+        })
+    }
+    private fun handleApiError(response: Response<CartResponse>, binding: ItemPackageCardBinding) {
+        when (response.code()) {
+            StatusCodeConstant.BAD_REQUEST -> {
+
+                response.errorBody()?.let { errorBody ->
+                    val message = Gson().fromJson(errorBody.charStream(), APIError::class.java)
+                    val displayMessage = message.error ?: "Invalid Request"
+                    Utils.T(context, displayMessage)
+                }
+            }
+            StatusCodeConstant.UNAUTHORIZED -> {
+                response.errorBody()?.let { errorBody ->
+
+                    val message = Gson().fromJson(errorBody.charStream(), APIError::class.java)
+                    val displayMessage = message.message ?: "Unauthorized Access"
+                    Utils.T(context, displayMessage)
+                    Utils.UnAuthorizationToken(context)
+                }
+            }
+            StatusCodeConstant.NOT_FOUND -> {
+                response.errorBody()?.let { errorBody ->
+
+                    val message = Gson().fromJson(errorBody.charStream(), APIError::class.java)
+                    val displayMessage = message.message ?: "Package not found. Please try again."
+                    Utils.T(context, displayMessage)
+                }
+            }
+            else -> {
+                Utils.T(context, "Unknown error occurred.")
+            }
+        }
+    }
+
+    private fun updateCartCount(cartCount:Int) {
+        if (context is DashboardActivity) {
+            context.updateCartCount(cartCount) // Update the cart count in the activity
+        }
+    }
+
 }
