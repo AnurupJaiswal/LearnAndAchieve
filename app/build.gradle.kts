@@ -88,6 +88,7 @@ dependencies {
     implementation("androidx.navigation:navigation-ui:2.7.7")
     implementation("androidx.fragment:fragment-ktx:1.5.0")
     implementation ("com.tbuonomo:dotsindicator:4.3")
+    implementation ("com.facebook.shimmer:shimmer:0.5.0")
 
     implementation ("com.github.bumptech.glide:glide:4.16.0")
 

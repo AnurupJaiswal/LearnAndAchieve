@@ -18,7 +18,19 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:id="@+id/shimmerLayout"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            app:shimmer_auto_start="true">
 
+            <!-- Placeholder for shimmer -->
+            <View
+                android:id="@+id/shimmerPlaceholder"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:background="#E0E0E0" />
+        </com.facebook.shimmer.ShimmerFrameLayout>
 
         <ImageView
             android:id="@+id/youtubeThumbnail"

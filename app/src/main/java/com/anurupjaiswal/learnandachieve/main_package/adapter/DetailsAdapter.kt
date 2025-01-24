@@ -8,12 +8,13 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.anurupjaiswal.learnandachieve.R
 import org.json.JSONObject
-
-class DetailsAdapter(private val jsonObject: JSONObject) :
+class DetailsAdapter(private var userDetails: Map<String, String?>) :
     RecyclerView.Adapter<DetailsAdapter.DetailsViewHolder>() {
 
-    private val data: List<Pair<String, String>> = parseJson(jsonObject)
-    private val TAG = "DetailsAdapter"
+    class DetailsViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        val fieldLabel: TextView = view.findViewById(R.id.labelTextView)
+        val fieldValue: TextView = view.findViewById(R.id.valueTextView)
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DetailsViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -22,36 +23,15 @@ class DetailsAdapter(private val jsonObject: JSONObject) :
     }
 
     override fun onBindViewHolder(holder: DetailsViewHolder, position: Int) {
-        try {
-            val (label, value) = data[position]
-            holder.labelTextView.text = label
-            holder.valueTextView.text = value
-            Log.d(TAG, "Binding data: $label -> $value")
-        } catch (e: Exception) {
-            Log.e(TAG, "Error in onBindViewHolder: ${e.message}", e)
-        }
+        val field = userDetails.keys.toList()[position]
+        val value = userDetails[field]
+
+        holder.fieldLabel.text = field
+        holder.fieldValue.text = value
     }
-
-    override fun getItemCount(): Int = data.size
-
-    class DetailsViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val labelTextView: TextView = view.findViewById(R.id.labelTextView)
-        val valueTextView: TextView = view.findViewById(R.id.valueTextView)
+    fun updateData(newDetails: Map<String, String?>) {
+        userDetails = newDetails
+        notifyDataSetChanged()
     }
-
-    private fun parseJson(jsonObject: JSONObject): List<Pair<String, String>> {
-        val result = mutableListOf<Pair<String, String>>()
-        try {
-            jsonObject.keys().forEach { key ->
-                val value = jsonObject.optString(key, "N/A")
-                result.add(Pair(key, value))
-                Log.d(TAG, "Parsed key-value: $key = $value")
-            }
-        } catch (e: Exception) {
-
-            Log.e(TAG, "Error parsing JSON: ${e.message}", e)
-        }
-        return result
-    }
+    override fun getItemCount(): Int = userDetails.size
 }
-

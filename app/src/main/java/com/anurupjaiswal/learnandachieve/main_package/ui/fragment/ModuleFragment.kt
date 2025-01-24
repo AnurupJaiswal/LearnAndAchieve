@@ -74,6 +74,8 @@ private  var apiService :ApiService? = null
 
     private fun handleModuleClick(module: Module) {
         val bundle = Bundle().apply {
+
+            putString(Constants.moduleId,module.module_id)
         }
 
         // Use NavigationManager to navigate to the TopicFragment

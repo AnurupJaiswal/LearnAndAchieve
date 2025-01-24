@@ -24,11 +24,20 @@ class AccountFragment : Fragment(R.layout.fragment_account), View.OnClickListene
         super.onViewCreated(view, savedInstanceState)
 
         _binding = FragmentAccountBinding.bind(view)
+        init()
+    }
+
+
+    fun init() {
         val dashboardActivity = requireActivity() as DashboardActivity
         navController = dashboardActivity.navController
-
-
-
+        binding.tvStudentName.text = "Hey ${Utils.GetSession().firstName}"
+        binding.tvStudentClass.text = "Class ${Utils.GetSession().className} (${Utils.GetSession().medium})"
+        Utils.Picasso(
+            Utils.GetSession().profilePicture.toString(),
+            binding.ivProfile,
+            R.drawable.ic_profile
+        )
         binding.llOurServices.setOnClickListener(this)
         binding.llAboutUs.setOnClickListener(this)
         binding.llTermsAndConditions.setOnClickListener(this)
@@ -56,6 +65,7 @@ class AccountFragment : Fragment(R.layout.fragment_account), View.OnClickListene
             binding.llOurServices -> NavigationManager.navigateToFragment(
                 navController, R.id.ourServiceFragment
             )
+
             binding.rlStudentMaterial -> NavigationManager.navigateToFragment(
                 navController, R.id.studyMaterial
             )
@@ -120,9 +130,9 @@ class AccountFragment : Fragment(R.layout.fragment_account), View.OnClickListene
                 navController, R.id.BharatSatFragment
             )
 
-             binding.lbLogout ->{
-                 showLogoutDialog()
-             }
+            binding.lbLogout -> {
+                showLogoutDialog()
+            }
         }
 
     }
@@ -133,7 +143,7 @@ class AccountFragment : Fragment(R.layout.fragment_account), View.OnClickListene
             onLogoutConfirmed = {
 
                 Utils.UnAuthorizationToken(requireContext())
-               Utils.I_clear(requireContext(), LoginActivity::class.java, null)
+                Utils.I_clear(requireContext(), LoginActivity::class.java, null)
             }
         )
     }

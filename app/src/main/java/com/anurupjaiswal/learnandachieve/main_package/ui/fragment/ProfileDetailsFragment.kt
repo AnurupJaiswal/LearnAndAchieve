@@ -20,10 +20,24 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.anurupjaiswal.learnandachieve.R
+import com.anurupjaiswal.learnandachieve.basic.database.User
+import com.anurupjaiswal.learnandachieve.basic.database.UserDataHelper
+import com.anurupjaiswal.learnandachieve.basic.retrofit.APIError
+import com.anurupjaiswal.learnandachieve.basic.retrofit.RetrofitClient
+import com.anurupjaiswal.learnandachieve.basic.utilitytools.StatusCodeConstant
+import com.anurupjaiswal.learnandachieve.basic.utilitytools.Utils
+import com.anurupjaiswal.learnandachieve.basic.utilitytools.Utils.E
 import com.anurupjaiswal.learnandachieve.databinding.FragmentProfileDetailsBinding
 import com.anurupjaiswal.learnandachieve.main_package.adapter.DetailsAdapter
+import com.anurupjaiswal.learnandachieve.main_package.ui.activity.DashboardActivity
+import com.anurupjaiswal.learnandachieve.model.PackageDetailsResponse
+import com.anurupjaiswal.learnandachieve.model.GetUserResponse
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.gson.Gson
 import org.json.JSONObject
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.io.File
 import java.io.FileOutputStream
 import java.text.SimpleDateFormat
@@ -36,8 +50,10 @@ class ProfileDetailsFragment : Fragment(R.layout.fragment_profile_details) {
 
     private lateinit var personalDetailsTab: TextView
     private lateinit var contactDetailsTab: TextView
-
+    private lateinit var personalDetails: Map<String, String?>
+    private lateinit var contactDetails: Map<String, String?>
     private val TAG = "ProfileDetailsFragment"
+    private lateinit var detailsAdapter: DetailsAdapter
 
     // Launchers for Camera and Gallery Intents
     private val cameraLauncher =
@@ -75,49 +91,66 @@ class ProfileDetailsFragment : Fragment(R.layout.fragment_profile_details) {
 
     private fun setupUI() {
         try {
-            // Initialize tabs and RecyclerView
+
+
+            getUserDetails(Utils.GetSession().token!!)
+
+            Utils.Picasso(
+                Utils.GetSession().profilePicture.toString(),
+                binding.ivProfile,
+                R.drawable.ic_profile
+            )
             personalDetailsTab = binding.personalDetailsTab
             contactDetailsTab = binding.contactDetailsTab
             binding.profileDetailsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
+            detailsAdapter = DetailsAdapter(emptyMap()) // Start with empty data
+            binding.profileDetailsRecyclerView.adapter = detailsAdapter
 
-            val jsonData = """
-                {
-                  "personalDetails": {
-                    "First Name": "Rohit",
-                    "Middle Name": "Xyz",
-                    "Last Name": "Sharma",
-                    "Date Of Birth": "05/02/2000",
-                    "Gender": "Male",
-                    "School Name": "Shantiniketan School",
-                    "Medium": "English",
-                    "Class": "10th"
-                  },
-                  "contactDetails": {
-                    "Email": "demo@gmail.com",
-                    "Mobile": "9812345678",
-                    "Address Line 1": "101, DigiHost Pvt Ltd",
-                    "Address Line 2": "102, DigiHost Pvt Ltd",
-                    "State": "Maharashtra",
-                    "District": "Raigad",
-                    "Taluka": "Panvel",
-                    "Pin Code": "400077"
-                  }
-                }
-            """.trimIndent()
+            val user = Utils.GetSession()// Assuming fetching the first user
 
-            val jsonObject = JSONObject(jsonData)
+
+            personalDetails = mapOf(
+                "First Name" to user.firstName,
+                "Middle Name" to user.middleName,
+                "Last Name" to user.lastName,
+                "Date Of Birth" to user.dateOfBirth,
+                "Gender" to user.gender,
+                "School Name" to user.schoolName,
+                "Medium" to user.medium,
+                "Class" to user.className,
+                "Register By" to user.registerBy
+            ).filterValues { !it.isNullOrEmpty() && it != "null" } // Remove null, empty, or "null" string values
+
+
+
+
+
+            contactDetails = mapOf(
+                "Email" to user.email,
+                "Mobile" to user.mobile?.toString(),
+                "Address Line -1" to user.addressLineOne,
+                "Address Line -2" to user.addressLineTwo,
+                "State" to user.state,
+                "District" to user.district,
+                "Taluka" to user.taluka
+            ).filterValues { !it.isNullOrEmpty() && it != "null" } // Remove null, empty, or "null" string values
+
+            Utils.Picasso(
+                Utils.GetSession().profilePicture.toString(),
+                binding.ivProfile,
+                R.drawable.ic_profile
+            )
+            Log.d(TAG, "Personal Details: $personalDetails")
+            Log.d(TAG, "Contact Details: $contactDetails")
             updateTabUI(isPersonalDetailsSelected = true)
-            updateRecyclerView(jsonObject.optJSONObject("personalDetails") ?: JSONObject())
 
             // Tab click listeners
             personalDetailsTab.setOnClickListener {
                 updateTabUI(isPersonalDetailsSelected = true)
-                updateRecyclerView(jsonObject.optJSONObject("personalDetails") ?: JSONObject())
             }
 
             contactDetailsTab.setOnClickListener {
                 updateTabUI(isPersonalDetailsSelected = false)
-                updateRecyclerView(jsonObject.optJSONObject("contactDetails") ?: JSONObject())
             }
 
             binding.McvEditPencil.setOnClickListener {
@@ -136,26 +169,24 @@ class ProfileDetailsFragment : Fragment(R.layout.fragment_profile_details) {
                 personalDetailsTab.setTextColor(ContextCompat.getColor(requireContext(), android.R.color.white))
                 contactDetailsTab.background = null
                 contactDetailsTab.setTextColor(ContextCompat.getColor(requireContext(), android.R.color.black))
+                detailsAdapter.updateData(personalDetails)
+
             } else {
                 contactDetailsTab.background =
                     ContextCompat.getDrawable(requireContext(), R.drawable.toggle_selected)
                 contactDetailsTab.setTextColor(ContextCompat.getColor(requireContext(), android.R.color.white))
                 personalDetailsTab.background = null
                 personalDetailsTab.setTextColor(ContextCompat.getColor(requireContext(), android.R.color.black))
+
+                detailsAdapter.updateData(contactDetails)
+
             }
         } catch (e: Exception) {
             Log.e(TAG, "Error in updateTabUI: ${e.message}", e)
         }
     }
 
-    private fun updateRecyclerView(data: JSONObject) {
-        try {
-            val adapter = DetailsAdapter(data)
-            binding.profileDetailsRecyclerView.adapter = adapter
-        } catch (e: Exception) {
-            Log.e(TAG, "Error in updateRecyclerView: ${e.message}", e)
-        }
-    }
+
 
     private fun   showCameraGalleryOptionsBottomSheet() {
         val bottomSheetDialog = BottomSheetDialog(requireContext())
@@ -271,4 +302,112 @@ class ProfileDetailsFragment : Fragment(R.layout.fragment_profile_details) {
         private const val CAMERA_PERMISSION_CODE = 100
         private const val GALLERY_PERMISSION_CODE = 101
     }
+
+
+    private fun getUserDetails(authToken: String) {
+        val apiService = RetrofitClient.client
+
+        val tokenb = "Bearer $authToken"
+        apiService.getUserDetails(tokenb).enqueue(object : Callback<GetUserResponse> {
+            override fun onResponse(call: Call<GetUserResponse>, response: Response<GetUserResponse>) {
+                // Hide loading state
+                try {
+                    if (response.code() == StatusCodeConstant.OK) {
+                        val userModel = response.body()
+
+                        if (userModel?.user != null) {
+                            val getUser = userModel.user
+
+                            E("User ID: ${getUser.user_id}")
+                            E("Full API Response: ${response.body()}")
+
+                            // Convert GetUser data to User object
+                            val userData = User().apply {
+                                _id = getUser.user_id
+                                token = authToken
+                                firstName = getUser.firstName
+                                middleName = getUser.middleName
+                                lastName = getUser.lastName
+                                dateOfBirth = getUser.dateOfBirth
+                                gender = getUser.gender
+                                schoolName = getUser.schoolName
+                                medium = getUser.medium
+                                classId = getUser.class_id
+                                profilePicture = getUser.profilePicture
+                                registerBy = getUser.registerBy
+                                referralCode = getUser.referralCode
+                                email = getUser.email
+                                mobile = getUser.mobile
+                                addressLineOne = getUser.addressLineOne
+                                addressLineTwo = getUser.addressLineTwo
+                                state = getUser.state
+                                district = getUser.district
+                                taluka = getUser.taluka
+                                createdDate = getUser.created_date
+                                updatedDate = getUser.updated_date
+                                className = getUser.class_name
+                            }
+
+                            // Insert or update into the local database
+                            UserDataHelper.instance.insertData(userData)
+                            E("User data inserted into local database successfully.")
+                        } else {
+                            // Log or handle case where 'getUser' is null
+                            E("Error: 'getUser' is null in response.")
+                        }
+
+                    } else {
+                        handleGetUserResponseApiError(response)
+                    }
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    Utils.T(context, "Error processing the request.")
+                }
+            }
+
+            override fun onFailure(call: Call<GetUserResponse>, t: Throwable) {
+                call.cancel()
+                // Hide loading state
+                t.printStackTrace()
+                Utils.T(context, t.message ?: "Request failed. Please try again later.")
+            }
+        })
+
+
+
+    }
+
+
+    private fun handleGetUserResponseApiError(response: Response<GetUserResponse>) {
+        when (response.code()) {
+            StatusCodeConstant.BAD_REQUEST -> {
+                response.errorBody()?.let { errorBody ->
+                    val message = Gson().fromJson(errorBody.charStream(), APIError::class.java)
+                    val displayMessage = message.error ?: "Invalid Request"
+                    Utils.T(requireContext(), displayMessage)
+                }
+            }
+            StatusCodeConstant.UNAUTHORIZED -> {
+                response.errorBody()?.let { errorBody ->
+                    val message = Gson().fromJson(errorBody.charStream(), APIError::class.java)
+                    val displayMessage = message.message ?: "Unauthorized Access"
+                    Utils.T(context, displayMessage)
+                    Utils.UnAuthorizationToken(requireContext())
+                }
+            }
+            StatusCodeConstant.NOT_FOUND -> {
+                response.errorBody()?.let { errorBody ->
+                    val message = Gson().fromJson(errorBody.charStream(), APIError::class.java)
+                    val displayMessage = message.message ?: "Package not found. Please try again."
+                    Utils.T(requireContext(), displayMessage)
+                }
+            }
+            else -> {
+                Utils.T(context, "Unknown error occurred.")
+            }
+        }
+    }
+
+
+
 }

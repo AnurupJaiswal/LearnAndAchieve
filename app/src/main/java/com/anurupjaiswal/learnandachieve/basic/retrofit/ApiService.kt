@@ -18,10 +18,14 @@ import com.anurupjaiswal.learnandachieve.model.RegistrationVerifyOtpResponse
 import com.anurupjaiswal.learnandachieve.model.SignupResponse
 import com.anurupjaiswal.learnandachieve.model.StateApiResponse
 import com.anurupjaiswal.learnandachieve.model.TalukaApiResponse
+import com.anurupjaiswal.learnandachieve.model.TopicResponse
+import com.anurupjaiswal.learnandachieve.model.GetUserResponse
+import com.anurupjaiswal.learnandachieve.model.OrderHistoryResponse
 import com.anurupjaiswal.learnandachieve.model.VerifyOtpResponse
 import com.google.gson.JsonObject
 import okhttp3.RequestBody
 import retrofit2.Call
+import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.FieldMap
@@ -88,29 +92,24 @@ interface ApiService {
     fun forgotPassword(@Body body: RequestBody): Call<ForgetPasswordResponse>
 
 
-
-
-
     @POST(Const.VERIFY_OTP)
     fun verifyOtp(@Body params: Map<String, String?>): Call<VerifyOtpResponse>
 
 
-
-
-
-
     @POST(Const.RESET_PASSWORD)
-    fun resetPassword(@Header(Constants.Authorization)
-                      token: String,
-                      @Body requestBody: Map<String, String>): Call<ForgetPasswordResponse>
+    fun resetPassword(
+        @Header(Constants.Authorization)
+        token: String,
+        @Body requestBody: Map<String, String>
+    ): Call<ForgetPasswordResponse>
 
     @GET(Const.PACKAGE_GET_ALL)
-    fun getPackages(@Header(Constants.Authorization)
-                    token: String,
-                    @Query(Const.LIMIT) limit: Int,
+    fun getPackages(
+        @Header(Constants.Authorization)
+        token: String,
+        @Query(Const.LIMIT) limit: Int,
         @Query(Const.OFFSET) offset: Int
-    ):  Call<PackageResponse>
-
+    ): Call<PackageResponse>
 
 
     @POST(Const.ADD_TO_CART)
@@ -122,7 +121,8 @@ interface ApiService {
     @GET(Const.GET_PACKAGE_DETAILS_BY_ID)
     fun getPackageDetails(
         @Header(Constants.Authorization) token: String?,   // Pass the token in the header
-        @Query(Constants.PackageId) packageId: String?): Call<PackageDetailsResponse>
+        @Query(Constants.PackageId) packageId: String?
+    ): Call<PackageDetailsResponse>
 
     @GET(Const.GET_ALL_CARDS)
     fun getCartData(@Header(Constants.Authorization) token: String): Call<AllCartResponse>
@@ -130,23 +130,39 @@ interface ApiService {
 
     @DELETE(Const.DELETE_CART_API)
     fun deleteCartItem(
-        @Header("Authorization") authToken: String, // Authentication token for the request
-        @Path("cart_id") cart_id: String // Cart item ID to be deleted
+        @Header(Constants.Authorization) authToken: String, // Authentication token for the request
+        @Path(Constants.classId) cart_id: String // Cart item ID to be deleted
     ): Call<DeleteCartResponse>
 
-    @GET("studyMaterials/getAll")
+    @GET(Const.STUDY_MATERIALS_GETALL)
     fun getStudyMaterials(
         @Query(Const.LIMIT) limit: Int,
         @Query(Const.OFFSET) offset: Int,
         @Header(Constants.Authorization) authorization: String
     ): Call<GetAllStudyMaterial>
 
-    @GET("studyMaterials/getAllModuleBySubject")
+    @GET(Const.GET_ALL_MODULE_BY_SUBJECT)
     fun getAllModulesBySubject(
         @Header(Constants.Authorization) authorization: String,
-        @Query("subject_id") subjectId: String,
-        @Query("medium") medium: String
+        @Query(Constants.subjectId) subjectId: String,
+        @Query(Constants.medium) medium: String
     ): Call<ModuleResponse>
+
+    @GET("studyMaterials/getAllTopics")
+    fun getAllTopics(
+        @Header(Constants.Authorization) authorization: String,
+        @Query(Constants.moduleId) moduleId: String
+    ): Call<TopicResponse>
+
+    @GET("user/details")
+     fun getUserDetails(
+        @Header("Authorization") token: String
+    ): Call<GetUserResponse>
+
+    @GET("order/getAll")
+    fun getOrderHistory(
+        @Header("Authorization") token: String // Sending token in the header
+    ): Call<OrderHistoryResponse>
 }
 
 

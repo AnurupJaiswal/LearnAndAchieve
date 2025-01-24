@@ -155,7 +155,7 @@ interface Constants {
         const val subjectId = "subject_id"
         const val subject_name = "subject_name"
         const val medium = "medium"
-        // Other constants for Media Type
+        const val moduleId = "module_id"
 
         //new
         const val Login = "Login"
