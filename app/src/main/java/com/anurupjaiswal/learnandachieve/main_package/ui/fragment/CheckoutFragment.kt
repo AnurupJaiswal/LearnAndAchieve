@@ -13,10 +13,12 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.anurupjaiswal.learnandachieve.R
 import com.anurupjaiswal.learnandachieve.basic.retrofit.ApiService
 import com.anurupjaiswal.learnandachieve.basic.retrofit.RetrofitClient
+import com.anurupjaiswal.learnandachieve.basic.utilitytools.NavigationManager
 import com.anurupjaiswal.learnandachieve.basic.utilitytools.StatusCodeConstant
 import com.anurupjaiswal.learnandachieve.basic.utilitytools.Utils
 import com.anurupjaiswal.learnandachieve.databinding.FragmentCheckoutBinding
@@ -49,7 +51,7 @@ class CheckoutFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         apiService = RetrofitClient.client // Initialize API service
-
+        cartItems.clear()
         token = Utils.GetSession().token
         setupRecyclerView()
         fetchCartData()
@@ -59,8 +61,7 @@ class CheckoutFragment : Fragment() {
         // Custom ClickableSpan to remove underline
         val clickableSpan = object : ClickableSpan() {
             override fun onClick(widget: View) {
-                Toast.makeText(requireContext(), "Terms of Service Clicked", Toast.LENGTH_SHORT)
-                    .show()
+              NavigationManager.navigateToFragment(findNavController(),R.id.termsAndConditionsFragment)
                 // Navigate to Terms of Service page or perform action here
             }
 

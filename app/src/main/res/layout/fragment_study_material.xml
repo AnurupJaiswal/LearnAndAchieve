@@ -11,8 +11,9 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="16sp"
-        android:fontFamily="@font/gilroy_semibold"
+        android:textSize="18sp"
+        android:layout_marginHorizontal="@dimen/_10sdp"
+        android:fontFamily="@font/gilroy_bold"
         android:text="Subjects"
         />
 
@@ -22,7 +23,6 @@
         android:id="@+id/recyclerViewSubjects"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-android:layout_marginTop="@dimen/_10sdp"
         android:clipToPadding="false"
         android:scrollbars="vertical" />
 

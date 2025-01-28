@@ -42,32 +42,54 @@
 
 
 
-    <com.anurupjaiswal.learnandachieve.basic.utilitytools.loadingButton.LoadingButton
-        android:id="@+id/lbDeleteAccount"
-        android:layout_alignParentBottom="true"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/primaryColor"
-        android:drawableTint="@color/white"
-        android:fontFamily="@font/poppins_semi_bold"
-        android:gravity="center"
-        android:layout_marginHorizontal="@dimen/_10sdp"
-        android:paddingVertical="@dimen/_7sdp"
-        android:text="@string/delete_account"
-        android:textColor="@color/background"
-        android:textSize="16sp"
 
-        app:drawableStartHeight="@dimen/_14sdp"
-        app:drawableStartWidth="@dimen/_14sdp"
-        app:disableClickOnLoading="true"
-        app:enableCenterDrawables="true"
-        app:enableRestore="true"
-        app:enableShrink="true"
-        app:radius="@dimen/_7sdp"
-        app:loadingDrawablePosition="End"
-        android:includeFontPadding="false"
-        app:loadingDrawableColor="@color/white"
-        app:shrinkDuration="100"
-        app:shrinkShape="Oval"/>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/lbDeleteAccount"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_40sdp"
+        android:layout_alignParentBottom="true"
+
+        app:cardBackgroundColor="@color/primaryColor"
+        android:paddingVertical="@dimen/_7sdp"
+        android:layout_marginTop="@dimen/_20sdp"
+
+
+        app:cardCornerRadius="@dimen/_5sdp"
+        app:strokeWidth="0dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center">
+
+            <ProgressBar
+                android:id="@+id/loading"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:indeterminateTint="@android:color/white"
+                android:padding="10dp"
+                android:visibility="gone"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:fontFamily="@font/poppins_semi_bold"
+                android:gravity="center"
+                android:includeFontPadding="false"
+                android:text="@string/delete_account"
+                android:id="@+id/tvOtpVerification"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+
+
+        </RelativeLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+
 
 </RelativeLayout>

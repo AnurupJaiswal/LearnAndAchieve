@@ -23,7 +23,7 @@
             android:textSize="18sp" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvCategories"
+            android:id="@+id/recyclerViewCategories"
             android:layout_marginTop="@dimen/_10sdp"
             android:layout_width="match_parent"
             tools:listitem="@layout/item_category"

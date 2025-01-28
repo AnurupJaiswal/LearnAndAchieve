@@ -5,58 +5,102 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.LinearLayoutManager
+import android.graphics.Bitmap
+import android.webkit.WebView
+import android.webkit.WebViewClient
+import android.widget.Toast
+import com.anurupjaiswal.learnandachieve.basic.retrofit.RetrofitClient
+import com.anurupjaiswal.learnandachieve.basic.utilitytools.StatusCodeConstant
 import com.anurupjaiswal.learnandachieve.databinding.FragmentCancellationPolicyBinding
-import com.anurupjaiswal.learnandachieve.main_package.adapter.PrivacyPolicyAdapter
-import com.anurupjaiswal.learnandachieve.model.PrivacyPolicyItem
+import com.anurupjaiswal.learnandachieve.databinding.FragmentTermsAndConditionsBinding
+import com.anurupjaiswal.learnandachieve.model.TermsConditionsResponse
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
-class CancellationPolicyFragment : Fragment() {
+class CancellationPolicyFragment  : Fragment() {
 
-    private var _binding: FragmentCancellationPolicyBinding? = null
-    private val binding get() = _binding!!
+    private lateinit var binding: FragmentCancellationPolicyBinding
+    private val apiService = RetrofitClient.client
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentCancellationPolicyBinding.inflate(inflater, container, false)
+    ): View? {
+        binding = FragmentCancellationPolicyBinding.inflate(inflater, container, false)
+
+        binding.progressBar.visibility = View.VISIBLE
+
+
+
+
+
+        fetchCancellationPolicy()
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        setupRecyclerView(getCancellationPolicyItems())
+    private fun fetchCancellationPolicy() {
+        apiService.getCancellationPolicy().enqueue(object : Callback<TermsConditionsResponse> {
+            override fun onResponse(
+                call: Call<TermsConditionsResponse>,
+                response: Response<TermsConditionsResponse>
+            ) {
+                if (response.isSuccessful) {
+                    response.body()?.data?.details?.let { htmlContent ->
+                        displayCancellationPolicy(htmlContent)
+                    }
+                } else {
+                    Toast.makeText(requireContext(), "Failed to load cancellation policy", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<TermsConditionsResponse>, t: Throwable) {
+                Toast.makeText(requireContext(), "Error: ${t.message}", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 
-    private fun setupRecyclerView(items: List<PrivacyPolicyItem>) {
-        val adapter = PrivacyPolicyAdapter(items)
-        binding.rvCancellationPolicy.layoutManager = LinearLayoutManager(requireContext())
-        binding.rvCancellationPolicy.adapter = adapter
-    }
+    private fun displayCancellationPolicy(htmlContent: String) {
+        val customCss = """
+        <style>
+            body {  
+                font-family: 'Gilroy-Semibold', sans-serif;
+                font-size: 14px;
+                line-height: 1.3;
+                
+            }
+        </style>
+    """
 
-    private fun getCancellationPolicyItems(): List<PrivacyPolicyItem> {
-        return listOf(
-            PrivacyPolicyItem(
-                title = "1. Refund Eligibility",
-                description = "Cancellations made within 24 hours of booking are eligible for a full refund, provided the service has not been utilized."
-            ),
-            PrivacyPolicyItem(
-                title = "2. Non-Refundable Services",
-                description = "Certain promotional offers and discounted services are non-refundable and non-cancellable."
-            ),
-            PrivacyPolicyItem(
-                title = "3. Late Cancellations",
-                description = "Cancellations made less than 24 hours before the service may incur a cancellation fee."
-            ),
-            PrivacyPolicyItem(
-                title = "4. Modification Policy",
-                description = "Modifications to bookings can be made free of charge up to 48 hours before the scheduled service."
-            )
+
+
+        val modifiedHtmlContent = customCss + htmlContent
+        binding.webView.apply {
+            // Disable scrollbars
+            isVerticalScrollBarEnabled = false
+            isHorizontalScrollBarEnabled = false
+
+            // Enable JavaScript if required
+            settings.javaScriptEnabled = true
+        }
+        binding.webView.loadDataWithBaseURL(
+            null,
+            modifiedHtmlContent,
+            "text/html",
+            "UTF-8",
+            null
         )
+
+        // Set WebView client to listen for loading events
+        binding.webView.webViewClient = object : WebViewClient() {
+            override fun onPageFinished(view: WebView?, url: String?) {
+                binding.progressBar.visibility = View.GONE
+            }
+
+            override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
+                binding.progressBar.visibility = View.VISIBLE
+            }
+        }
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
 }

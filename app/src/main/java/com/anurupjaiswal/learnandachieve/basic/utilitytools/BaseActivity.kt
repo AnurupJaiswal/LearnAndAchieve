@@ -28,20 +28,20 @@ open class BaseActivity : AppCompatActivity() {
     }
 
 
-    override fun dispatchTouchEvent(event: MotionEvent): Boolean {
-        if (event.action == MotionEvent.ACTION_DOWN) {
-            val v: View? = currentFocus
-            if (v is EditText) {
-                val outRect = Rect()
-                v.getGlobalVisibleRect(outRect)
-                if (!outRect.contains(event.rawX.toInt(), event.rawY.toInt())) {
-                    v.clearFocus()
-                    hideKeyboard(v)
+        override fun dispatchTouchEvent(event: MotionEvent): Boolean {
+            if (event.action == MotionEvent.ACTION_DOWN) {
+                val v: View? = currentFocus
+                if (v is EditText) {
+                    val outRect = Rect()
+                    v.getGlobalVisibleRect(outRect)
+                    if (!outRect.contains(event.rawX.toInt(), event.rawY.toInt())) {
+                        v.clearFocus()
+                        hideKeyboard(v)
+                    }
                 }
             }
+            return super.dispatchTouchEvent(event)
         }
-        return super.dispatchTouchEvent(event)
-    }
 
     fun showSoftKeyboard(editText: EditText) {
 

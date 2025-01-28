@@ -12,11 +12,16 @@ import com.anurupjaiswal.learnandachieve.databinding.ItemCategoryBinding
 import com.anurupjaiswal.learnandachieve.model.FAQCategory
 
 class FAQCategoryAdapter(
-    private val categories: List<FAQCategory>
+    private var categories: List<FAQCategory>,
+    private val onCategoryClicked: (categoryId: String, position: Int) -> Unit
 ) : RecyclerView.Adapter<FAQCategoryAdapter.CategoryViewHolder>() {
 
-    // Track the currently expanded position (-1 means no category is expanded)
     private var expandedPosition = -1
+
+    fun updateCategories(newCategories: List<FAQCategory>) {
+        categories = newCategories
+        notifyDataSetChanged()
+    }
 
     inner class CategoryViewHolder(val binding: ItemCategoryBinding) : RecyclerView.ViewHolder(binding.root)
 
@@ -25,51 +30,55 @@ class FAQCategoryAdapter(
         return CategoryViewHolder(binding)
     }
 
+
+
     override fun onBindViewHolder(holder: CategoryViewHolder, position: Int) {
         val category = categories[position]
-        holder.binding.tvCategoryName.text = category.categoryName
+        holder.binding.tvCategoryName.text = category.faqCategoryName
 
-        // Set up the child RecyclerView for questions
-        val questionAdapter = QuestionsAdapter(category.questions)
-        holder.binding.rvQuestions.layoutManager = LinearLayoutManager(holder.itemView.context)
-        holder.binding.rvQuestions.adapter = questionAdapter
-
-        // Update views based on expand/collapse state
-        val isExpanded = position == expandedPosition
-        holder.binding.rvQuestions.visibility = if (isExpanded) View.VISIBLE else View.GONE
-
-        // Rotate arrow based on expanded state
-        val rotationAngle = if (isExpanded) 90f else 0f
-        holder.binding.tvArrowForward.rotation = rotationAngle
-
-        // Update category name color
-        val color = if (isExpanded) {
-            ContextCompat.getColor(holder.itemView.context, R.color.primaryColor)
+        // Set the text color based on whether the category is expanded or not
+        val color = if (position == expandedPosition) {
+            ContextCompat.getColor(holder.itemView.context, R.color.primaryColor)  // Blue when expanded
         } else {
-            ContextCompat.getColor(holder.itemView.context, R.color.black)
+            ContextCompat.getColor(holder.itemView.context, R.color.black)  // Black when not expanded
         }
         holder.binding.tvCategoryName.setTextColor(color)
 
-        // Change divider color based on expanded state
-        val dividerColor = if (isExpanded) {
-            ContextCompat.getColor(holder.itemView.context, R.color.primaryColor)
+        // Change the color of the viewCategory dynamically based on the expanded state
+        val viewCategoryColor = if (position == expandedPosition) {
+            ContextCompat.getColor(holder.itemView.context, R.color.primaryColor)  // Blue when expanded
         } else {
-            ContextCompat.getColor(holder.itemView.context, R.color.black)
+            ContextCompat.getColor(holder.itemView.context, R.color.black)  // Black when not expanded
         }
-        holder.binding.viewCategory.setBackgroundColor(dividerColor)
+        holder.binding.viewCategory.setBackgroundColor(viewCategoryColor)
 
-        // Set onClick listener for the category name
+        // Ensure category.questions is not null before passing to the adapter
+        val questions = category.questions ?: emptyList()  // Default to empty list if null
+        val questionAdapter = QuestionsAdapter(questions)
+        holder.binding.rvQuestions.layoutManager = LinearLayoutManager(holder.itemView.context)
+        holder.binding.rvQuestions.adapter = questionAdapter
+
+        // Handle expand/collapse state (without animation)
+        val isExpanded = position == expandedPosition
+        holder.binding.rvQuestions.visibility = if (isExpanded) View.VISIBLE else View.GONE
+
+        // Rotate the arrow for expand/collapse (without animation)
+        val rotationAngle = if (isExpanded) 90f else 0f
+        holder.binding.tvArrowForward.rotation = rotationAngle
+
+        // Handle category click to expand/collapse
         holder.binding.llContainer.setOnClickListener {
             val previousExpandedPosition = expandedPosition
-
-            // Update the expanded position
             expandedPosition = if (isExpanded) -1 else position
-
-            // Notify item changes to update visibility and animations
             notifyItemChanged(previousExpandedPosition)
             notifyItemChanged(expandedPosition)
+
+            val categoryId = category.faq_Category_id
+            onCategoryClicked(categoryId, position)  // Trigger API to load questions for the category
         }
     }
+
+
 
     override fun getItemCount() = categories.size
 }

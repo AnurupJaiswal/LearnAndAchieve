@@ -122,7 +122,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
         )
         errorValidationModels.add(
             ValidationModel(
-                Validation.Type.PasswordLength, binding.etPassword, binding.tvErrorPass
+                Validation.Type.Empty, binding.etPassword, binding.tvErrorPass
             )
         )
 
@@ -263,7 +263,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
                 response.errorBody()!!.charStream(),
                 APIError::class.java
             )
-            Utils.T(activity, message.message)
+            Utils.T(activity, message.error)
             if (response.code() == StatusCodeConstant.UNAUTHORIZED) {
                 Utils.UnAuthorizationToken(activity)
             }

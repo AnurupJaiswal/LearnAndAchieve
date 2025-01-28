@@ -1,97 +1,115 @@
 package com.anurupjaiswal.learnandachieve.main_package.ui.fragment
 
+import android.graphics.Bitmap
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.anurupjaiswal.learnandachieve.R
+import android.webkit.WebView
+import android.webkit.WebViewClient
+import android.widget.Toast
+import androidx.fragment.app.Fragment
+import com.anurupjaiswal.learnandachieve.basic.retrofit.RetrofitClient
 import com.anurupjaiswal.learnandachieve.databinding.FragmentTermsAndConditionsBinding
-import com.anurupjaiswal.learnandachieve.main_package.adapter.TermsAdapter
-import com.anurupjaiswal.learnandachieve.model.TermCondition
+import com.anurupjaiswal.learnandachieve.model.TermsConditionsResponse
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class TermsAndConditionsFragment : Fragment() {
 
-    private var _binding: FragmentTermsAndConditionsBinding? = null
-    private val binding get() = _binding!! // Backing property to ensure non-null reference
-
-    private lateinit var termsAdapter: TermsAdapter
-    private lateinit var termsList: List<TermCondition>
-
-    // init block for early initialization
-    init {
-        termsList()
-    }
+    private lateinit var binding: FragmentTermsAndConditionsBinding
+    private val apiService = RetrofitClient.client
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentTermsAndConditionsBinding.inflate(inflater, container, false)
+    ): View? {
+        binding = FragmentTermsAndConditionsBinding.inflate(inflater, container, false)
 
-        recyclerViewSetup() // Initialize RecyclerView
+        binding.progressBar.visibility = View.VISIBLE
 
-        return binding.root // Return the root view from the binding
+
+
+        val isFromAccountFragment = arguments?.getBoolean("isFromAccountFragment", false) ?: false
+
+        if (isFromAccountFragment) {
+            fetchTermsAndConditions()  // Fetch terms for account fragment
+        } else {
+            //fetchRegistrationTerms()  // Fetch terms for registration fragment
+        }
+
+        fetchTermsAndConditions()
+        return binding.root
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null // Prevent memory leaks
+    private fun fetchTermsAndConditions() {
+        apiService.getTermsConditions().enqueue(object : Callback<TermsConditionsResponse> {
+            override fun onResponse(
+                call: Call<TermsConditionsResponse>,
+                response: Response<TermsConditionsResponse>
+            ) {
+                if (response.isSuccessful) {
+
+                        response.body()?.data?.details?.let { htmlContent ->
+                            displayTermsAndConditions(htmlContent)
+                        }
+
+
+
+
+
+                } else {
+                    Toast.makeText(requireContext(), "Failed to load terms", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<TermsConditionsResponse>, t: Throwable) {
+                Toast.makeText(requireContext(), "Error: ${t.message}", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 
-    /**
-     * Initialize the terms list
-     */
-    private fun termsList() {
-        termsList = listOf(
-            TermCondition("1.", "Coordinators must be at least 18 years old."),
-            TermCondition("2.", "Coordinators must have completed at least the 12th standard."),
-            TermCondition(
-                "3.",
-                "PRADNYA LEARN AND ACHIEVE EDUTECH will provide free online training, which all coordinators must attend as scheduled."
-            ),
-            TermCondition(
-                "4.",
-                "Coordinators are representatives on an incentives basis only and are not employees of PRADNYA LEARN AND ACHIEVE EDUTECH. No benefits will be provided beyond the prescribed incentives."
-            ),
-            TermCondition(
-                "5.",
-                "Coordinators will earn 12.5% incentives on their total sales, with the potential for additional special incentives as announced by PRADNYA LEARN AND ACHIEVE EDUTECH."
-            ),
-            TermCondition(
-                "6.",
-                "Coordinators have three products to sell: Bharat Sat examination registration, Mock test packages, and the Pradnya Study n Learn Mobile App."
-            ),
-            TermCondition(
-                "7.",
-                "Coordinators must link their bank accounts to the PRADNYA LEARN AND ACHIEVE EDUTECH payment system to receive payments."
-            ),
-            TermCondition(
-                "8.",
-                "Coordinators can withdraw their incentives once a week, with a minimum withdrawal amount of Rs. 1000 (one thousand rupees only)."
-            ),
-            TermCondition(
-                "9.",
-                " Withdrawals will be processed via NEFT to the coordinator's bank account after verification by PRADNYA LEARN AND ACHIEVE EDUTECH’s accounting staff."
-            ),
-            TermCondition(
-                "10.",
-                "Coordinators must provide accurate and truthful information when filling out the form to join as a coordinator."
-            ),
-            TermCondition(
-                "11.",
-"Coordinators must adhere to the standard ethics and practices of the sales team, as provided in the training sessions."
-            ),
+    private fun displayTermsAndConditions(htmlContent: String) {
+        val customCss = """
+        <style>
+            body {
+                font-family: 'Gilroy-Semibold', sans-serif;
+                font-size: 14px;
+                line-height: 1.3;
+            }
+        </style>
+    """
+
+        // Inject the custom CSS before the HTML content
+
+        val modifiedHtmlContent = customCss + htmlContent
+        binding.webViewTerms.apply {
+            // Disable scrollbars
+            isVerticalScrollBarEnabled = false
+            isHorizontalScrollBarEnabled = false
+
+            // Enable JavaScript if required
+            settings.javaScriptEnabled = true
+        }
+        binding.webViewTerms.loadDataWithBaseURL(
+            null,
+            modifiedHtmlContent,
+            "text/html",
+            "UTF-8",
+            null
         )
+
+        // Set WebView client to listen for loading events
+        binding.webViewTerms.webViewClient = object : WebViewClient() {
+            override fun onPageFinished(view: WebView?, url: String?) {
+                binding.progressBar.visibility = View.GONE
+            }
+
+            override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
+                binding.progressBar.visibility = View.VISIBLE
+            }
+        }
     }
 
-    /**
-     * Initialize RecyclerView
-     */
-    private fun recyclerViewSetup() {
-        binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
-        termsAdapter = TermsAdapter(termsList)
-        binding.recyclerView.adapter = termsAdapter
-    }
 }

@@ -4,75 +4,103 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.anurupjaiswal.learnandachieve.basic.retrofit.ApiService
+import com.anurupjaiswal.learnandachieve.basic.retrofit.RetrofitClient
 import com.anurupjaiswal.learnandachieve.databinding.FragmentFAQBinding
 import com.anurupjaiswal.learnandachieve.main_package.adapter.FAQCategoryAdapter
 import com.anurupjaiswal.learnandachieve.model.FAQCategory
-import com.anurupjaiswal.learnandachieve.model.FAQQuestion
+import com.anurupjaiswal.learnandachieve.model.FAQResponse
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class FAQFragment : Fragment() {
 
+    private lateinit var faqCategoryAdapter: FAQCategoryAdapter
+    private lateinit var apiService: ApiService
+    private lateinit var categories: List<FAQCategory>
+
+    // Declare binding object
     private var _binding: FragmentFAQBinding? = null
     private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
+    ): View? {
+        // Initialize view binding
         _binding = FragmentFAQBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupRecyclerView()
-    }
 
-    private fun setupRecyclerView() {
-        // Fetch the data
-        val faqData = getSampleFAQData()
+        // Initialize the ApiService
+        apiService = RetrofitClient.client
 
-        // Set up the RecyclerView
-        binding.rvCategories.apply {
-            layoutManager = LinearLayoutManager(requireContext())
-            adapter = FAQCategoryAdapter(faqData)
+        // Set up the adapter
+        faqCategoryAdapter = FAQCategoryAdapter(emptyList()) { categoryId, position ->
+            // Handle category click to fetch FAQs
+            fetchFAQsForCategory(categoryId, position)
         }
+
+        // Set up RecyclerView with the adapter
+        binding.recyclerViewCategories.layoutManager = LinearLayoutManager(requireContext())
+        binding.recyclerViewCategories.adapter = faqCategoryAdapter
+
+        // Fetch categories when the fragment is created
+        fetchCategories()
     }
 
-    private fun getSampleFAQData(): List<FAQCategory> {
-        return listOf(
-            FAQCategory(
-                "General",
-                listOf(
-                    FAQQuestion(
-                        question = "What is Learn and Achieve Edutech Project?",
-                        answer = "Learn and Achieve is an educational initiative aimed at providing innovative learning solutions to students across India."
-                    ),
-                    FAQQuestion(
-                        question = " how does it benefit students?",
-                        answer = "Skill Enhancement: Participating in BHARAT SAT encourages students to develop a broad spectrum of skills, from problem-solving to time management, fostering their holistic growth."
-                    )
-                )
-            ),
-            FAQCategory(
-                "Bharat SAT",
-                listOf(
-                    FAQQuestion(
-                        question = "What is Bharat SAT?",
-                        answer = "Bharat SAT is a state-of-the-art satellite service for educational purposes."
-                    ),
-                    FAQQuestion(
-                        question = "How to access Bharat SAT?",
-                        answer = "Access Bharat SAT with a subscription tailored for your needs."
-                    )
-                )
-            )
-        )
+    private fun fetchCategories() {
+        apiService.getCategories(20, 0).enqueue(object : Callback<FAQResponse> {
+            override fun onResponse(call: Call<FAQResponse>, response: Response<FAQResponse>) {
+                if (response.isSuccessful && response.body()?.message == "Success") {
+                    // Get the category data from the response
+                    categories = response.body()?.data?.faqCategoryData ?: emptyList()
+                    faqCategoryAdapter.updateCategories(categories)
+                } else {
+                    Toast.makeText(requireContext(), "Failed to fetch categories", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<FAQResponse>, t: Throwable) {
+                Toast.makeText(requireContext(), "Error: ${t.message}", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+    private fun fetchFAQsForCategory(categoryId: String, position: Int) {
+        apiService.getFAQsByCategory(10, 0, categoryId).enqueue(object : Callback<FAQResponse> {
+            override fun onResponse(call: Call<FAQResponse>, response: Response<FAQResponse>) {
+                if (response.isSuccessful && response.body()?.message == "Success") {
+                    // Get the questions for the selected category
+                    val questions = response.body()?.data?.faqsData ?: emptyList()
+
+                    // Update the category's questions
+                    categories[position].questions = questions
+
+                    // Notify the adapter that the questions have been updated for this category
+                    faqCategoryAdapter.notifyItemChanged(position)
+                } else {
+                    Toast.makeText(requireContext(), "Failed to fetch FAQs", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<FAQResponse>, t: Throwable) {
+                Toast.makeText(requireContext(), "Error: ${t.message}", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
+        // Avoid memory leaks by setting the binding object to null
         _binding = null
     }
 }

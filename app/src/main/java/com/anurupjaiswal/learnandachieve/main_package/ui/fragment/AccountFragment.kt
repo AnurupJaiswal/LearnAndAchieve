@@ -74,10 +74,17 @@ class AccountFragment : Fragment(R.layout.fragment_account), View.OnClickListene
                 navController, R.id.aboutUsFragment
             )
 
-            binding.llTermsAndConditions -> NavigationManager.navigateToFragment(
+            binding.llTermsAndConditions ->{
+
+
+
+
+                val bundle = Bundle()
+            bundle.putBoolean("isFromAccountFragment", true)
+                    NavigationManager.navigateToFragment(
                 navController, R.id.termsAndConditionsFragment
             )
-
+}
             binding.llFAQ -> NavigationManager.navigateToFragment(
                 navController, R.id.FAQFragment
             )

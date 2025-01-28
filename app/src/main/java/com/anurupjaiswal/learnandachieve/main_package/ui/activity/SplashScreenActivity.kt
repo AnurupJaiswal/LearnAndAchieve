@@ -81,7 +81,7 @@ class SplashScreenActivity : AppCompatActivity() {
 
         // Start the video when it is ready
         videoView.setOnPreparedListener { mediaPlayer ->
-            mediaPlayer.isLooping = true // Optionally, loop the video
+
             videoView.start()
         }
 

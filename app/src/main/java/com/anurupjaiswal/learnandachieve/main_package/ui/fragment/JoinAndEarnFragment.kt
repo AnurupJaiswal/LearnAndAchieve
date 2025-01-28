@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.res.Resources
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -21,13 +22,28 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.anurupjaiswal.learnandachieve.R
+import com.anurupjaiswal.learnandachieve.basic.retrofit.APIError
+import com.anurupjaiswal.learnandachieve.basic.retrofit.ApiService
+import com.anurupjaiswal.learnandachieve.basic.retrofit.RetrofitClient
+import com.anurupjaiswal.learnandachieve.basic.utilitytools.Constants
+import com.anurupjaiswal.learnandachieve.basic.utilitytools.StatusCodeConstant
+import com.anurupjaiswal.learnandachieve.basic.utilitytools.Utils
+import com.anurupjaiswal.learnandachieve.basic.utilitytools.Utils.E
 import com.anurupjaiswal.learnandachieve.basic.validation.Validation
 import com.anurupjaiswal.learnandachieve.basic.validation.ValidationModel
 import com.anurupjaiswal.learnandachieve.basic.wheelpicker.DatePicker
 import com.anurupjaiswal.learnandachieve.databinding.FragmentJoinAndEarnBinding
+import com.anurupjaiswal.learnandachieve.main_package.StateSelectionAdapter
 import com.anurupjaiswal.learnandachieve.main_package.adapter.ExpandableCardAdapter
 import com.anurupjaiswal.learnandachieve.main_package.adapter.SelectionAdapter
+import com.anurupjaiswal.learnandachieve.model.ApiResponse
 import com.anurupjaiswal.learnandachieve.model.CardItem
+import com.anurupjaiswal.learnandachieve.model.State
+import com.anurupjaiswal.learnandachieve.model.StateApiResponse
+import com.google.gson.Gson
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -37,8 +53,10 @@ class JoinAndEarnFragment : Fragment() ,View.OnClickListener {
     private var _binding: FragmentJoinAndEarnBinding? = null
     private val binding get() = _binding!!
     private lateinit var adapter: ExpandableCardAdapter
-
+    private var stateList: List<State> = emptyList()
+    private var selectedStateId: String? = null // To store the selected state ID
     private val dateFormatter = SimpleDateFormat("d MMM yyyy", Locale.getDefault())
+    private var apiService: ApiService? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -49,8 +67,8 @@ class JoinAndEarnFragment : Fragment() ,View.OnClickListener {
         val view = binding.root
 
         setupRcv()
-
-
+        apiService = RetrofitClient.client
+        fetchStates()
         binding.etDateOfBirth.setOnClickListener(this)
         binding.etQualification.setOnClickListener(this)
         binding.etState.setOnClickListener(this)
@@ -163,6 +181,8 @@ class JoinAndEarnFragment : Fragment() ,View.OnClickListener {
             )
         )
 
+
+
         errorValidationModels.add(
             ValidationModel(
                 Validation.Type.Empty,
@@ -191,6 +211,11 @@ class JoinAndEarnFragment : Fragment() ,View.OnClickListener {
 
                 Toast.makeText(requireContext(), "Please accept the terms and conditions", Toast.LENGTH_SHORT).show()
                 return false
+            }else{
+
+                addCoordinator()
+                return true
+
             }
 
 
@@ -234,6 +259,83 @@ class JoinAndEarnFragment : Fragment() ,View.OnClickListener {
             picker.hide()
         }
     }
+
+
+    private fun fetchStates() {
+        apiService?.getStates()?.enqueue(object : Callback<StateApiResponse> {
+            override fun onResponse(
+                call: Call<StateApiResponse>,
+                response: Response<StateApiResponse>
+            ) {
+                if (response.isSuccessful) {
+                    val stateApiResponse = response.body()
+                    if (stateApiResponse != null) {
+                        stateList = stateApiResponse.data ?: emptyList()
+                        Log.d("States Loaded", "Total States: ${stateList.size}")
+                    }
+                } else {
+                    Log.e("API Error", "Response Error: ${response.code()}")
+                }
+            }
+
+            override fun onFailure(call: Call<StateApiResponse>, t: Throwable) {
+                Log.e("API Error", "API Call Failed: ${t.message}")
+            }
+        })
+    }
+
+
+    private fun showSelectionPopup(
+        editText: EditText,
+        stateDataList: List<State>,
+        onItemSelected: (String, String) -> Unit
+    ) {
+        val inflater = LayoutInflater.from(requireContext())
+        val popupView = inflater.inflate(R.layout.popup_selection, null)
+
+        val heightInPixels = if (stateDataList.size > 3) {
+            110.dpToPx() // Adjust height of the popup based on the number of items
+        } else {
+            LinearLayout.LayoutParams.WRAP_CONTENT
+        }
+
+        val popupWindow = PopupWindow(
+            popupView, editText.width, heightInPixels, true
+        ).apply {
+            isFocusable = true
+            isOutsideTouchable = true
+            setBackgroundDrawable(
+                ContextCompat.getDrawable(
+                    requireContext(),
+                    R.drawable.popup_background_with_shadow
+                )
+            )
+            elevation = 10f
+        }
+
+        val recyclerView = popupView.findViewById<RecyclerView>(R.id.recyclerView)
+        recyclerView.layoutManager = LinearLayoutManager(requireContext())
+
+        // Use the StateSelectionAdapter for state data
+        val adapter = StateSelectionAdapter(stateDataList) { selectedStateName, stateId ->
+            editText.setText(selectedStateName) // Set the state name
+            selectedStateId = stateId // Save the state ID
+            E("State Selected State: $selectedStateName  ID: $stateId")
+            onItemSelected(selectedStateName, stateId)
+            popupWindow.dismiss()
+        }
+
+        recyclerView.adapter = adapter
+        recyclerView.isNestedScrollingEnabled = true
+
+        val location = IntArray(2)
+        editText.getLocationOnScreen(location)
+        val x = location[0]
+        val y = location[1] + editText.height - 6
+
+        popupWindow.showAtLocation(editText, Gravity.NO_GRAVITY, x, y)
+    }
+
 
 
     private fun showSelectionPopup(editText: EditText, items: List<String>, onItemSelected: (String) -> Unit = {}) {
@@ -302,20 +404,114 @@ class JoinAndEarnFragment : Fragment() ,View.OnClickListener {
                 binding.etQualification,
                 listOf("Post Graduation", "Bachelor’s", "12th Standard")
             )
-            R.id.etState -> showSelectionPopup(
-                binding.etState,
-                listOf(
-                    "Andaman and Nicobar Islands", "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar",
-                    "Chandigarh", "Chhattisgarh", "Dadra and Nagar Haveli ,Daman and Diu", "Delhi",
-                    "Goa", "Gujarat", "Haryana", "Himachal Pradesh", "Jammu and Kashmir", "Jharkhand",
-                    "Karnataka", "Kerala", "Ladakh", "Lakshadweep", "Madhya Pradesh", "Maharashtra",
-                    "Manipur", "Meghalaya", "Mizoram", "Nagaland", "Odisha", "Pondicherry", "Punjab",
-                    "Rajasthan", "Sikkim", "Tamil Nadu", "Telangana", "Tripura", "Uttar Pradesh",
-                    "Uttarakhand", "West Bengal"
-                )
-            )
+            R.id.etState ->
+
+                if (stateList.isNotEmpty()) {
+                    // Show the popup for state selection
+                    showSelectionPopup(binding.etState, stateList) { selectedName, selectedId ->
+                        // Set the selected state name in the EditText
+                        binding.etState.setText(selectedName)
+                        selectedStateId = selectedId // Save the selected state ID
+                        Log.d("State Selected ", "State: $selectedName, ID: $selectedId")
+
+                    }
+                } else {
+                    // Display a message if states are not available
+                    Toast.makeText(
+                        requireContext(),
+                        "States are not available. Please try again.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+
+
             R.id.tvRegesterNow -> validateFields()
             R.id.llTermsAndConditions -> findNavController().navigate(R.id.termsAndConditionsFragment, null)
         }
     }
+
+
+
+
+
+    private fun addCoordinator() {
+        val params = HashMap<String, Any>().apply {
+            put(Constants.name, binding.etName.text.toString().trim())
+            put(Constants.email, binding.etEmail.text.toString().trim())
+            put(Constants.mobile, binding.etMobile.text.toString().trim())
+            put(Constants.dateOfBirth,binding.etDateOfBirth.text.toString().trim())
+            put(Constants.qualification, binding.etQualification.text.toString().trim())
+            put(Constants.notifyEmail, true)
+            put(Constants.addressLineOne,binding.etAddressLineOne.text.toString().trim())
+            put(Constants.addressLineTwo, binding.etAddressLineTwo.text.toString().trim())
+            put(Constants.state, selectedStateId!!)
+            put(Constants.district, binding.etDistrict.text.toString().trim())
+            put(Constants.taluka, binding.etTaluka.text.toString().trim())
+            put(Constants.pincodeCoordinator, binding.etPincode.text.toString().trim())
+        }
+
+        // Get the authorization token
+        val token = "Bearer ${Utils.GetSession().token}"
+
+        // Make the API call
+        val apiService = RetrofitClient.client
+        apiService.addCoordinator(token, params).enqueue(object : Callback<ApiResponse> {
+            override fun onResponse(call: Call<ApiResponse>, response: Response<ApiResponse>) {
+                when (response.code()) {
+                    StatusCodeConstant.OK -> {
+                        val message = response.body()?.message ?: "Coordinator added successfully!"
+                        Utils.T(requireContext(), message)
+                        clearAllEditTexts(binding.root)
+
+                    }
+                    StatusCodeConstant.BAD_REQUEST -> {
+
+                        response.errorBody()?.let { errorBody ->
+                            val message = Gson().fromJson(errorBody.charStream(), APIError::class.java)
+                            val displayMessage = message.error
+                            Utils.T(requireContext(), displayMessage)
+
+                        }
+
+                    }
+                    StatusCodeConstant.UNAUTHORIZED -> {
+                        response.errorBody()?.let { errorBody ->
+                            val message = Gson().fromJson(errorBody.charStream(), APIError::class.java)
+                            val displayMessage = message.error
+
+                            Utils.T(requireContext(), displayMessage)
+
+                        }
+                    }
+                    else -> {
+                        response.errorBody()?.let { errorBody ->
+                            val message = Gson().fromJson(errorBody.charStream(), APIError::class.java)
+                            val displayMessage = message.error
+
+
+                            Utils.T(requireContext(), displayMessage)
+
+                        }
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<ApiResponse>, t: Throwable) {
+                Utils.T(requireContext(), "Request failed. Error: ${t.message}")
+            }
+        })
+    }
+
+    private fun clearAllEditTexts(parentView: ViewGroup) {
+        for (i in 0 until parentView.childCount) {
+            val child = parentView.getChildAt(i)
+            if (child is EditText) {
+                child.text?.clear()
+            } else if (child is ViewGroup) {
+                // Recursively clear EditTexts in nested ViewGroups
+                clearAllEditTexts(child)
+            }
+        }
+    }
+
 }

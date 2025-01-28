@@ -8,68 +8,127 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.anurupjaiswal.learnandachieve.R
+import com.anurupjaiswal.learnandachieve.basic.retrofit.APIError
+import com.anurupjaiswal.learnandachieve.basic.retrofit.ApiService
+import com.anurupjaiswal.learnandachieve.basic.retrofit.RetrofitClient
+import com.anurupjaiswal.learnandachieve.basic.utilitytools.Constants
 import com.anurupjaiswal.learnandachieve.basic.utilitytools.NavigationManager
+import com.anurupjaiswal.learnandachieve.basic.utilitytools.StatusCodeConstant
+import com.anurupjaiswal.learnandachieve.basic.utilitytools.Utils
+import com.anurupjaiswal.learnandachieve.databinding.FragmentHomeBinding
+import com.anurupjaiswal.learnandachieve.databinding.FragmentStudyMaterialBinding
+import com.anurupjaiswal.learnandachieve.main_package.adapter.StudyMaterialAdapter
 import com.anurupjaiswal.learnandachieve.main_package.adapter.SubjectsAdapter
+import com.anurupjaiswal.learnandachieve.model.GetAllStudyMaterial
 
 import com.anurupjaiswal.learnandachieve.model.Module
 import com.anurupjaiswal.learnandachieve.model.Subject
+import com.google.gson.Gson
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class StudyMaterialFragment : Fragment() {
+    private var apiservice: ApiService? = null
+    private var _binding: FragmentStudyMaterialBinding? = null
+    private val binding get() = _binding!!
 
+    var token: String? = null
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val rootView = inflater.inflate(R.layout.fragment_study_material, container, false)
+        _binding = FragmentStudyMaterialBinding.inflate(inflater, container, false)
 
-        // RecyclerView setup
-        val recyclerView: RecyclerView = rootView.findViewById(R.id.recyclerViewSubjects)
-        recyclerView.layoutManager = GridLayoutManager(activity, 2)
+        init()
 
-        // List of subjects
-        val subjects = listOf(
-            Subject(
-                "Science 1",
-                R.drawable.subjecttest,
-                listOf(
-                    Module("Chapter 1", "Gravitation"),
-                    Module("Chapter 2", "Periodic classification of elements")
-                )
-            ),
-            Subject(
-                "Mathematics",
-                R.drawable.icon_homes,
-                listOf(
-                    Module("Chapter 1", "Mathematics - Module 1 Description"),
-                    Module("Chapter 2", "Mathematics - Module 2 Description")
-                )
-            )
-        )
+        return binding.root
+    }
 
-        // Set adapter
-        val adapter = SubjectsAdapter(requireContext(), subjects) { subject ->
-            // Extract module names and descriptions as separate lists
-            val moduleNames = subject.modules?.map { it.chapterName }
-            val moduleDescriptions = subject.modules?.map { it.topic }
+    fun init() {
 
-            // Create a bundle for passing data to ModuleFragment
-            val bundle = Bundle().apply {
-                putString("subject_name", subject.name)
-                subject.iconResId?.let { putInt("subject_icon", it) }
-                putStringArrayList("module_names", moduleNames?.let { ArrayList(it) })
-                putStringArrayList("module_descriptions", moduleDescriptions?.let { ArrayList(it) })
+        token = Utils.GetSession().token
+
+
+        apiservice = RetrofitClient.client
+        binding.recyclerViewSubjects.layoutManager = GridLayoutManager(requireContext(), 2)
+
+
+        fetchStudyMaterials()
+
+    }
+
+
+    private fun fetchStudyMaterials() {
+
+        apiservice?.getStudyMaterials(
+            limit = 10,
+            offset = 0,
+            authorization = "Bearer $token"
+        )?.enqueue(object : Callback<GetAllStudyMaterial> {
+            override fun onResponse(
+                call: Call<GetAllStudyMaterial>,
+                response: Response<GetAllStudyMaterial>
+            ) {
+                try {
+                    if (response.code() == StatusCodeConstant.OK) {
+                        val studyMaterialsResponse = response.body()
+
+                        studyMaterialsResponse?.data?.let { studyMaterials ->
+                            val adapter =
+                                SubjectsAdapter(studyMaterials) { subjectId, medium, subjectName ->
+
+                                    navigateTOModule(subjectId, medium, subjectName)
+                                }
+
+                            binding.recyclerViewSubjects.adapter = adapter
+                        }
+                    } else {
+                        // Handle error for non-200 responses
+                        handleStudyMaterialsApiError(response)
+                    }
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    Utils.T(context, "Error processing the request.")
+                }
             }
 
-            // Use NavigationManager to navigate to ModuleFragment
-            NavigationManager.navigateToFragment(
-                navController = findNavController(),
-                destinationId = R.id.moduleFragment,
-                bundle = bundle
-            )
-        }
-        recyclerView.adapter = adapter
-
-        return rootView
+            override fun onFailure(call: Call<GetAllStudyMaterial>, t: Throwable) {
+                call.cancel()
+                t.printStackTrace()
+                Utils.T(context, t.message ?: "Request failed. Please try again later.")
+            }
+        })
     }
+    private fun handleStudyMaterialsApiError(response: Response<GetAllStudyMaterial>) {
+        when (response.code()) {
+            StatusCodeConstant.UNAUTHORIZED -> {
+                response.errorBody()?.let { errorBody ->
+                    val message = Gson().fromJson(errorBody.charStream(), APIError::class.java)
+                    Utils.UnAuthorizationToken(requireContext())
+                }
+            }
+
+            else -> {
+                Utils.T(context, "Unknown error occurred.")
+            }
+        }
+    }
+    fun navigateTOModule(subjectId: String, medium: String, subjectName: String) {
+        val bundle = Bundle().apply {
+            putString(Constants.subjectId, subjectId)
+            putString(Constants.subject_name, subjectName)
+            putString(Constants.medium, medium)
+        }
+
+        NavigationManager.navigateToFragment(
+            findNavController(),
+            R.id.moduleFragment,
+            bundle
+        )
+
+    }
+
 }

@@ -1,35 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    tools:context="main_package.ui.fragment.PrivacyPolicyFragment">
+    android:orientation="vertical">
+
 
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical">
 
+
+
         <TextView
+            android:id="@+id/tvTittle"
+
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:fontFamily="@font/gilroy_semibold"
-            android:text="Privacy Policy"
-
+            android:text = "@string/privacy_policy"
             android:textColor="@color/blue"
             android:textSize="22sp" />
 
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvPrivacyPolicy"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+
+            android:visibility="visible" />
+
+
+
+        <WebView
+            android:id="@+id/webView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginHorizontal="@dimen/_10sdp"
+            android:layout_marginTop="@dimen/_10sdp" />
     </LinearLayout>
+
 
 </androidx.core.widget.NestedScrollView>

@@ -84,7 +84,6 @@ interface Constants {
 
         const val device_id = "device_id"
         const val verifyPassword = "verifyPassword"
-        const val newPassword = "newPassword"
         const val otp = "otp"
         const val fcmId = "fcmId"
         const val deviceType = "deviceType"
@@ -141,6 +140,7 @@ interface Constants {
         const val schoolName = "schoolName"
         const val className = "class" // Changed to avoid conflict with Kotlin keyword 'class'
         const val classId = "classId"
+        const val cartId = "cart_id"
 
         const val addressLineOne = "addressLineOne"
         const val addressLineTwo = "addressLineTwo"
@@ -148,6 +148,7 @@ interface Constants {
         const val district = "district"
         const val taluka = "taluka"
         const val pincode = "pincode"
+        const val pincodeCoordinator = "pinCode"
         const val registerBy = "registerBy"
         const val referralCode = "referralCode"
         const val Type = "Type"
@@ -156,6 +157,11 @@ interface Constants {
         const val subject_name = "subject_name"
         const val medium = "medium"
         const val moduleId = "module_id"
+        const val currentPassword = "currentPassword"
+        const val newPassword = "newPassword"
+        const val confirmPassword = "confirmPassword"
+        const val qualification = "qualification"
+        const val notifyEmail = "notifyEmail"
 
         //new
         const val Login = "Login"

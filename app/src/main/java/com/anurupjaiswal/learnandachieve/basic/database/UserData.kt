@@ -180,7 +180,7 @@ class UserData {
     }
 
     fun loadImage(imageView: ImageView, imageUrl: String) {
-        Utils.Picasso(Const.HOST_URL + imageUrl, imageView, R.drawable.dummy)
+        Utils.Picasso(Const.HOST_URL + imageUrl, imageView, R.drawable.ic_profile)
     }
 }
 

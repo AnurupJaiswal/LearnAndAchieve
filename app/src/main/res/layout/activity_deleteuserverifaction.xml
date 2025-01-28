@@ -2,10 +2,11 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
     android:background="@drawable/gradient_background"
+    android:fitsSystemWindows="true"
     tools:context=".main_package.ui.activity.OtpVerificationActivity">
 
     <ImageView
@@ -25,20 +26,20 @@
         android:id="@+id/McvBack"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:cardCornerRadius="@dimen/_20sdp"
         android:layout_marginTop="@dimen/_10sdp"
+        app:cardBackgroundColor="@color/background"
+        app:cardCornerRadius="@dimen/_20sdp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.04"
-        app:cardBackgroundColor="@color/background"
-        app:strokeWidth="0dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:strokeWidth="0dp">
 
         <ImageView
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:src="@drawable/ic_back_arrow"
-            android:padding="@dimen/_7sdp"/>
+            android:padding="@dimen/_7sdp"
+            android:src="@drawable/ic_back_arrow" />
 
     </com.google.android.material.card.MaterialCardView>
 
@@ -78,14 +79,15 @@
         android:id="@+id/ivPencil"
         android:layout_width="70dp"
         android:layout_height="270dp"
+        android:layout_marginEnd="@dimen/_10sdp"
         android:elevation="5dp"
         android:src="@drawable/ic_pencil"
         app:layout_constraintBottom_toTopOf="@+id/constraintLayout"
         app:layout_constraintEnd_toEndOf="@+id/imageView2"
-        app:layout_constraintHorizontal_bias="0.755"
+        app:layout_constraintHorizontal_bias="7.0"
         app:layout_constraintStart_toEndOf="@+id/tvHeading"
         app:layout_constraintTop_toBottomOf="@+id/McvBack"
-        />
+        app:layout_constraintVertical_bias="0.5" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"
@@ -114,9 +116,9 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginHorizontal="@dimen/_10sdp"
+            android:layout_marginTop="-20dp"
             android:cursorVisible="true"
             android:elevation="@dimen/_2sdp"
-            android:layout_marginTop="-20dp"
             android:fontFamily="@font/gilroy_semibold"
             android:gravity="center_horizontal"
             android:inputType="number"
@@ -161,53 +163,90 @@
         </LinearLayout>
 
 
-        <TextView
-            android:id="@+id/tvResendOTP"
+        <LinearLayout
+            android:id="@+id/llResendOtp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/_10sdp"
-            android:fontFamily="@font/gilroy_semibold"
-            android:gravity="end"
-            android:includeFontPadding="false"
-            android:text="Resend OTP"
+            android:layout_marginTop="@dimen/_10sdp"
+            app:layout_constraintTop_toBottomOf="@+id/llError">
 
-            android:textColor="@color/primaryColor"
-            android:textSize="12sp"
-            app:layout_constraintTop_toBottomOf="@+id/llError"
+            <TextView
+                android:id="@+id/tvTimeRemaning"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/gilroy_semibold"
+                android:includeFontPadding="false"
+                android:text="02 : 54"
+                android:textSize="12sp"
+                android:paddingHorizontal="@dimen/_10sdp"
 
-            />
+                android:visibility="invisible" />
 
-        <com.anurupjaiswal.learnandachieve.basic.utilitytools.loadingButton.LoadingButton
-            android:id="@+id/lb"
+            <TextView
+                android:id="@+id/tvResendOtp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:focusable="true"
+                android:paddingHorizontal="@dimen/_10sdp"
+
+                android:fontFamily="@font/gilroy_semibold"
+                android:gravity="end"
+                android:includeFontPadding="false"
+                android:text="Resend OTP"
+                android:textColor="@color/primaryColor"
+                android:textSize="12sp" />
+
+        </LinearLayout>
+
+
+
+
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/lbVerity"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/_40sdp"
             android:layout_marginHorizontal="@dimen/_10sdp"
             android:layout_marginTop="@dimen/_20sdp"
-            android:background="@color/primaryColor"
-            android:drawableTint="@color/white"
-            android:fontFamily="@font/gilroy_medium"
-            android:gravity="center"
-            android:includeFontPadding="false"
             android:paddingVertical="@dimen/_7sdp"
-            android:text="Delete Account"
-            android:textColor="@color/background"
-            android:textSize="16sp"
-            app:disableClickOnLoading="true"
-            app:drawableStartHeight="@dimen/_14sdp"
-            app:drawableStartWidth="@dimen/_14sdp"
-            app:enableCenterDrawables="true"
-            app:enableRestore="true"
-            app:enableShrink="true"
-            app:fontFamily="@font/gilroy_semibold"
-            app:layout_constraintTop_toBottomOf="@+id/tvResendOTP"
-            app:loadingDrawableColor="@color/white"
-            app:loadingDrawablePosition="End"
-            app:radius="@dimen/_7sdp"
-            app:shrinkDuration="100"
-            app:shrinkShape="Oval"
+            app:cardBackgroundColor="@color/primaryColor"
+            app:cardCornerRadius="@dimen/_5sdp"
 
-            tools:layout_editor_absoluteY="162dp" />
 
+            app:layout_constraintTop_toBottomOf="@+id/llResendOtp"
+            app:strokeWidth="0dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center">
+
+                <ProgressBar
+                    android:id="@+id/loading"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:indeterminateTint="@android:color/white"
+                    android:padding="10dp"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/tvOtpVerification"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:fontFamily="@font/poppins_semi_bold"
+                    android:gravity="center"
+                    android:includeFontPadding="false"
+                    android:text="Delete Account"
+                    android:textColor="@color/white"
+                    android:textSize="16sp" />
+
+
+            </RelativeLayout>
+
+        </com.google.android.material.card.MaterialCardView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

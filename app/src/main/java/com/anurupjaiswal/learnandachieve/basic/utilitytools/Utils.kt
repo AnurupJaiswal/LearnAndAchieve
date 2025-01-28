@@ -70,6 +70,47 @@ object Utils {
         return UserDataHelper.instance.list[0]
     }
 
+
+    fun renderHtml(textView: TextView, htmlContent: String) {
+        // This will render the HTML content in the TextView
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+            textView.text = Html.fromHtml(htmlContent, Html.FROM_HTML_MODE_LEGACY)
+        } else {
+            textView.text = Html.fromHtml(htmlContent)
+        }
+    }
+
+
+    // Function to convert HSL to RGB
+    fun hslToRgb(h: Int, s: Int, l: Int): Int {
+        val c = (1 - Math.abs(2 * l / 100.0 - 1)) * s / 100.0
+        val x = c * (1 - Math.abs(((h / 60) % 2) - 1))
+        val m = l / 100.0 - c / 2
+
+        var r = 0.0
+        var g = 0.0
+        var b = 0.0
+
+        when (h) {
+            in 0..59 -> { r = c; g = x; b = 0.0 }
+            in 60..119 -> { r = x; g = c; b = 0.0 }
+            in 120..179 -> { r = 0.0; g = c; b = x }
+            in 180..239 -> { r = 0.0; g = x; b = c }
+            in 240..299 -> { r = x; g = 0.0; b = c }
+            in 300..359 -> { r = c; g = 0.0; b = x }
+        }
+
+        r += m
+        g += m
+        b += m
+
+        val rInt = (r * 255).toInt()
+        val gInt = (g * 255).toInt()
+        val bInt = (b * 255).toInt()
+
+        return Color.rgb(rInt, gInt, bInt)
+    }
+
     @JvmStatic
     fun IS_LOGIN(): Boolean {
         return UserDataHelper.instance.list.size > 0

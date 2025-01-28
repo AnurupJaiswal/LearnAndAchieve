@@ -114,7 +114,7 @@ class OtpVerificationActivity : BaseActivity(), View.OnClickListener {
             Constants.otp to binding.PinView.text.toString(),
             "type" to "forgot-password"
         )
-        apiservice?.verifyOtp(params)?.enqueue(object : retrofit2.Callback<VerifyOtpResponse> {
+        apiservice?.verifyOtp("",params)?.enqueue(object : retrofit2.Callback<VerifyOtpResponse> {
 
 
             override fun onResponse(

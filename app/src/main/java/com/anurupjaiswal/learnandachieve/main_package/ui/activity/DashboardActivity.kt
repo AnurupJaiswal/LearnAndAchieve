@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.activity.OnBackPressedCallback
+import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
@@ -91,6 +92,8 @@ class DashboardActivity : BaseActivity() {
                         isToolbarVisible = true,
                         isBackButtonVisible = false
                     ) // Hide Back Button
+                    window?.statusBarColor = ContextCompat.getColor(this, R.color.white) // Default white color
+
                 }
 
                  R.id.account -> {
@@ -104,6 +107,7 @@ class DashboardActivity : BaseActivity() {
                         isBackButtonVisible = true
                     ) // Show Back Button
 
+                     window?.statusBarColor = ContextCompat.getColor(this, R.color.white) // Default white color
 
                 }
 
@@ -115,6 +119,8 @@ class DashboardActivity : BaseActivity() {
                         isBackButtonVisible = true
                     ) // Show Back Button
 
+                    window?.statusBarColor = ContextCompat.getColor(this, R.color.white) // Default white color
+
 
                 }
 
@@ -124,6 +130,9 @@ class DashboardActivity : BaseActivity() {
                         isToolbarVisible = false,
                         isBackButtonVisible = false
                     ) // Hide everything
+
+                    window?.statusBarColor = ContextCompat.getColor(this, R.color.primaryColor) // Specific color for this fragment
+
                 }
 
                 else -> {
@@ -132,6 +141,9 @@ class DashboardActivity : BaseActivity() {
                         isToolbarVisible = true,
                         isBackButtonVisible = true
                     ) // Show Back Button
+
+                    window?.statusBarColor = ContextCompat.getColor(this, R.color.white) // Default white color
+
                 }
             }
         }

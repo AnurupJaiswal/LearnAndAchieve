@@ -8,32 +8,41 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.anurupjaiswal.learnandachieve.R
-import com.anurupjaiswal.learnandachieve.model.Subject
+import com.anurupjaiswal.learnandachieve.basic.utilitytools.Utils
+import com.anurupjaiswal.learnandachieve.databinding.ItemStudySubjectBinding
+import com.anurupjaiswal.learnandachieve.model.StudyMaterial
 
 
 class SubjectsAdapter(
-    private val context: Context,
-    private val subjectList: List<Subject>,
-    private val onSubjectClick: (Subject) -> Unit
-) : RecyclerView.Adapter<SubjectsAdapter.SubjectViewHolder>() {
+    private val StudyMaterial: List<StudyMaterial>,
+    private val onItemClick: (subjectId:String,medium:String,subjectName:String) -> Unit // Callback to pass the subject_id
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SubjectViewHolder {
-        val view = LayoutInflater.from(context).inflate(R.layout.item_study_subject, parent, false)
-        return SubjectViewHolder(view)
+) : RecyclerView.Adapter<SubjectsAdapter.SubjectsViewHolder>() {
+
+    class SubjectsViewHolder(private val binding: ItemStudySubjectBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+
+        fun bind(Subjects: StudyMaterial,onItemClick: (String,String,String) -> Unit) {
+            binding.subjectName.text = Subjects.subject_name
+            Utils.Picasso(Subjects.subject_image,binding.subjectIcon,R.drawable.popup_background_with_shadow)
+
+            binding.root.setOnClickListener {
+                // Invoke the callback passing the subject_id
+                onItemClick(Subjects.subject_id,Subjects.medium,Subjects.subject_name)
+            }
+        }
     }
 
-    override fun onBindViewHolder(holder: SubjectViewHolder, position: Int) {
-        val subject = subjectList[position]
-        holder.subjectName.text = subject.name
-        subject.iconResId?.let { holder.subjectIcon.setImageResource(it) }
-        holder.itemView.setOnClickListener { onSubjectClick(subject) }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SubjectsViewHolder {
+        val binding = ItemStudySubjectBinding.inflate(
+            LayoutInflater.from(parent.context), parent, false
+        )
+        return SubjectsViewHolder(binding)
     }
 
-    override fun getItemCount(): Int = subjectList.size
-
-    class SubjectViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val subjectName: TextView = itemView.findViewById(R.id.subjectName)
-        val subjectIcon: ImageView = itemView.findViewById(R.id.subjectIcon)
+    override fun onBindViewHolder(holder: SubjectsViewHolder, position: Int) {
+        holder.bind(StudyMaterial[position], onItemClick)
     }
+
+    override fun getItemCount(): Int = StudyMaterial.size
 }
-

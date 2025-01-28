@@ -10,52 +10,103 @@ import com.anurupjaiswal.learnandachieve.databinding.FragmentPrivacyPolicyBindin
 import com.anurupjaiswal.learnandachieve.main_package.adapter.PrivacyPolicyAdapter
 import com.anurupjaiswal.learnandachieve.model.PrivacyPolicyItem
 
+
+
+import android.graphics.Bitmap
+
+import android.webkit.WebView
+import android.webkit.WebViewClient
+import android.widget.Toast
+import com.anurupjaiswal.learnandachieve.basic.retrofit.RetrofitClient
+import com.anurupjaiswal.learnandachieve.basic.utilitytools.StatusCodeConstant
+import com.anurupjaiswal.learnandachieve.databinding.FragmentTermsAndConditionsBinding
+import com.anurupjaiswal.learnandachieve.model.TermsConditionsResponse
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+
 class PrivacyPolicyFragment : Fragment() {
 
-    private var _binding: FragmentPrivacyPolicyBinding? = null
-    private val binding get() = _binding!!
+    private lateinit var binding: FragmentPrivacyPolicyBinding
+    private val apiService = RetrofitClient.client
 
-    // Sample data for privacy policy (now directly initialized)
-    private val privacyPolicyItems = listOf(
-        PrivacyPolicyItem(
-            title = "1. Information Provided During Registration",
-            description = "We collect and store the information provided during the registration process to create and manage user accounts, ensuring a personalized experience for our users."
-        ),
-        PrivacyPolicyItem(
-            title = "2. Photos and Testimony",
-            description = "Users may voluntarily provide photos and testimonies, which may be used for promotional purposes with explicit consent."
-        ),
-        PrivacyPolicyItem(
-            title = "3. Log Information",
-            description = "Our systems automatically collect log information, including IP addresses, browser types, and pages visited, to analyze trends, administer the site, and gather demographic information for overall user experience improvement."
-        )
-    )
-
-    // onCreateView to inflate the layout
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentPrivacyPolicyBinding.inflate(inflater, container, false)
+    ): View? {
+        binding = FragmentPrivacyPolicyBinding.inflate(inflater, container, false)
+
+        binding.progressBar.visibility = View.VISIBLE
+
+
+
+
+
+        fetchPrivacyPolicy()
         return binding.root
     }
 
-    // onViewCreated is where RecyclerView setup takes place
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    private fun fetchPrivacyPolicy() {
+        apiService.getPrivacyPolicy().enqueue(object : Callback<TermsConditionsResponse> {
+            override fun onResponse(
+                call: Call<TermsConditionsResponse>,
+                response: Response<TermsConditionsResponse>
+            ) {
+                if (response.code() == StatusCodeConstant.OK) {
+                    response.body()?.data?.details?.let { htmlContent ->
+                        displayPrivacyPolicy(htmlContent)
+                    }
+                } else {
+                    Toast.makeText(requireContext(), "Failed to load privacy policy", Toast.LENGTH_SHORT).show()
+                }
+            }
 
-        setupRecyclerView()
+            override fun onFailure(call: Call<TermsConditionsResponse>, t: Throwable) {
+                Toast.makeText(requireContext(), "Error: ${t.message}", Toast.LENGTH_SHORT).show()
+            }
+        })    }
+
+    private fun displayPrivacyPolicy(htmlContent: String) {
+        val customCss = """
+        <style>
+            body {  
+                font-family: 'Gilroy-Semibold', sans-serif;
+                font-size: 14px;
+                line-height: 1.3;
+                overflow: hidden; /* Disable scrolling */
+            }
+        </style>
+    """
+
+        // Inject the custom CSS before the HTML content
+
+        val modifiedHtmlContent = customCss + htmlContent
+        binding.webView.apply {
+            // Disable scrollbars
+            isVerticalScrollBarEnabled = false
+            isHorizontalScrollBarEnabled = false
+
+            // Enable JavaScript if required
+            settings.javaScriptEnabled = true
+        }
+        binding.webView.loadDataWithBaseURL(
+            null,
+            modifiedHtmlContent,
+            "text/html",
+            "UTF-8",
+            null
+        )
+
+        // Set WebView client to listen for loading events
+        binding.webView.webViewClient = object : WebViewClient() {
+            override fun onPageFinished(view: WebView?, url: String?) {
+                binding.progressBar.visibility = View.GONE
+            }
+
+            override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
+                binding.progressBar.visibility = View.VISIBLE
+            }
+        }
     }
 
-    // Set up the RecyclerView and Adapter
-    private fun setupRecyclerView() {
-        binding.rvPrivacyPolicy.layoutManager = LinearLayoutManager(requireContext())
-        binding.rvPrivacyPolicy.adapter = PrivacyPolicyAdapter(privacyPolicyItems)
-    }
-
-    // Clean up binding reference to avoid memory leaks
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
 }

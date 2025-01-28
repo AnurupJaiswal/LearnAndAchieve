@@ -537,7 +537,7 @@
                 android:maxLines="1"
                 android:paddingVertical="@dimen/_13sdp"
                 android:singleLine="true"
-                android:textColor="@color/black"
+                android:textColor="@color/white"
                 android:textColorHint="@color/white"
                 android:textSize="14sp" />
 
@@ -665,6 +665,7 @@
                 android:fontFamily="@font/gilroy_regular"
                 android:hint="Enter your pincode"
                 android:maxLines="1"
+                android:inputType="number"
                 android:paddingVertical="@dimen/_13sdp"
                 android:singleLine="true"
                 android:textColor="@color/white"
