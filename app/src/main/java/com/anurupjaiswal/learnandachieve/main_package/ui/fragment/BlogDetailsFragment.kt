@@ -11,16 +11,13 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2
 import com.anurupjaiswal.learnandachieve.R
-import com.anurupjaiswal.learnandachieve.basic.retrofit.ApiService
 import com.anurupjaiswal.learnandachieve.basic.retrofit.RetrofitClient
 import com.anurupjaiswal.learnandachieve.basic.utilitytools.Utils
-import com.anurupjaiswal.learnandachieve.basic.utilitytools.Utils.Picasso
 import com.anurupjaiswal.learnandachieve.databinding.FragmentBlogDetailsBinding
 import com.anurupjaiswal.learnandachieve.main_package.adapter.RelatedBlogPagerAdapter
 import com.anurupjaiswal.learnandachieve.model.BlogResponse
 import com.anurupjaiswal.learnandachieve.model.DeailsBlogCategoryData
 import com.anurupjaiswal.learnandachieve.model.RelatedBlog
-import com.bumptech.glide.Glide
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
