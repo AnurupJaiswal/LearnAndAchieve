@@ -16,6 +16,8 @@ interface Const {
         const val baseUrlForImage = "https://stage-api.learnandachieve.in/uploads/";
 
 
+        const val razorpayKeyName: String = "rzp_live_S6CW342Go2QiOT"
+
         const val USER_LOGIN = "user/login"
         const val GET_ALL_CLASSES = "class/getAllClasses"
         const val GET_STATES = "state/all"

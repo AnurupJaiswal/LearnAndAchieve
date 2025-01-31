@@ -188,9 +188,8 @@ android:layout_gravity="center_vertical"
             android:id="@+id/note"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text=" Students will have access within 30 days of registration."
-
-
+            android:text="Students will have access within 30 days of registration."
+            android:fontFamily="@font/gilroy_semibold"
             android:textSize="14sp" />
 
 

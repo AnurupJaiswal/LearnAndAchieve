@@ -3,13 +3,17 @@ package com.anurupjaiswal.learnandachieve.basic.retrofit
 import com.anurupjaiswal.learnandachieve.basic.utilitytools.Constants
 import com.anurupjaiswal.learnandachieve.model.AllCartResponse
 import com.anurupjaiswal.learnandachieve.model.ApiResponse
+import com.anurupjaiswal.learnandachieve.model.BlogResponse
 import com.anurupjaiswal.learnandachieve.model.CartResponse
 import com.anurupjaiswal.learnandachieve.model.ChangePasswordResponse
 import com.anurupjaiswal.learnandachieve.model.ClassResponse
+import com.anurupjaiswal.learnandachieve.model.CreateOrderRequest
+import com.anurupjaiswal.learnandachieve.model.CreateOrderResponse
 import com.anurupjaiswal.learnandachieve.model.DeleteCartResponse
 import com.anurupjaiswal.learnandachieve.model.DistrictApiResponse
 import com.anurupjaiswal.learnandachieve.model.FAQResponse
 import com.anurupjaiswal.learnandachieve.model.ForgetPasswordResponse
+import com.anurupjaiswal.learnandachieve.model.GetAllBlogAppResponse
 import com.anurupjaiswal.learnandachieve.model.GetAllStudyMaterial
 import com.anurupjaiswal.learnandachieve.model.LoginData
 import com.anurupjaiswal.learnandachieve.model.Module
@@ -23,9 +27,11 @@ import com.anurupjaiswal.learnandachieve.model.StateApiResponse
 import com.anurupjaiswal.learnandachieve.model.TalukaApiResponse
 import com.anurupjaiswal.learnandachieve.model.TopicResponse
 import com.anurupjaiswal.learnandachieve.model.GetUserResponse
+import com.anurupjaiswal.learnandachieve.model.MockTestResponse
 import com.anurupjaiswal.learnandachieve.model.OrderHistoryResponse
 import com.anurupjaiswal.learnandachieve.model.TermsConditionsResponse
 import com.anurupjaiswal.learnandachieve.model.VerifyOtpResponse
+import com.anurupjaiswal.learnandachieve.model.VerifyPaymentResponse
 import com.google.gson.JsonObject
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -225,6 +231,39 @@ interface ApiService {
         @Query("offset") offset: Int,
         @Query("faq_Category_id") categoryId: String
     ): Call<FAQResponse>
+
+
+    @POST("package/createOrder")
+    fun createOrder(
+        @Header("Authorization") token: String?,
+        @Body paymentData: HashMap<String, String>    ): Call<CreateOrderResponse>
+
+
+
+    // Endpoint for verifying payment
+    @POST("package/verifyPayment")
+    fun verifyPayment(
+        @Header("Authorization") authToken: String,  // Send the token in Authorization header
+        @Body paymentData: HashMap<String, String>  // Send the payment data as a HashMap
+    ): Call<VerifyPaymentResponse>
+
+    @GET("mockTest/getAll")
+    fun getMockTests(
+        @Header("Authorization") authToken: String,
+        @Query("limit") limit: Int,
+        @Query("offset") offset: Int
+    ): Call<MockTestResponse>
+
+     @GET("blog/getAllBlogApp")
+    fun getAllBlogApp(
+        @Header("Authorization") authToken: String,
+
+    ): Call<GetAllBlogAppResponse>
+
+    @GET("blog/getBlogDetailsById")
+    fun getBlogDetails(
+        @Query("blog_id") blogId: String  // Pass the blog_id as a query parameter
+    ): Call<BlogResponse>
 }
 
 

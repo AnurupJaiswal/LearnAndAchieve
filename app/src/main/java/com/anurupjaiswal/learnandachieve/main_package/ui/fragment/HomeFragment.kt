@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.GestureDetector
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -36,6 +37,7 @@ import com.anurupjaiswal.learnandachieve.main_package.adapter.HomeViewPagerAdapt
 import com.anurupjaiswal.learnandachieve.main_package.adapter.PopularPackagesAdapter
 import com.anurupjaiswal.learnandachieve.main_package.adapter.PurchasePackageAdapter
 import com.anurupjaiswal.learnandachieve.main_package.adapter.StudyMaterialAdapter
+import com.anurupjaiswal.learnandachieve.model.GetAllBlogAppResponse
 import com.anurupjaiswal.learnandachieve.model.GetAllStudyMaterial
 import com.anurupjaiswal.learnandachieve.model.HomeViewpagerIteam
 import com.anurupjaiswal.learnandachieve.model.PackageResponse
@@ -111,7 +113,7 @@ class HomeFragment : Fragment() {
 
     fun init() {
 
-        token = Utils.GetSession().token
+        token = "Bearer ${Utils.GetSession().token} "
         binding.rcvStudyMaterial.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
 
@@ -122,8 +124,10 @@ class HomeFragment : Fragment() {
             false
         )
 
-        fetchStudyMaterials()
-        getPackages()
+        fetchStudyMaterials(token!!)
+        getPackages(token!!)
+
+        getAllBlogData(token!!)
     }
 
     private fun setUpShopNowViewpager() {
@@ -222,12 +226,12 @@ class HomeFragment : Fragment() {
     }
 
 
-    private fun getPackages() {
+    private fun getPackages(authToken:String) {
 
         val userId = Utils.GetSession()._id
         E("token $token")
         E("userId $userId")
-        val authToken = "Bearer $token"
+
 
         apiservice?.getPackages(authToken, limit = 10, offset = 0)
             ?.enqueue(object : retrofit2.Callback<PackageResponse> {
@@ -452,12 +456,9 @@ class HomeFragment : Fragment() {
     }
 
 
-    private fun fetchStudyMaterials() {
+    private fun fetchStudyMaterials(authToken:String) {
 
-        apiservice?.getStudyMaterials(
-            limit = 10,
-            offset = 0,
-            authorization = "Bearer $token"
+        apiservice?.getStudyMaterials(limit = 10, offset = 0, authToken
         )?.enqueue(object : Callback<GetAllStudyMaterial> {
             override fun onResponse(
                 call: Call<GetAllStudyMaterial>,
@@ -508,4 +509,102 @@ class HomeFragment : Fragment() {
             }
         }
     }
+
+
+
+    fun getAllBlogData(authToken:String) {
+
+
+        apiservice?.getAllBlogApp(authToken)?.enqueue(object : Callback<GetAllBlogAppResponse> {
+            override fun onResponse(
+                call: Call<GetAllBlogAppResponse>,
+                response: Response<GetAllBlogAppResponse>
+            ) {
+                if (response.isSuccessful && response.body() != null) {
+                    val blogDataList = response.body()?.data?.BlogData
+                    val blogCategoryDataList = response.body()?.data?.blogCategoryData // This is the list of categories
+
+                    // Check if blogDataList is not null and not empty
+                    if (!blogDataList.isNullOrEmpty()) {
+
+                        // Function to get category name by matching blog_category_id
+                        fun getCategoryNameById(blogCategoryId: String): String? {
+                            return blogCategoryDataList?.find { it.blog_Category_id == blogCategoryId }?.categoryName
+                        }
+
+                        // Handling blogDataList
+                        if (blogDataList.size > 0) {
+                            binding.tvBlogTitle1.text = blogDataList[0].title
+
+                            // Get category name for blog 1
+                            val categoryName1 = getCategoryNameById(blogDataList[0].blog_category_id)
+
+                            binding.cvBlogCard1.setOnClickListener {
+                                // Pass both blog_id and categoryName to navigateToBlogDetails
+                                navigateToBlogDetails(blogDataList[0].blog_id, categoryName1)
+                            }
+                        }
+                        if (blogDataList.size > 1) {
+                            binding.tvBlogTitle2.text = blogDataList[1].title
+
+                            // Get category name for blog 2
+                            val categoryName2 = getCategoryNameById(blogDataList[1].blog_category_id)
+
+                            binding.cvBlogCard2.setOnClickListener {
+                                // Pass both blog_id and categoryName to navigateToBlogDetails
+                                navigateToBlogDetails(blogDataList[1].blog_id, categoryName2)
+                            }
+                        }
+                        if (blogDataList.size > 2) {
+                            binding.tvBlogTitle3.text = blogDataList[2].title
+
+                            // Get category name for blog 3
+                            val categoryName3 = getCategoryNameById(blogDataList[2].blog_category_id)
+
+                            binding.cvBlogCard3.setOnClickListener {
+                                // Pass both blog_id and categoryName to navigateToBlogDetails
+                                navigateToBlogDetails(blogDataList[2].blog_id, categoryName3)
+                            }
+                        }
+                        if (blogDataList.size > 3) {
+                            binding.tvBlogTitle4.text = blogDataList[3].title
+
+                            val categoryName4 = getCategoryNameById(blogDataList[3].blog_category_id)
+                            binding.cvBlogCard4.setOnClickListener {
+                                // Pass both blog_id and categoryName to navigateToBlogDetails
+                                navigateToBlogDetails(blogDataList[3].blog_id, categoryName4)
+                            }
+                        }
+                    } else {
+                        // Handle empty or null blogDataList
+                        Log.e("HomeFragment", "Blog data list is empty or null")
+                    }
+                } else {
+                    // Handle the case when the response is not successful or body is null
+                    Log.e("HomeFragment", "Response failed or body is null")
+                }
+            }
+
+            override fun onFailure(call: Call<GetAllBlogAppResponse>, t: Throwable) {
+                // Handle failure, like showing a Toast or an error message
+            }
+        })
+    }
+
+    private fun navigateToBlogDetails(blogId: String,categoryName: String?) {
+        val bundle = Bundle().apply {
+            putString("blog_id", blogId)
+            putString("categoryName", categoryName) // Add categoryName to the bundle
+
+        }
+        NavigationManager.navigateToFragment(
+            findNavController(),
+            R.id.BlogDetailsFragment,
+            bundle
+        )
+    }
+
+
+
 }
+

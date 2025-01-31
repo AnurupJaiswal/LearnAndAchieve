@@ -5,10 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.anurupjaiswal.learnandachieve.databinding.FragmentPrivacyPolicyBinding
-import com.anurupjaiswal.learnandachieve.main_package.adapter.PrivacyPolicyAdapter
-import com.anurupjaiswal.learnandachieve.model.PrivacyPolicyItem
+
 
 
 
@@ -75,6 +73,12 @@ class PrivacyPolicyFragment : Fragment() {
                 line-height: 1.3;
                 overflow: hidden; /* Disable scrolling */
             }
+               * {
+            -webkit-user-select: none; /* Safari */
+            -moz-user-select: none; /* Firefox */
+            -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Standard */
+        }
         </style>
     """
 

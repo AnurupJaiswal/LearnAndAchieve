@@ -468,6 +468,14 @@ object Utils {
         }
     }
 
+
+    fun formatDate(dateString: String): String {
+        val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
+        val outputFormat = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
+        val date = inputFormat.parse(dateString)
+        return outputFormat.format(date ?: Date())
+    }
+
     val dateAfterYear: String
         get() {
             val cal = Calendar.getInstance()

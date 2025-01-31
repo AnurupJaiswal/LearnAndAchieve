@@ -10,9 +10,7 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.Toast
 import com.anurupjaiswal.learnandachieve.basic.retrofit.RetrofitClient
-import com.anurupjaiswal.learnandachieve.basic.utilitytools.StatusCodeConstant
 import com.anurupjaiswal.learnandachieve.databinding.FragmentCancellationPolicyBinding
-import com.anurupjaiswal.learnandachieve.databinding.FragmentTermsAndConditionsBinding
 import com.anurupjaiswal.learnandachieve.model.TermsConditionsResponse
 import retrofit2.Call
 import retrofit2.Callback
@@ -68,7 +66,13 @@ class CancellationPolicyFragment  : Fragment() {
                 font-size: 14px;
                 line-height: 1.3;
                 
-            }
+            }     
+             * {
+            -webkit-user-select: none; /* Safari */
+            -moz-user-select: none; /* Firefox */
+            -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Standard */
+        }
         </style>
     """
 

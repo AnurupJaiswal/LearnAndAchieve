@@ -192,32 +192,54 @@
                 </LinearLayout>
 
 
+
+
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/proceedButton"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-
+                    android:layout_height="@dimen/_40sdp"
                     app:cardBackgroundColor="@color/primaryColor"
-                    app:cardCornerRadius="@dimen/_10sdp"
+                    android:paddingVertical="@dimen/_7sdp"
+                    android:layout_marginTop="@dimen/_20sdp"
 
+                    app:layout_constraintTop_toBottomOf="@+id/llError"
+
+                    app:cardCornerRadius="@dimen/_10sdp"
                     app:strokeWidth="0dp">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:fontFamily="@font/gilroy_semibold"
-                        android:includeFontPadding="false"
-                        android:padding="18dp"
-                        android:text="Proceed To Pay"
-                        android:textAllCaps="false"
-                        android:textColor="@color/white"
-                        android:textSize="18sp"
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center">
 
-                        />
+                        <ProgressBar
+                            android:id="@+id/loading"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:indeterminateTint="@android:color/white"
+                            android:padding="10dp"
+                            android:visibility="gone"
+                            />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center"
+                            android:fontFamily="@font/poppins_semi_bold"
+                            android:gravity="center"
+                            android:includeFontPadding="false"
+                            android:text="Proceed To Pay"
+                            android:id="@+id/tvPay"
+                            android:textColor="@color/white"
+                            android:textSize="16sp" />
+
+
+                    </RelativeLayout>
 
                 </com.google.android.material.card.MaterialCardView>
+
+
             </LinearLayout>
 
         </com.google.android.material.card.MaterialCardView>

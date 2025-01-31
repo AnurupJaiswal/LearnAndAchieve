@@ -1,100 +1,210 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
+    android:orientation="vertical"
     tools:context=".main_package.ui.fragment.BlogDetailsFragment">
 
-    <LinearLayout
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/nestedScrollView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:paddingHorizontal="@dimen/_10sdp">
-
-
-        <TextView
-            android:id="@+id/tvTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="4dp"
-            android:fontFamily="@font/gilroy_semibold"
-            android:includeFontPadding="false"
-            android:maxLines="2"
-            android:text="Empowering Students with Free E-Learning Services"
-            android:textColor="@android:color/black"
-            android:textSize="18sp" />
-
-
-        <TextView
-            android:id="@+id/tvBlogType"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_5sdp"
-            android:layout_marginEnd="8dp"
-            android:layout_weight="0.6"
-            android:text="GENERAL"
-            android:textColor="@android:color/holo_orange_dark"
-            android:textSize="14sp"
-            android:textStyle="bold" />
-
+        android:layout_height="wrap_content"
+        android:visibility="gone">
 
         <LinearLayout
-            android:id="@+id/blogHeader"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_5sdp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:weightSum="3">
+            android:layout_height="match_parent"
+
+            android:orientation="vertical">
+
 
             <TextView
-                android:id="@+id/tvAuthor"
+                android:id="@+id/tvTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:drawablePadding="@dimen/_3sdp"
-                android:gravity="center"
-                android:text="Gaurav Prabhu"
-                android:textColor="@android:color/darker_gray"
-                android:textSize="14sp"
-                app:drawableStartCompat="@drawable/ic_user" />
+                android:layout_marginTop="@dimen/_10sdp"
+                android:layout_marginBottom="4dp"
+                android:fontFamily="@font/gilroy_semibold"
+                android:includeFontPadding="false"
+                android:maxLines="2"
 
-            <!-- Calendar Icon -->
-            <ImageView
-                android:id="@+id/calendarIcon"
-                android:layout_width="16dp"
-                android:layout_height="16dp"
-                android:layout_marginStart="16dp"
-                android:layout_weight="0.1"
-                android:src="@drawable/ic_calendar" />
+                android:text="Empowering Students with Free E-Learning Services"
+                android:textColor="@android:color/black"
+                android:textSize="18sp" />
 
-            <!-- Date -->
-            <TextView
-                android:id="@+id/tvDate"
-                android:layout_width="wrap_content"
+
+            <LinearLayout
+                android:id="@+id/blogHeader"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_weight="1"
-                android:text="July 1, 2024"
-                android:textColor="@android:color/darker_gray"
-                android:textSize="14sp" />
+                android:layout_marginTop="@dimen/_5sdp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingHorizontal="@dimen/_10sdp"
+
+                android:weightSum="3">
+
+
+                <TextView
+                    android:id="@+id/tvBlogType"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/gilroy_bold"
+                    android:text="GENERAL"
+                    android:textColor="@android:color/holo_orange_dark"
+                    android:textSize="14sp" />
+
+                <TextView
+
+                    android:id="@+id/tvAuthor"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:drawablePadding="@dimen/_3sdp"
+                    android:fontFamily="@font/gilroy_regular"
+                    android:gravity="center_vertical"
+                    android:text="Gaurav Prabhu"
+                    android:textColor="@android:color/darker_gray"
+                    android:textSize="14sp"
+                    app:drawableStartCompat="@drawable/ic_user" />
+
+                <TextView
+                    android:id="@+id/tvDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:drawablePadding="@dimen/_3sdp"
+                    android:fontFamily="@font/gilroy_regular"
+                    android:gravity="center_vertical"
+                    android:text="Gaurav Prabhu"
+                    android:textColor="@android:color/darker_gray"
+                    android:textSize="14sp"
+                    app:drawableStartCompat="@drawable/ic_calendar" />
+
+            </LinearLayout>
+
+
+            <WebView
+                android:id="@+id/webView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:nestedScrollingEnabled="false"
+                android:overScrollMode="never"
+                android:scrollbars="none"
+
+                android:scrollingCache="false" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="#EFEFEF"
+                android:paddingBottom="@dimen/_20sdp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/gilroy_bold"
+                    android:textSize="@dimen/_20sdp"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:includeFontPadding="false"
+                    android:textColor="@color/blue"
+                    android:layout_marginStart="10dp"
+                    android:text="Related Blogs"/>
+
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/viewPagerRelatedBlogs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clipChildren="false"
+                android:layout_marginTop="@dimen/_10sdp"
+
+                android:clipToPadding="false"
+                android:overScrollMode="never"
+                />
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/mcvPrevious"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:layout_margin="10dp"
+                    android:gravity="start"
+                    app:cardBackgroundColor="@color/primaryColor"
+                    app:cardCornerRadius="@dimen/_25sdp"
+                    app:strokeWidth="0dp">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="center"
+                        android:rotation="180"
+
+                        android:src="@drawable/ic_arrow_forward"
+                        app:tint="@color/white" />
+                </com.google.android.material.card.MaterialCardView>
+
+
+                <LinearLayout
+                    android:id="@+id/dotsContainer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_gravity="center_vertical"
+                    android:orientation="horizontal" />
+
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/mcvNext"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+
+                    android:layout_margin="10dp"
+                    app:cardBackgroundColor="@color/primaryColor"
+                    app:cardCornerRadius="@dimen/_25sdp"
+
+                    app:strokeWidth="0dp">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_arrow_forward"
+                        app:tint="@color/white" />
+                </com.google.android.material.card.MaterialCardView>
+
+
+            </RelativeLayout>
+
+
         </LinearLayout>
 
+        </LinearLayout>
 
-        <TextView
-            android:id="@+id/tvDescription"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
+    </androidx.core.widget.NestedScrollView>
 
-            android:layout_marginVertical="@dimen/_10sdp"
-            android:fontFamily="@font/gilroy_regular"
-            android:text="Lorem ipsum  fjfid fjdfdlfjd jfdlfdjfdl klfjdlfdj jvvsdjd fjdfldjf fjdfldj lfjdfdlfj fjdfldj fefkfe fkf;lfj fjd;lgjg gjdfg;lgj jdglkjg ;jdd;gj lfjdfdfj jvdlfjdl;g lfjdfld jlfsdldjl ljfsdlfjdl fjdlfjgfldjdlddjldfjdfdlfffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff dolorfjdfdfjdldjfdfkdlfdkfd;lfkdl;dfkd dkld;dk ckdlfdk fdfldk gfg fdfd fdjfdk fjfdkf fdjfdf fdjfdf zzzzzzzzzz sit amet, consectetur adipiscing elit, sed do...."
-            android:textColor="@android:color/black"
-            android:textSize="14sp" />
-    </LinearLayout>
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:indeterminate="true"
+        android:visibility="gone" />
 
-
-</androidx.core.widget.NestedScrollView>
+</RelativeLayout>
