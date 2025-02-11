@@ -5,33 +5,30 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.anurupjaiswal.learnandachieve.R
-import com.anurupjaiswal.learnandachieve.basic.database.UserDataHelper
 import com.anurupjaiswal.learnandachieve.basic.retrofit.ApiService
 import com.anurupjaiswal.learnandachieve.basic.retrofit.RetrofitClient
-import com.anurupjaiswal.learnandachieve.basic.utilitytools.Constants
 import com.anurupjaiswal.learnandachieve.basic.utilitytools.NavigationManager
-import com.anurupjaiswal.learnandachieve.basic.utilitytools.SavedData
+import com.anurupjaiswal.learnandachieve.basic.utilitytools.NetworkUtil
 import com.anurupjaiswal.learnandachieve.basic.utilitytools.StatusCodeConstant
 import com.anurupjaiswal.learnandachieve.basic.utilitytools.Utils
-import com.anurupjaiswal.learnandachieve.basic.utilitytools.Utils.E
 import com.anurupjaiswal.learnandachieve.databinding.FragmentPurchasePackageBinding
 import com.anurupjaiswal.learnandachieve.main_package.adapter.PurchasePackageAdapter
-import com.anurupjaiswal.learnandachieve.main_package.ui.activity.DashboardActivity
 import com.anurupjaiswal.learnandachieve.model.PackageResponse
-import com.anurupjaiswal.learnandachieve.model.PackageModel
 import retrofit2.Call
 import retrofit2.Response
+import retrofit2.Callback
+
 
 class PurchasePackageFragment : Fragment() {
 
     private var _binding: FragmentPurchasePackageBinding? = null
     private val binding get() = _binding!!
-    private var apiservice: ApiService? = null
-
+    private var apiService: ApiService? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,79 +39,92 @@ class PurchasePackageFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
+
         super.onViewCreated(view, savedInstanceState)
-        apiservice = RetrofitClient.client
         init()
     }
 
 
-    fun init() {
-        apiservice = RetrofitClient.client
-        binding.recyclerView.layoutManager = LinearLayoutManager(context)
 
-        getPackages()
+    private fun init() {
+        apiService = RetrofitClient.client
+        binding.rcvPurchasePackage.layoutManager = LinearLayoutManager(context)
+        if (NetworkUtil.isInternetAvailable(requireContext())) {
+            fetchPackages()
+        } else {
+            showNoInternetMessage()
+        }
+
+        // Listen for changes in network status
+        NetworkUtil.registerNetworkReceiver(requireContext()) { isConnected ->
+            if (isConnected) {
+                binding.noInternetText.visibility = View.GONE
+                fetchPackages() // Re-fetch data when internet is back
+            } else {
+                showNoInternetMessage()
+
+            }
+        }
     }
 
+    private fun fetchPackages() {
+        showProgressBar(true)
+        val authToken = "Bearer ${Utils.GetSession().token}"
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
-
-    private fun getPackages() {
-
-        val token = Utils.GetSession().token
-        val userId = Utils.GetSession()._id
-        E("token $token")
-        E("userId $userId")
-        val authToken = "Bearer $token"
-
-        apiservice?.getPackages(authToken, limit = 10, offset = 0)
-            ?.enqueue(object : retrofit2.Callback<PackageResponse> {
-                override fun onResponse(
-                    call: Call<PackageResponse>,
-                    response: Response<PackageResponse>
-                ) {
-                    try {
-                        if (response.code() == StatusCodeConstant.OK) {
-                            val packageResponse = response.body()
-                            if (packageResponse != null) {
-
-
-                                val packageList = packageResponse.packages
-                                val adapter =
-                                    PurchasePackageAdapter(requireContext(), packageList, authToken,
-                                        onPackageDetailsClick = { packageId, token ->
-                                            navigateToPackageDetails(packageId, token)
+        apiService?.getPackages(authToken, limit = 10, offset = 0)
+            ?.enqueue(object : Callback<PackageResponse> {
+                override fun onResponse(call: Call<PackageResponse>, response: Response<PackageResponse>) {
+                    showProgressBar(false)
+                    when (response.code()) {
+                        StatusCodeConstant.OK -> response.body()?.packages?.let { packageList ->
+                            if (packageList.isNotEmpty()) {
+                                binding.noInternetText.visibility = View.GONE
+                                binding.rcvPurchasePackage.adapter = PurchasePackageAdapter(
+                                    requireContext(), packageList, authToken,
+                                    onPackageDetailsClick = { packageId, token ->
+                                        val bundle = Bundle().apply {
+                                            putString("packageId", packageId)
+                                            putString("token", token)
                                         }
-                                    )
-                                binding.recyclerView.adapter = adapter
-                                adapter.notifyDataSetChanged()  // Notify that the data has been updated
-
-                            }
+                                        NavigationManager.navigateToFragment(
+                                            findNavController(),
+                                            R.id.packageDetailsFragment,
+                                            bundle
+                                        )
+                                    }
+                                )
+                            } else showNoInternetMessage()
                         }
-                    } catch (e: Exception) {
-                        e.printStackTrace()
+                        StatusCodeConstant.UNAUTHORIZED -> Utils.UnAuthorizationToken(requireContext())
+                        else -> showNoInternetMessage()
                     }
                 }
 
                 override fun onFailure(call: Call<PackageResponse>, t: Throwable) {
-                    call.cancel()
-                    t.printStackTrace()
-                    Utils.T(activity, t.message)
-                    E("getMessage::" + t.message)
+                    showNoInternetMessage()
                 }
             })
     }
 
-    fun navigateToPackageDetails(packageId: String, token: String) {
-        val bundle = Bundle().apply {
-            putString("packageId", packageId)
-            putString("token", token)
-        }
+    private fun showProgressBar(isVisible: Boolean) {
+        binding.progressBar.visibility = if (isVisible) View.VISIBLE else View.GONE
+        binding.rcvPurchasePackage.visibility = if (isVisible) View.GONE else View.VISIBLE
+    }
 
-        NavigationManager.navigateToFragment(findNavController(), R.id.packageDetailsFragment, bundle)
+    private fun showNoInternetMessage() {
+        binding.progressBar.visibility = View.GONE
+        binding.rcvPurchasePackage.visibility = View.GONE
+        binding.noInternetText.visibility = View.VISIBLE
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+
+        _binding = null
+        NetworkUtil.unregisterNetworkCallback(requireContext())
 
     }
 }
+
 

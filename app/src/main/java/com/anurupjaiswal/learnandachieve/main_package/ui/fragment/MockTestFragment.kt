@@ -6,9 +6,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.anurupjaiswal.learnandachieve.R
 import com.anurupjaiswal.learnandachieve.basic.retrofit.RetrofitClient
+import com.anurupjaiswal.learnandachieve.basic.utilitytools.NavigationManager
+import com.anurupjaiswal.learnandachieve.basic.utilitytools.NetworkUtil
 import com.anurupjaiswal.learnandachieve.basic.utilitytools.Utils
+import com.anurupjaiswal.learnandachieve.basic.utilitytools.Utils.E
 import com.anurupjaiswal.learnandachieve.databinding.FragmentMockTestBinding
 import com.anurupjaiswal.learnandachieve.main_package.adapter.MockTestAdapter
 
@@ -30,13 +35,56 @@ class MockTestFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentMockTestBinding.inflate(inflater, container, false)
-        setupRecyclerView()
-        fetchMockTests()
+
         return binding.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+
+        init()
+    }
+
+
+    private fun init() {
+        setupRecyclerView()
+        if (NetworkUtil.isInternetAvailable(requireContext())) {
+            fetchMockTests()
+        } else {
+            showNoInternetMessage()
+        }
+
+        // Listen for changes in network status
+        NetworkUtil.registerNetworkReceiver(requireContext()) { isConnected ->
+            if (isConnected) {
+                binding.noInternetText.visibility = View.GONE
+                fetchMockTests() // Re-fetch data when internet is back
+            } else {
+                binding.rvMockTest.visibility = View.GONE
+                binding.noInternetText.visibility = View.VISIBLE
+            }
+        }
+    }
+    private fun showNoInternetMessage() {
+        binding.progressBar.visibility = View.GONE
+        binding.rvMockTest.visibility = View.GONE
+        binding.noInternetText.visibility = View.VISIBLE
+    }
+
+    private fun showProgressBar(isVisible: Boolean) {
+        binding.progressBar.visibility = if (isVisible) View.VISIBLE else View.GONE
+        binding.rvMockTest.visibility = if (isVisible) View.GONE else View.VISIBLE
+    }
+
     private fun setupRecyclerView() {
-        adapter = MockTestAdapter(mockTestList)
+        adapter = MockTestAdapter(mockTestList) { mockTestId ->
+            val bundle = Bundle().apply {
+
+                putString("mockTest_id", mockTestId)
+            }
+           NavigationManager.navigateToFragment(findNavController(), R.id.QuestionComparisonFragment,bundle)
+        }
         binding.rvMockTest.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = this@MockTestFragment.adapter
@@ -44,6 +92,7 @@ class MockTestFragment : Fragment() {
     }
 
     private fun fetchMockTests() {
+        showProgressBar(true)
 
         val authToken = "Bearer ${Utils.GetSession().token}"  // Assuming the token is stored in session
 
@@ -54,13 +103,21 @@ class MockTestFragment : Fragment() {
                         mockTestList.clear()
                         mockTestList.addAll(response.body()!!.data)
                         adapter.notifyDataSetChanged()
+                        showProgressBar(false)
+
                     } else {
-                        Toast.makeText(requireContext(), "Failed to load data", Toast.LENGTH_SHORT).show()
+                        E("Error: ${response.message()}")
+                        E("Error: ${response.errorBody()}")
+                        showNoInternetMessage()
+                        showProgressBar(false)
                     }
                 }
 
                 override fun onFailure(call: Call<MockTestResponse>, t: Throwable) {
                     Toast.makeText(requireContext(), "Error: ${t.message}", Toast.LENGTH_SHORT).show()
+                    showNoInternetMessage()
+                    showProgressBar(false)
+
                 }
             })
     }
@@ -68,5 +125,7 @@ class MockTestFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+        NetworkUtil.unregisterNetworkCallback(requireContext())
+
     }
 }

@@ -1,58 +1,50 @@
 package com.anurupjaiswal.learnandachieve.main_package.adapter
 
-import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.TextView
-import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.anurupjaiswal.learnandachieve.R
+import com.anurupjaiswal.learnandachieve.basic.utilitytools.Utils
 import com.anurupjaiswal.learnandachieve.databinding.ItemBlogBinding
-import com.anurupjaiswal.learnandachieve.model.Blog
+import com.anurupjaiswal.learnandachieve.model.BlogData
 
-
-
-class BlogAdapter(private var blogList: List<Blog>) : RecyclerView.Adapter<BlogAdapter.BlogViewHolder>() {
-
-    inner class BlogViewHolder(private val binding: ItemBlogBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(blog: Blog) {
-            binding.titleTextView.text = blog.title
-            binding.dateTextView.text = blog.date
-            binding.descriptionTextView.text = blog.description
-            // Glide.with(binding.root.context).load(blog.imageUrl).into(binding.imageView)
-
-            binding.tvReadMore.setOnClickListener {
-                val navController = itemView.findNavController()
-
-                // Create the Bundle and pass the necessary data
-                val bundle = Bundle().apply {
-                    putString("title", blog.title)
-                    putString("date", blog.date)
-                    putString("description", blog.description)
-                    putString("imageUrl", blog.imageUrl)  // If needed
-                }
-
-                navController.navigate(R.id.BlogDetailsFragment, bundle)
-            }
-        }
-    }
+class BlogAdapter(
+    private var blogList: List<BlogData>,
+    private val onItemClick: (BlogData) -> Unit
+) : RecyclerView.Adapter<BlogAdapter.BlogViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BlogViewHolder {
         val binding = ItemBlogBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return BlogViewHolder(binding)
+        return BlogViewHolder(binding, onItemClick)
     }
 
     override fun onBindViewHolder(holder: BlogViewHolder, position: Int) {
-        holder.bind(blogList[position])
+        val blog = blogList[position]
+        holder.bind(blog)
     }
 
-    override fun getItemCount() = blogList.size
+    override fun getItemCount(): Int = blogList.size
 
-    fun updateBlogs(newBlogs: List<Blog>) {
-        blogList = newBlogs
+    fun updateList(newList: List<BlogData>) {
+        blogList = newList
         notifyDataSetChanged()
+    }
+
+    class BlogViewHolder(
+        private val binding: ItemBlogBinding,
+        private val onItemClick: (BlogData) -> Unit
+    ) : RecyclerView.ViewHolder(binding.root) {
+
+        fun bind(blog: BlogData) {
+            binding.titleTextView.text = blog.title
+            binding.tvPostBy.text = blog.name
+            binding.dateTextView.text = Utils.formatDate(blog.date)
+            binding.descriptionTextView.text = blog.briefIntro
+            Utils.Picasso(blog.mainImage, binding.imageView, R.drawable.image_blog_test)
+
+            // Apply click listener to the whole item
+
+            binding.tvReadMore.setOnClickListener { onItemClick(blog) }
+        }
     }
 }

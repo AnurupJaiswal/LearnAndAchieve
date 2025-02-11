@@ -27,6 +27,7 @@ import com.anurupjaiswal.learnandachieve.R
 import com.anurupjaiswal.learnandachieve.basic.retrofit.APIError
 import com.anurupjaiswal.learnandachieve.basic.retrofit.ApiService
 import com.anurupjaiswal.learnandachieve.basic.retrofit.RetrofitClient
+import com.anurupjaiswal.learnandachieve.basic.utilitytools.AppController
 import com.anurupjaiswal.learnandachieve.basic.utilitytools.Constants
 import com.anurupjaiswal.learnandachieve.basic.utilitytools.NavigationManager
 import com.anurupjaiswal.learnandachieve.basic.utilitytools.StatusCodeConstant
@@ -123,11 +124,21 @@ class HomeFragment : Fragment() {
             LinearLayoutManager.HORIZONTAL,
             false
         )
+        if ((requireActivity().application as AppController).isOnline) {
+            showLoading(true)
+            binding.llBlogContainer.visibility = View.VISIBLE
 
-        fetchStudyMaterials(token!!)
-        getPackages(token!!)
+            fetchStudyMaterials(token!!)
+            getPackages(token!!)
 
-        getAllBlogData(token!!)
+            getAllBlogData(token!!)
+        } else {
+            Utils.T(requireContext(), "Please Check Internet Connection!")
+            binding.llBlogContainer.visibility = View.GONE
+            binding.progressBar.visibility = View.GONE
+        }
+
+
     }
 
     private fun setUpShopNowViewpager() {
@@ -226,7 +237,7 @@ class HomeFragment : Fragment() {
     }
 
 
-    private fun getPackages(authToken:String) {
+    private fun getPackages(authToken: String) {
 
         val userId = Utils.GetSession()._id
         E("token $token")
@@ -456,9 +467,10 @@ class HomeFragment : Fragment() {
     }
 
 
-    private fun fetchStudyMaterials(authToken:String) {
+    private fun fetchStudyMaterials(authToken: String) {
 
-        apiservice?.getStudyMaterials(limit = 10, offset = 0, authToken
+        apiservice?.getStudyMaterials(
+            limit = 10, offset = 0, authToken
         )?.enqueue(object : Callback<GetAllStudyMaterial> {
             override fun onResponse(
                 call: Call<GetAllStudyMaterial>,
@@ -478,11 +490,12 @@ class HomeFragment : Fragment() {
                             binding.rcvStudyMaterial.adapter = adapter
                         }
                     } else {
-                        // Handle error for non-200 responses
                         handleStudyMaterialsApiError(response)
                     }
                 } catch (e: Exception) {
                     e.printStackTrace()
+                    showLoading(true)
+
                     Utils.T(context, "Error processing the request.")
                 }
             }
@@ -496,7 +509,10 @@ class HomeFragment : Fragment() {
     }
 
     private fun handleStudyMaterialsApiError(response: Response<GetAllStudyMaterial>) {
+        showLoading(false)
+
         when (response.code()) {
+
             StatusCodeConstant.UNAUTHORIZED -> {
                 response.errorBody()?.let { errorBody ->
                     val message = Gson().fromJson(errorBody.charStream(), APIError::class.java)
@@ -511,8 +527,7 @@ class HomeFragment : Fragment() {
     }
 
 
-
-    fun getAllBlogData(authToken:String) {
+    fun getAllBlogData(authToken: String) {
 
 
         apiservice?.getAllBlogApp(authToken)?.enqueue(object : Callback<GetAllBlogAppResponse> {
@@ -522,9 +537,10 @@ class HomeFragment : Fragment() {
             ) {
                 if (response.isSuccessful && response.body() != null) {
                     val blogDataList = response.body()?.data?.BlogData
-                    val blogCategoryDataList = response.body()?.data?.blogCategoryData // This is the list of categories
+                    val blogCategoryDataList =
+                        response.body()?.data?.blogCategoryData // This is the list of categories
 
-                    // Check if blogDataList is not null and not empty
+                    binding.llBlogContainer.visibility = View.VISIBLE
                     if (!blogDataList.isNullOrEmpty()) {
 
                         // Function to get category name by matching blog_category_id
@@ -537,7 +553,8 @@ class HomeFragment : Fragment() {
                             binding.tvBlogTitle1.text = blogDataList[0].title
 
                             // Get category name for blog 1
-                            val categoryName1 = getCategoryNameById(blogDataList[0].blog_category_id)
+                            val categoryName1 =
+                                getCategoryNameById(blogDataList[0].blog_category_id)
 
                             binding.cvBlogCard1.setOnClickListener {
                                 // Pass both blog_id and categoryName to navigateToBlogDetails
@@ -548,7 +565,8 @@ class HomeFragment : Fragment() {
                             binding.tvBlogTitle2.text = blogDataList[1].title
 
                             // Get category name for blog 2
-                            val categoryName2 = getCategoryNameById(blogDataList[1].blog_category_id)
+                            val categoryName2 =
+                                getCategoryNameById(blogDataList[1].blog_category_id)
 
                             binding.cvBlogCard2.setOnClickListener {
                                 // Pass both blog_id and categoryName to navigateToBlogDetails
@@ -559,7 +577,8 @@ class HomeFragment : Fragment() {
                             binding.tvBlogTitle3.text = blogDataList[2].title
 
                             // Get category name for blog 3
-                            val categoryName3 = getCategoryNameById(blogDataList[2].blog_category_id)
+                            val categoryName3 =
+                                getCategoryNameById(blogDataList[2].blog_category_id)
 
                             binding.cvBlogCard3.setOnClickListener {
                                 // Pass both blog_id and categoryName to navigateToBlogDetails
@@ -569,29 +588,35 @@ class HomeFragment : Fragment() {
                         if (blogDataList.size > 3) {
                             binding.tvBlogTitle4.text = blogDataList[3].title
 
-                            val categoryName4 = getCategoryNameById(blogDataList[3].blog_category_id)
+                            val categoryName4 =
+                                getCategoryNameById(blogDataList[3].blog_category_id)
                             binding.cvBlogCard4.setOnClickListener {
                                 // Pass both blog_id and categoryName to navigateToBlogDetails
                                 navigateToBlogDetails(blogDataList[3].blog_id, categoryName4)
                             }
+                            showLoading(false)
+
                         }
                     } else {
-                        // Handle empty or null blogDataList
+                        showLoading(false)
+
                         Log.e("HomeFragment", "Blog data list is empty or null")
                     }
                 } else {
-                    // Handle the case when the response is not successful or body is null
-                    Log.e("HomeFragment", "Response failed or body is null")
+                    showLoading(false)
+
+                    E("Response failed or body is null")
                 }
             }
 
             override fun onFailure(call: Call<GetAllBlogAppResponse>, t: Throwable) {
-                // Handle failure, like showing a Toast or an error message
+                showLoading(false)
+                t.message?.let { E(it) }
             }
         })
     }
 
-    private fun navigateToBlogDetails(blogId: String,categoryName: String?) {
+    private fun navigateToBlogDetails(blogId: String, categoryName: String?) {
         val bundle = Bundle().apply {
             putString("blog_id", blogId)
             putString("categoryName", categoryName) // Add categoryName to the bundle
@@ -605,6 +630,14 @@ class HomeFragment : Fragment() {
     }
 
 
-
+    private fun showLoading(isLoading: Boolean) {
+        if (isLoading) {
+            binding.progressBar.visibility = View.VISIBLE
+            binding.llHomeContainer.visibility = View.INVISIBLE
+        } else {
+            binding.progressBar.visibility = View.GONE
+            binding.llHomeContainer.visibility = View.VISIBLE
+        }
+    }
 }
 

@@ -16,12 +16,14 @@ data class MockTestItem(
     val durationInMinutes: Int,
     val numberOfAttempts: Int,
     val remainingAttempts: Int,
+    val isPackageExpired: Boolean,
     val subjectData: List<MockSubject>,
     val numberOfQuestions: Int,
     val totalQuestions: Int,
     val date: String,
     val expireDate: String
 )
+
 
 data class MockSubject(
     val subjectId: String,

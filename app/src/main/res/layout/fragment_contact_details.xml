@@ -274,6 +274,8 @@
     </LinearLayout>
 
 
+
+
     <CheckBox
         android:id="@+id/checkboxTerms"
         android:layout_width="wrap_content"

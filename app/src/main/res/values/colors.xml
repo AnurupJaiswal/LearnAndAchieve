@@ -59,6 +59,7 @@
     <color name="grayDark">#353535</color>
     <color name="gray72">#727272</color>
     <color name="mock_test_card_bg">#EFF5FF</color>
+    <color name="desable">#CCCCCC</color>
 
 
 </resources>

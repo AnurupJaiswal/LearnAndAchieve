@@ -29,6 +29,7 @@ import com.anurupjaiswal.learnandachieve.model.TopicResponse
 import com.anurupjaiswal.learnandachieve.model.GetUserResponse
 import com.anurupjaiswal.learnandachieve.model.MockTestResponse
 import com.anurupjaiswal.learnandachieve.model.OrderHistoryResponse
+import com.anurupjaiswal.learnandachieve.model.QuestionComparisonResponse
 import com.anurupjaiswal.learnandachieve.model.TermsConditionsResponse
 import com.anurupjaiswal.learnandachieve.model.VerifyOtpResponse
 import com.anurupjaiswal.learnandachieve.model.VerifyPaymentResponse
@@ -264,6 +265,22 @@ interface ApiService {
     fun getBlogDetails(
         @Query("blog_id") blogId: String  // Pass the blog_id as a query parameter
     ): Call<BlogResponse>
+
+    @GET("blog/getAll") // Base URL is already defined in RetrofitClient
+    fun getBlogs(
+        @Header("Authorization") token: String,
+        @Query("blog_Category_id") categoryId: String?,
+        @Query("limit") limit: Int,
+        @Query("offset") offset: Int
+    ): Call<GetAllBlogAppResponse>
+
+        @POST("user/logout")
+        fun logoutUser(@Header(Constants.Authorization) token: String): Call<ApiResponse>
+    @GET("mockTest/getAllQuestionById")
+    fun getMockTestQuestions(@Header(Constants.Authorization) token: String,
+        @Query("mockTest_id") mockTestId: String
+    ): Call<QuestionComparisonResponse>
+
 }
 
 

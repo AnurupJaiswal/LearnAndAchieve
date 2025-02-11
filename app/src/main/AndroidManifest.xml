@@ -7,6 +7,8 @@
         android:required="false" />
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="ACCESS_NETWORK_STATE " />
+
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission
         android:name="android.permission.READ_EXTERNAL_STORAGE"
@@ -17,6 +19,8 @@
     <uses-permission
         android:name="android.permission.READ_MEDIA_IMAGES"
         android:required="false" />
+
+
 
     <application
         android:name=".basic.utilitytools.AppController"
@@ -37,13 +41,12 @@
 
         <activity
             android:name=".main_package.ui.activity.DeleteuserverifactionActivity"
-            android:exported="true" >
+            android:exported="true">
 
         </activity>
         <activity
             android:name=".main_package.ui.activity.SplashScreenActivity"
             android:exported="true">
-
 
 
             <intent-filter>
@@ -79,5 +82,8 @@
             android:name=".main_package.ui.activity.OnboardingActivity"
             android:exported="true" />
     </application>
+
+
+
 
 </manifest>

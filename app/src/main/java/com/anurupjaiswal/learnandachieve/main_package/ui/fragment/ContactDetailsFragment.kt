@@ -18,9 +18,11 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.anurupjaiswal.learnandachieve.R
+import com.anurupjaiswal.learnandachieve.basic.retrofit.APIError
 import com.anurupjaiswal.learnandachieve.basic.retrofit.ApiService
 import com.anurupjaiswal.learnandachieve.basic.retrofit.RetrofitClient
 import com.anurupjaiswal.learnandachieve.basic.utilitytools.Constants
+import com.anurupjaiswal.learnandachieve.basic.utilitytools.StatusCodeConstant
 import com.anurupjaiswal.learnandachieve.basic.utilitytools.Utils
 import com.anurupjaiswal.learnandachieve.basic.utilitytools.Utils.E
 import com.anurupjaiswal.learnandachieve.basic.utilitytools.ValidationFragment
@@ -40,7 +42,9 @@ import com.anurupjaiswal.learnandachieve.model.State
 import com.anurupjaiswal.learnandachieve.model.StateApiResponse
 import com.anurupjaiswal.learnandachieve.model.TalukaApiResponse
 import com.anurupjaiswal.learnandachieve.model.Talukas
+import com.google.gson.Gson
 import com.google.gson.JsonObject
+import com.google.gson.JsonSyntaxException
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
@@ -550,16 +554,13 @@ private var dateOfBirth: String? = null
         // Make the API call
         apiService?.registerUser(requestBody)?.enqueue(object : Callback<SignupResponse> {
             override fun onResponse(call: Call<SignupResponse>, response: Response<SignupResponse>) {
-                if (response.isSuccessful) {
+                if (response.code() == StatusCodeConstant.OK) {
                     // Handle success
                     val signupResponse = response.body()
                     Log.d("API Success", "Response: ${signupResponse?.message}")
 
-
                     val combinedBundle = Bundle().apply {
-                        // Include the authToken from the response
                         putString("authToken", signupResponse?.token)
-                        // Include all the collected data (email, mobile, etc.)
                         putString("email", email)
                         putString("mobile", mobile)
                         putString("addressLineOne", addressLineOne)
@@ -570,24 +571,35 @@ private var dateOfBirth: String? = null
                         putString("pincode", pincode)
                     }
 
-
-
-
                     onResponse(true, combinedBundle)
+                } else if (response.code() == StatusCodeConstant.BAD_REQUEST) {
+                    // Directly parse the error response
+                    val errorBody = response.errorBody()?.string()
+                    val apiError = try {
+                        Gson().fromJson(errorBody, APIError::class.java)
+                    } catch (e: JsonSyntaxException) {
+                        Log.e("API Error Parsing", "Failed to parse error: ${e.message}")
+                        null
+                    }
+
+                    Log.e("API Bad Request", "Code: ${response.code()}, Error: ${apiError?.message}")
+
+                    Utils.T(activity, apiError?.message ?: "Invalid request. Please check your details and try again.")
+                    onResponse(false, null)
                 } else {
-                    // Handle API error response
+                    // Handle other API errors
                     val errorBody = response.errorBody()?.string()
                     Log.e("API Error", "Code: ${response.code()}, Error: $errorBody")
-                    onResponse(false, null)
                     Utils.T(activity, "Registration failed. Please try again.")
+                    onResponse(false, null)
                 }
             }
 
             override fun onFailure(call: Call<SignupResponse>, t: Throwable) {
                 // Handle failure
                 Log.e("API Failure", "Error: ${t.message}")
-                onResponse(false, null)
                 Utils.T(activity, "Something went wrong. Please try again.")
+                onResponse(false, null)
             }
         })
     }

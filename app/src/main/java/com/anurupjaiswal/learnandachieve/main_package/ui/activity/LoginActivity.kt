@@ -211,21 +211,17 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
 
 
             override fun onResponse(call: Call<LoginData>, response: Response<LoginData>) {
-                Utils.toggleProgressBarAndText(false, binding.loading, binding.tvLogIN,binding.root)
+                Utils.toggleProgressBarAndText(false, binding.loading, binding.tvLogIN, binding.root)
                 try {
                     if (response.code() == StatusCodeConstant.OK) {
                         val userModel = response.body()
                         if (userModel != null) {
                             val user = userModel.user
                             if (user != null) {
-                                // Set token manually
                                 user.token = userModel.token
-
-                                // Log data for verification
                                 E("User ID: ${user._id}")
                                 E("Token: ${user.token}")
 
-                                // Insert into local database
                                 UserDataHelper.instance.insertData(user)
                                 E("User data inserted into local database successfully.")
                             }
@@ -233,6 +229,10 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
                             // Navigate to dashboard
                             Utils.I_clear(activity, DashboardActivity::class.java, null)
                         }
+                    } else if (response.code() == StatusCodeConstant.CREATED) {
+                        val userModel = response.body()
+
+                        Utils.T(activity,"${userModel?.message}") // Show Toast
                     } else {
                         handleErrorResponse(response)
                     }

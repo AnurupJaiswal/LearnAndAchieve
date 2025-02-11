@@ -100,13 +100,14 @@ class BlogDetailsFragment : Fragment() {
         // Apply custom CSS for styling if needed
         val customCSS = """
         <style>
-            @import url('https://fonts.googleapis.com/css2?family=Gilroy:wght@400;700&display=swap');
+     
 
             body {
-        font-family: 'Gilroy', sans-serif;
-                font-size: 14px;
-                line-height: 1.5;
-              
+                font-family: 'Gilroy-Semibold', sans-serif;
+                  font-size: 14px;
+                   line-height: 1.5;
+                   padding: 10px;
+                  overflow-x: hidden;
             }
 
             h2 {

@@ -18,9 +18,12 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.provider.MediaStore
 import android.provider.OpenableColumns
 import android.text.Html
@@ -39,6 +42,8 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import com.anurupjaiswal.learnandachieve.R
 import com.anurupjaiswal.learnandachieve.basic.database.User
 import com.anurupjaiswal.learnandachieve.basic.database.UserDataHelper
@@ -48,6 +53,7 @@ import com.anurupjaiswal.learnandachieve.databinding.AlertdialogBinding
 import com.anurupjaiswal.learnandachieve.databinding.CustomToastBinding
 import com.anurupjaiswal.learnandachieve.databinding.DialogLogoutBinding
 import com.anurupjaiswal.learnandachieve.main_package.ui.activity.LoginActivity
+import com.google.android.material.card.MaterialCardView
 
 import com.squareup.picasso.NetworkPolicy
 import com.squareup.picasso.Picasso
@@ -71,7 +77,8 @@ object Utils {
     }
 
 
-    fun renderHtml(textView: TextView, htmlContent: String) {
+
+        fun renderHtml(textView: TextView, htmlContent: String) {
         // This will render the HTML content in the TextView
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
             textView.text = Html.fromHtml(htmlContent, Html.FROM_HTML_MODE_LEGACY)
@@ -92,12 +99,29 @@ object Utils {
         var b = 0.0
 
         when (h) {
-            in 0..59 -> { r = c; g = x; b = 0.0 }
-            in 60..119 -> { r = x; g = c; b = 0.0 }
-            in 120..179 -> { r = 0.0; g = c; b = x }
-            in 180..239 -> { r = 0.0; g = x; b = c }
-            in 240..299 -> { r = x; g = 0.0; b = c }
-            in 300..359 -> { r = c; g = 0.0; b = x }
+            in 0..59 -> {
+                r = c; g = x; b = 0.0
+            }
+
+            in 60..119 -> {
+                r = x; g = c; b = 0.0
+            }
+
+            in 120..179 -> {
+                r = 0.0; g = c; b = x
+            }
+
+            in 180..239 -> {
+                r = 0.0; g = x; b = c
+            }
+
+            in 240..299 -> {
+                r = x; g = 0.0; b = c
+            }
+
+            in 300..359 -> {
+                r = c; g = 0.0; b = x
+            }
         }
 
         r += m
@@ -156,6 +180,7 @@ object Utils {
         }
         return result
     }
+
     fun getWindowWidth(): Int {
         // Calculate window height for fullscreen use
 
@@ -186,9 +211,10 @@ object Utils {
     fun UnAuthorizationToken(cx: Context) {
         UserDataHelper.instance.deleteAll()
 
-        T(cx,"Session expired. Please log in again.")
+        T(cx, "Session expired. Please log in again.")
         I_clear(cx, LoginActivity::class.java, null)
     }
+
     fun hideKeyboard(activity: Activity) {
         val imm: InputMethodManager =
             activity.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -213,6 +239,7 @@ object Utils {
         }
         return bitmap
     }
+
     fun InternetDialog(context: Context?) {
         val dialog = Dialog(context!!, android.R.style.Theme_DeviceDefault_Dialog_Alert)
         dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
@@ -255,7 +282,7 @@ object Utils {
         dialog.show()
     }
 
-  fun logoutAlertDialog(c: Context): Dialog {
+    fun logoutAlertDialog(c: Context): Dialog {
         val dialog = Dialog(c, android.R.style.Theme_DeviceDefault_Dialog_Alert)
         dialog.setCanceledOnTouchOutside(false)
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -294,27 +321,28 @@ object Utils {
     }
 
     fun Picasso(Url: String, imageView: ImageView?, dummy: Int) {
-        Picasso.get().load(Const.baseUrlForImage + Url).fetch(object : com.squareup.picasso.Callback {
-            override fun onSuccess() {
-                if (dummy == 0) Picasso.get()
-                    .load(Const.baseUrlForImage + Url)
-                    .networkPolicy(NetworkPolicy.OFFLINE)
-                    .into(imageView) else Picasso.get()
-                    .load(Const.baseUrlForImage + Url)
-                    .error(dummy)
-                    .networkPolicy(NetworkPolicy.OFFLINE)
-                    .into(imageView)
-            }
+        Picasso.get().load(Const.baseUrlForImage + Url)
+            .fetch(object : com.squareup.picasso.Callback {
+                override fun onSuccess() {
+                    if (dummy == 0) Picasso.get()
+                        .load(Const.baseUrlForImage + Url)
+                        .networkPolicy(NetworkPolicy.OFFLINE)
+                        .into(imageView) else Picasso.get()
+                        .load(Const.baseUrlForImage + Url)
+                        .error(dummy)
+                        .networkPolicy(NetworkPolicy.OFFLINE)
+                        .into(imageView)
+                }
 
-            override fun onError(e: Exception) {
-                if (dummy == 0) Picasso.get()
-                    .load(Const.baseUrlForImage + Url)
-                    .into(imageView) else Picasso.get()
-                    .load(Const.baseUrlForImage + Url)
-                    .error(dummy)
-                    .into(imageView)
-            }
-        })
+                override fun onError(e: Exception) {
+                    if (dummy == 0) Picasso.get()
+                        .load(Const.baseUrlForImage + Url)
+                        .into(imageView) else Picasso.get()
+                        .load(Const.baseUrlForImage + Url)
+                        .error(dummy)
+                        .into(imageView)
+                }
+            })
     }
 
     fun getImageUri(inContext: Context, inImage: Bitmap): Uri {
@@ -502,39 +530,44 @@ object Utils {
     }
 
     fun initProgressDialog(c: Context?): Dialog {
-        val dialog = Dialog(c!!)
-        dialog.setCanceledOnTouchOutside(false)
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialog.setContentView(R.layout.progress_dialog)
-        dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        dialog.setCanceledOnTouchOutside(false)
-        dialog.setCancelable(false)
-        dialog.show()
-        return dialog
+        if (c == null) throw IllegalArgumentException("Context cannot be null")
+
+        return Dialog(c).apply {
+            requestWindowFeature(Window.FEATURE_NO_TITLE)
+            setContentView(R.layout.progress_dialog)
+            window?.setBackgroundDrawable(ColorDrawable(Color.WHITE))
+            window?.setLayout(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT
+            )
+            setCancelable(false)
+            setCanceledOnTouchOutside(false)
+        }
     }
-   /* fun videoProgressDialog(c: Context?): Dialog {
-        val dialog = Dialog(c!!)
-        dialog.setCanceledOnTouchOutside(false)
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialog.setContentView(R.layout.progress_dialog)
-        dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        dialog.setCanceledOnTouchOutside(false)
-        dialog.setCancelable(true)
-        dialog.show()
-        return dialog
-    }*/
-/*
-    fun pdfProgressDialog(c: Context?): Dialog {
-        val dialog = Dialog(c!!)
-        dialog.setCanceledOnTouchOutside(false)
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialog.setContentView(R.layout.progress_dialog)
-        dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        dialog.setCanceledOnTouchOutside(false)
-        dialog.setOnCancelListener { T(c, "Unable to load Pdf") }
-        dialog.show()
-        return dialog
-    }*/
+
+    /* fun videoProgressDialog(c: Context?): Dialog {
+         val dialog = Dialog(c!!)
+         dialog.setCanceledOnTouchOutside(false)
+         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+         dialog.setContentView(R.layout.progress_dialog)
+         dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+         dialog.setCanceledOnTouchOutside(false)
+         dialog.setCancelable(true)
+         dialog.show()
+         return dialog
+     }*/
+    /*
+        fun pdfProgressDialog(c: Context?): Dialog {
+            val dialog = Dialog(c!!)
+            dialog.setCanceledOnTouchOutside(false)
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+            dialog.setContentView(R.layout.progress_dialog)
+            dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            dialog.setCanceledOnTouchOutside(false)
+            dialog.setOnCancelListener { T(c, "Unable to load Pdf") }
+            dialog.show()
+            return dialog
+        }*/
 
     @SuppressLint("InflateParams")
     fun T(c: Context?, msg: String?) {
@@ -550,7 +583,10 @@ object Utils {
         // Create the custom toast
         val toast = Toast(c)
         toast.duration = Toast.LENGTH_SHORT
-        toast.view = binding.root  // Set the custom layout to the toast
+        toast.setView(binding.root)
+
+        // Set the position of the toast (above the default position)
+      //  toast.setGravity(Gravity.TOP or Gravity.CENTER_HORIZONTAL, 0, 110)
 
         // Show the custom toast
         toast.show()
@@ -583,10 +619,12 @@ object Utils {
     fun T_Long(c: Context?, msg: String?) {
         Toast.makeText(c, msg, Toast.LENGTH_LONG).show()
     }
+
     fun disableButton(loader: LoadingButton) {
         loader.alpha = 0.4f
         loader.isEnabled = false
     }
+
     fun enableButton(loader: LoadingButton) {
         loader.alpha = 1.0f
         loader.isEnabled = true
@@ -612,44 +650,43 @@ object Utils {
         alertdialog.show()
     }
 
-/*
-    fun expandOrCollapseView(v: View, expand: Boolean) {
-        if (expand) {
-            E("expand dikha")
-            v.measure(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-            val targetHeight = v.measuredHeight
-            v.layoutParams.height = 0
-            v.visibility = View.VISIBLE
-            val valueAnimator = ValueAnimator.ofInt(targetHeight)
-            valueAnimator.addUpdateListener { animation ->
-                v.layoutParams.height = animation.animatedValue
-                v.requestLayout()
+    /*
+        fun expandOrCollapseView(v: View, expand: Boolean) {
+            if (expand) {
+                E("expand dikha")
+                v.measure(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+                val targetHeight = v.measuredHeight
+                v.layoutParams.height = 0
+                v.visibility = View.VISIBLE
+                val valueAnimator = ValueAnimator.ofInt(targetHeight)
+                valueAnimator.addUpdateListener { animation ->
+                    v.layoutParams.height = animation.animatedValue
+                    v.requestLayout()
+                }
+                valueAnimator.interpolator = DecelerateInterpolator()
+                valueAnimator.duration = 200
+                valueAnimator.start()
+            } else {
+                E("expand nhi dikha")
+                val initialHeight = v.measuredHeight
+                val valueAnimator = ValueAnimator.ofInt(initialHeight, 0)
+                valueAnimator.interpolator = DecelerateInterpolator()
+                valueAnimator.addUpdateListener { animation ->
+                    v.layoutParams.height = animation.animatedValue
+                    v.requestLayout()
+                    if (animation.animatedValue as Int == 0) v.visibility = View.GONE
+                }
+                valueAnimator.interpolator = DecelerateInterpolator()
+                valueAnimator.duration = 200
+                valueAnimator.start()
             }
-            valueAnimator.interpolator = DecelerateInterpolator()
-            valueAnimator.duration = 200
-            valueAnimator.start()
-        } else {
-            E("expand nhi dikha")
-            val initialHeight = v.measuredHeight
-            val valueAnimator = ValueAnimator.ofInt(initialHeight, 0)
-            valueAnimator.interpolator = DecelerateInterpolator()
-            valueAnimator.addUpdateListener { animation ->
-                v.layoutParams.height = animation.animatedValue
-                v.requestLayout()
-                if (animation.animatedValue as Int == 0) v.visibility = View.GONE
-            }
-            valueAnimator.interpolator = DecelerateInterpolator()
-            valueAnimator.duration = 200
-            valueAnimator.start()
         }
-    }
-*/
+    */
 
     fun hashMapTORequestBody(hm: HashMap<*, *>): RequestBody {
         val json = (hm as Map<*, *>?)?.let { JSONObject(it).toString() }
         return json.toString().toRequestBody("application/json; charset=utf-8".toMediaType())
     }
-
 
 
     fun toggleProgressBarAndText(
@@ -669,28 +706,48 @@ object Utils {
         }
     }
 
+    fun startCountdownTimer(durationInMinutes: Int, timerTextView: TextView) {
+        val totalMillis = durationInMinutes * 60 * 1000L // Convert minutes to milliseconds
 
+        object : CountDownTimer(totalMillis, 1000) { // Update every second
+            override fun onTick(millisUntilFinished: Long) {
+                val hours = millisUntilFinished / (1000 * 60 * 60)
+                val minutes = (millisUntilFinished / (1000 * 60)) % 60
+                val seconds = (millisUntilFinished / 1000) % 60
+
+                // Apply italic style to "Left"
+                val formattedTime = String.format("%02d hr %02d mins %02d secs <i>Left</i>", hours, minutes, seconds)
+
+                // Set formatted text
+                timerTextView.text = Html.fromHtml(formattedTime, Html.FROM_HTML_MODE_LEGACY)
+            }
+
+            override fun onFinish() {
+                timerTextView.text = "Time's Up!"
+            }
+        }.start()
+
+    }
     fun showLogoutDialog(
-    context: Context,
-    onLogoutConfirmed: () -> Unit, // Callback for logout
-    onCancel: () -> Unit = {}     // Optional callback for cancel
+        context: Context,
+        onLogoutConfirmed: (ProgressBar, MaterialCardView) -> Unit, // Pass UI elements for visibility handling
+        onCancel: () -> Unit = {} // Optional cancel callback
     ) {
-        // Use ViewBinding to inflate the dialog layout
         val binding = DialogLogoutBinding.inflate(LayoutInflater.from(context))
 
-        // Create an AlertDialog
         val dialog = AlertDialog.Builder(context)
             .setView(binding.root)
-            .setCancelable(false) // Prevent back press and outside touch
+            .setCancelable(false)
             .create()
 
-        // Prevent dialog dismissal on outside touch
         dialog.setCanceledOnTouchOutside(false)
 
         // Handle Logout button click
         binding.mcvLogout.setOnClickListener {
-            onLogoutConfirmed()
-            dialog.dismiss()
+            binding.loading.visibility = View.VISIBLE // Show loading indicator
+            binding.mcvLogout.isEnabled = false // Disable logout button
+
+            onLogoutConfirmed(binding.loading, binding.mcvLogout) // Pass views to handle UI updates
         }
 
         // Handle Cancel button click
@@ -699,9 +756,9 @@ object Utils {
             dialog.dismiss()
         }
 
-        // Show the dialog
         dialog.show()
     }
+
 
 
 }
