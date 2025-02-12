@@ -141,6 +141,8 @@ interface Constants {
         const val className = "class" // Changed to avoid conflict with Kotlin keyword 'class'
         const val classId = "classId"
         const val cartId = "cart_id"
+        const val blogId = "blog_id"
+        const val blog_Category_id = "blog_Category_id"
 
         const val addressLineOne = "addressLineOne"
         const val addressLineTwo = "addressLineTwo"

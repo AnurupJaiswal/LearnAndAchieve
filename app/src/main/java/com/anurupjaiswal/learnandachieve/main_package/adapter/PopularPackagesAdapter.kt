@@ -102,7 +102,7 @@ class PopularPackagesAdapter(
                 try {
                     if (response.code() == StatusCodeConstant.OK) {
                         val cartResponse = response.body()
-
+                        
                         Utils.T(context, "Add To Cart Successfully")
                         if (cartResponse != null) {
                             cartResponse.cartData?.let { updateCartCount(it.cartCount) }
@@ -112,7 +112,8 @@ class PopularPackagesAdapter(
                     }
                 } catch (e: Exception) {
                     e.printStackTrace()
-                    Utils.T(context, "Error processing the request.")
+
+                    E("Error processing the request.")
                 }
             }
 
@@ -120,7 +121,7 @@ class PopularPackagesAdapter(
                 call.cancel()
                 // Hide loading state
                 t.printStackTrace()
-                Utils.T(context, t.message ?: "Request failed. Please try again later.")
+                E(t.message ?: "Request failed. Please try again later.")
             }
         })
     }
@@ -131,7 +132,9 @@ class PopularPackagesAdapter(
                 response.errorBody()?.let { errorBody ->
                     val message = Gson().fromJson(errorBody.charStream(), APIError::class.java)
                     val displayMessage = message.error ?: "Invalid Request"
-                    Utils.T(context, displayMessage)
+                    E(displayMessage)
+
+                    //      Utils.T(context, displayMessage)
                 }
             }
             StatusCodeConstant.UNAUTHORIZED -> {
@@ -139,7 +142,8 @@ class PopularPackagesAdapter(
 
                     val message = Gson().fromJson(errorBody.charStream(), APIError::class.java)
                     val displayMessage = message.message ?: "Unauthorized Access"
-                    Utils.T(context, displayMessage)
+               //     Utils.T(context, displayMessage)
+                    E(displayMessage)
                     Utils.UnAuthorizationToken(context)
                 }
             }

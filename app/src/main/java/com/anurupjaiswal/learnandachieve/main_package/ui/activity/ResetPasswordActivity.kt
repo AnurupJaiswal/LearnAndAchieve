@@ -164,68 +164,54 @@ var token :String? =null
         apiservice?.resetPassword(authToken, requestBody)
             ?.enqueue(object : retrofit2.Callback<ForgetPasswordResponse> {
                 override fun onResponse(
-                    call: Call<ForgetPasswordResponse>, response: Response<ForgetPasswordResponse>
+                    call: Call<ForgetPasswordResponse>,
+                    response: Response<ForgetPasswordResponse>
                 ) {
-                    Utils.toggleProgressBarAndText(true, binding.loading, binding.tvOtpVerification,binding.root)
+                    // Toggle progress to visible (or update UI accordingly)
+                    Utils.toggleProgressBarAndText(true, binding.loading, binding.tvOtpVerification, binding.root)
                     try {
-                        if (response.code() == StatusCodeConstant.OK) {
-                            val resetPasswordResponse = response.body()
-                            resetPasswordResponse?.let {
-
-                                Utils.T(this@ResetPasswordActivity,"Reset Successfully")
-                                Utils.I_clear(activity, LoginActivity::class.java,null)
-                            }
-                        } else if (response.code() == StatusCodeConstant.BAD_REQUEST) {
-
-
-                            Utils.toggleProgressBarAndText(
-                                false, binding.loading, binding.tvOtpVerification,binding.root
-                            )
-
-
-                            response.errorBody()?.let { errorBody ->
-                                val message =
-                                    Gson().fromJson(errorBody.charStream(), APIError::class.java)
-                        //        val displayMessage = message.error ?: "InValid OTP"
-                                //Toast.makeText(activity, displayMessage, Toast.LENGTH_SHORT).show()
-                            }
-
-                        } else if (response.code() == StatusCodeConstant.UNAUTHORIZED) {
-                            Utils.toggleProgressBarAndText(
-                                false, binding.loading, binding.tvOtpVerification,binding.root
-                            )
-
-                            response.errorBody()?.let { errorBody ->
-                                val message =
-                                    Gson().fromJson(errorBody.charStream(), APIError::class.java)
-                                val displayMessage = message.message ?: "Unauthorized Access"
-
-                                // Ensure message is non-empty before showing Toast
-                                if (displayMessage.isNotEmpty()) {
-                                    Toast.makeText(activity, displayMessage, Toast.LENGTH_SHORT)
-                                        .show()
-
+                        when (response.code()) {
+                            StatusCodeConstant.OK -> {
+                                response.body()?.let { resetPasswordResponse ->
+                                    Utils.T(this@ResetPasswordActivity, "Reset Successfully")
+                                    Utils.I_clear(activity, LoginActivity::class.java, null)
                                 }
+                            }
+                            StatusCodeConstant.BAD_REQUEST -> {
+                                // Hide progress UI
+                                Utils.toggleProgressBarAndText(false, binding.loading, binding.tvOtpVerification, binding.root)
+                                response.errorBody()?.let { errorBody ->
+                                    val apiError = Gson().fromJson(errorBody.charStream(), APIError::class.java)
+                                    val displayMessage = apiError.error ?: "Invalid OTP"
+                                    Utils.T(activity, displayMessage)
+                                }
+                            }
+                            StatusCodeConstant.UNAUTHORIZED -> {
+                                Utils.toggleProgressBarAndText(false, binding.loading, binding.tvOtpVerification, binding.root)
                                 Utils.UnAuthorizationToken(activity)
+                            }
+                            else -> {
+                                Utils.toggleProgressBarAndText(false, binding.loading, binding.tvOtpVerification, binding.root)
+                                Utils.E("resetPassword Error: ${response.code()} - ${response.message()}")
+                                Utils.T(activity, "Error: ${response.code()}")
                             }
                         }
                     } catch (e: Exception) {
                         e.printStackTrace()
+                        Utils.toggleProgressBarAndText(false, binding.loading, binding.tvOtpVerification, binding.root)
+                        Utils.E("Exception in resetPassword: ${e.message}")
                     }
                 }
 
                 override fun onFailure(call: Call<ForgetPasswordResponse>, t: Throwable) {
                     call.cancel()
                     t.printStackTrace()
-                    Utils.toggleProgressBarAndText(
-                        false, binding.loading, binding.tvOtpVerification,binding.root
-                    )
-
-                    Toast.makeText(
-                        activity, t.message ?: "Request failed Try Again Later", Toast.LENGTH_SHORT
-                    ).show()
+                    Utils.toggleProgressBarAndText(false, binding.loading, binding.tvOtpVerification, binding.root)
+                    Utils.E("onFailure: ${t.message}")
+                    Utils.T(activity, t.message ?: "Request failed. Try Again Later")
                 }
             })
+
     }
 
 

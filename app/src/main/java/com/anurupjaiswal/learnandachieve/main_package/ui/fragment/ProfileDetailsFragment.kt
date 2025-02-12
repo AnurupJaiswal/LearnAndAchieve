@@ -288,7 +288,7 @@ class ProfileDetailsFragment : Fragment(R.layout.fragment_profile_details) {
             if (grantResults.all { it == PackageManager.PERMISSION_GRANTED }) {
                 if (requestCode == CAMERA_PERMISSION_CODE) openCamera() else openGallery()
             } else {
-                Toast.makeText(requireContext(), "Permissions Denied", Toast.LENGTH_SHORT).show()
+                Utils.T(requireContext(), "Permissions Denied")
             }
         }
     }
@@ -396,7 +396,6 @@ class ProfileDetailsFragment : Fragment(R.layout.fragment_profile_details) {
                 call: Call<GetUserResponse>,
                 response: Response<GetUserResponse>
             ) {
-                // Hide loading state
                 try {
                     if (response.code() == StatusCodeConstant.OK) {
                         val userModel = response.body()
@@ -532,8 +531,8 @@ class ProfileDetailsFragment : Fragment(R.layout.fragment_profile_details) {
                             }
 
                             StatusCodeConstant.UNAUTHORIZED -> {
-                                // Unauthorized (401)
                                 val message = response.body()?.message ?: "Unauthorized. Please log in again."
+                              Utils.UnAuthorizationToken(requireContext())
                                 Utils.T(requireContext(), message)
                             }
 

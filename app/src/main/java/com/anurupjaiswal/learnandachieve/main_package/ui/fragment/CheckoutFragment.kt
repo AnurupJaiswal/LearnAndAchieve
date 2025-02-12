@@ -17,12 +17,14 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.anurupjaiswal.learnandachieve.R
+import com.anurupjaiswal.learnandachieve.basic.retrofit.APIError
 import com.anurupjaiswal.learnandachieve.basic.retrofit.ApiService
 import com.anurupjaiswal.learnandachieve.basic.retrofit.Const
 import com.anurupjaiswal.learnandachieve.basic.retrofit.RetrofitClient
 import com.anurupjaiswal.learnandachieve.basic.utilitytools.NavigationManager
 import com.anurupjaiswal.learnandachieve.basic.utilitytools.StatusCodeConstant
 import com.anurupjaiswal.learnandachieve.basic.utilitytools.Utils
+import com.anurupjaiswal.learnandachieve.basic.utilitytools.Utils.E
 import com.anurupjaiswal.learnandachieve.basic.utilitytools.Utils.toggleProgressBarAndText
 import com.anurupjaiswal.learnandachieve.databinding.FragmentCheckoutBinding
 import com.anurupjaiswal.learnandachieve.main_package.adapter.CartAdapter
@@ -34,17 +36,13 @@ import com.anurupjaiswal.learnandachieve.model.CreateOrderResponse
 import com.anurupjaiswal.learnandachieve.model.Notes
 import com.anurupjaiswal.learnandachieve.model.PackageModel
 import com.anurupjaiswal.learnandachieve.model.VerifyPaymentResponse
+import com.google.gson.Gson
 import com.razorpay.Checkout
 import com.razorpay.PaymentResultListener
 import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-
-
-
-
-
 
 
 
@@ -84,7 +82,7 @@ class CheckoutFragment : Fragment(), PaymentResultListener {
                 //startPayment()
                 createOrder(grandTotal)
             } else {
-                Toast.makeText(requireContext(), "Cart is empty or invalid amount", Toast.LENGTH_SHORT).show()
+              Utils.T(requireContext(), "Cart is empty or invalid amount")
             }
         }
     }
@@ -127,24 +125,48 @@ class CheckoutFragment : Fragment(), PaymentResultListener {
 
         apiService.getCartData(authToken).enqueue(object : Callback<AllCartResponse> {
             override fun onResponse(call: Call<AllCartResponse>, response: Response<AllCartResponse>) {
-                if (response.code() == StatusCodeConstant.OK) {
-                    val allCartResponse = response.body()
-                    allCartResponse?.let {
-                        allCartResponse.cartList?.let { cartItems.addAll(it) }
-                        allCartResponse.summary?.let { summary -> updateSummary(summary) }
-                        binding.recyclerViewCart.adapter?.notifyDataSetChanged()
+                try {
+                    when (response.code()) {
+                        StatusCodeConstant.OK -> {
+                            val allCartResponse = response.body()
+                            allCartResponse?.let {
+                                it.cartList?.let { cartItems.addAll(it) }
+                                it.summary?.let { summary -> updateSummary(summary) }
+                                binding.recyclerViewCart.adapter?.notifyDataSetChanged()
+                            }
+                        }
+
+                        StatusCodeConstant.UNAUTHORIZED -> {
+                            // Handle unauthorized response
+                            Utils.UnAuthorizationToken(requireContext())
+                        }
+
+                        StatusCodeConstant.BAD_REQUEST -> {
+                            response.errorBody()?.let { errorBody ->
+                                val apiError = Gson().fromJson(errorBody.charStream(), APIError::class.java)
+                                val errorMessage = apiError.error ?: "Bad Request Error"
+                                E("fetchCartData BAD_REQUEST: $errorMessage")
+                            }
+                        }
+
+                        else -> {
+                            // Log error response but do not show Toast
+                            E("fetchCartData Error: ${response.code()} - ${response.errorBody()?.string()}")
+                        }
                     }
-                } else {
-                    Toast.makeText(requireContext(), "Error: ${response.code()}", Toast.LENGTH_SHORT).show()
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    E("fetchCartData Exception: ${e.message}")
                 }
             }
 
             override fun onFailure(call: Call<AllCartResponse>, t: Throwable) {
                 t.printStackTrace()
-                Toast.makeText(requireContext(), "Failed to fetch cart data", Toast.LENGTH_SHORT).show()
+                E("fetchCartData Failure: ${t.message}")
             }
         })
     }
+
 
     private fun updateSummary(summary: CartSummary) {
         grandTotal = (summary.grandTotal ?: 0.0).toString()
@@ -189,7 +211,7 @@ class CheckoutFragment : Fragment(), PaymentResultListener {
 
         } catch (e: Exception) {
             e.printStackTrace()
-            Toast.makeText(requireContext(), "Error in payment: ${e.message}", Toast.LENGTH_SHORT).show()
+            E( "Error in payment: ${e.message}")
         }
     }
 
@@ -206,9 +228,9 @@ class CheckoutFragment : Fragment(), PaymentResultListener {
             Utils.T(requireContext(), "Payment Successful")
 
             // Log the payment details for debugging
-            Log.d("PaymentSuccess", "Payment ID: $paymentId")
-            Log.d("PaymentSuccess", "Order ID: $razorpayOrderId")
-            Log.d("PaymentSuccess", "Signature: $razorpaySignature")
+            E("Payment ID: $paymentId")
+            E("Order ID: $razorpayOrderId")
+            E("Signature: $razorpaySignature")
 
             // Send this data to your backend for verification
             verifyPayment(razorpayOrderId, paymentId, razorpaySignature)
@@ -249,10 +271,10 @@ class CheckoutFragment : Fragment(), PaymentResultListener {
                 ) {
                     if (response.isSuccessful) {
                         val orderResponse = response.body()
-                        Log.d("API_SUCCESS", "Order ID: ${orderResponse?.id}")
-                        Log.d("API_SUCCESS", "Amount Due: ${orderResponse?.amount_due}")
-                        Log.d("API_SUCCESS", "Currency: ${orderResponse?.currency}")
-                        Log.d("API_SUCCESS", "User ID: ${orderResponse?.notes?.userId}")
+                      E("Order ID: ${orderResponse?.id}")
+                        E("Amount Due: ${orderResponse?.amount_due}")
+                        E( "Currency: ${orderResponse?.currency}")
+                        E( "User ID: ${orderResponse?.notes?.userId}")
                         val orderId = orderResponse?.id ?: return
                         val amountDue = orderResponse?.amount_due ?: return
                         val currency = orderResponse?.currency ?: "INR"
@@ -268,14 +290,14 @@ class CheckoutFragment : Fragment(), PaymentResultListener {
                     } else {
                         toggleProgressBarAndText(false, binding.loading, binding.tvPay,binding.root)
 
-                        Log.e("API_ERROR", "Response Code: ${response.code()}, Message: ${response.message()}")
+                        E("Response Code: ${response.code()}, Message: ${response.message()}")
                     }
                 }
 
                 override fun onFailure(call: Call<CreateOrderResponse>, t: Throwable) {
 
 
-                    Log.e("API_FAILURE", "Error: ${t.message}")
+                    E("Error: ${t.message}")
                 }
             })
         }
@@ -298,17 +320,17 @@ class CheckoutFragment : Fragment(), PaymentResultListener {
                 if (response.isSuccessful) {
                     // Handle success
                     val verifyPaymentResponse = response.body()
-                    Log.d("PaymentVerification", "Response: ${verifyPaymentResponse?.message}")
+                    E("Response: ${verifyPaymentResponse?.message}")
                     // Additional logic after payment verification
                 } else {
                     // Handle failure
-                    Log.e("PaymentVerification", "Error: ${response.code()} ${response.message()}")
+                    E("Error: ${response.code()} ${response.message()}")
                 }
             }
 
             override fun onFailure(call: Call<VerifyPaymentResponse>, t: Throwable) {
                 // Handle failure
-                Log.e("PaymentVerification", "Error: ${t.message}")
+                E("Error: ${t.message}")
             }
         })
     }

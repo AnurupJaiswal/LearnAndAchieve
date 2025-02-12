@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/tvQuestionNumber"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:textSize="14sp"
+    android:text="3"
+    android:layout_margin="@dimen/_2sdp"
+    android:gravity="center"
+  android:paddingVertical="@dimen/_5sdp"
+    android:paddingHorizontal="@dimen/_10sdp"
+    android:background="@drawable/bg_not_answered"
+    android:textColor="@color/white"
+    android:textStyle="bold" />

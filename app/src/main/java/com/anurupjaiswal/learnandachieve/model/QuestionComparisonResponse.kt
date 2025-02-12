@@ -1,5 +1,7 @@
 package com.anurupjaiswal.learnandachieve.model
 
+import com.anurupjaiswal.learnandachieve.main_package.adapter.QuestionStatus
+
 data class QuestionComparisonResponse(
     val message: String,
     val data: QuestionComparisonData
@@ -32,7 +34,9 @@ data class QuestionItem(
     val options: List<String>,
     val questionType: String,
     val typeOfQuestion: String,
-    val subQuestions: List<SubQuestion>
+    val subQuestions: List<SubQuestion>,
+    var status: QuestionStatus = QuestionStatus.NOT_VIEWED
+
 )
 
 data class SubQuestion(

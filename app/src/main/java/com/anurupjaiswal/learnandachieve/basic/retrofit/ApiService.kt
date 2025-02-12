@@ -29,7 +29,11 @@ import com.anurupjaiswal.learnandachieve.model.TopicResponse
 import com.anurupjaiswal.learnandachieve.model.GetUserResponse
 import com.anurupjaiswal.learnandachieve.model.MockTestResponse
 import com.anurupjaiswal.learnandachieve.model.OrderHistoryResponse
+import com.anurupjaiswal.learnandachieve.model.PerformanceSummaryResponse
 import com.anurupjaiswal.learnandachieve.model.QuestionComparisonResponse
+import com.anurupjaiswal.learnandachieve.model.ShowResultReponce
+import com.anurupjaiswal.learnandachieve.model.SubmitMockTestRequest
+import com.anurupjaiswal.learnandachieve.model.SubmitMockTestResponse
 import com.anurupjaiswal.learnandachieve.model.TermsConditionsResponse
 import com.anurupjaiswal.learnandachieve.model.VerifyOtpResponse
 import com.anurupjaiswal.learnandachieve.model.VerifyPaymentResponse
@@ -54,9 +58,18 @@ import retrofit2.http.Query
 interface ApiService {
 
 
+        @POST(Const.SUBMIT_MOCK_TEST)
+        fun submitMockTest(
+            @Header(Constants.Authorization) token: String,
+            @Body request: SubmitMockTestRequest
+        ): Call<SubmitMockTestResponse>
+
+
     @FormUrlEncoded
     @POST(Const.USER_LOGIN)
-    fun userLogin(@FieldMap hm: HashMap<String, String?>): Call<LoginData>?
+    fun userLogin(
+        @FieldMap hm: HashMap<String, String?>
+    ): Call<LoginData>?
 
     @GET(Const.GET_ALL_CLASSES)
     fun getAllClasses(): Call<ClassResponse>
@@ -163,70 +176,71 @@ interface ApiService {
         @Query(Constants.medium) medium: String
     ): Call<ModuleResponse>
 
-    @GET("studyMaterials/getAllTopics")
+    @GET(Const.GET_ALL_TOPIC)
     fun getAllTopics(
         @Header(Constants.Authorization) authorization: String,
         @Query(Constants.moduleId) moduleId: String
     ): Call<TopicResponse>
 
-    @GET("user/details")
+    @GET(Const.GET_USER_DETAILS)
      fun getUserDetails(
         @Header(Constants.Authorization) authorization: String
     ): Call<GetUserResponse>
 
-    @GET("order/getAll")
+    @GET(Const.GET_ODER_ALL)
     fun getOrderHistory(
         @Header(Constants.Authorization) authorization: String
     ): Call<OrderHistoryResponse>
 
 
 
-    @POST("user/changePassword")
+    @POST(Const.CHANGE_PASSWORD)
     fun changePassword(
-        @Header("Authorization") token: String,
+        @Header(Constants.Authorization) token: String,
         @Body body: HashMap<String, String>
     ): Call<ChangePasswordResponse>
+
     @Multipart
-    @POST("user/updateProfile")
+    @POST(Const.UPDATE_PROFILE)
     fun updateProfile(
-        @Header("Authorization") token: String, // Token in Authorization header
+        @Header(Constants.Authorization) token: String,
         @Part profilePicture: MultipartBody.Part // Profile picture
     ): Call<GetUserResponse>
 
-    @DELETE("user/deleteprofilePicture")
+    @DELETE(Const.DELETE_PROFILE_PICTURE)
     fun deleteProfilePicture(
-        @Header("Authorization") token: String
+        @Header(Constants.Authorization) token: String,
     ): Call<ApiResponse>
 
-    @POST("user/deleteUser")
+    @POST(Const.DELETE_USER)
     fun deleteUser(@Header(Constants.Authorization) token: String): Call<ApiResponse>
 
 
-    @POST("coordinator/add-coordinator")
+    @POST(Const.ADD_COORDINATOR)
     fun addCoordinator(
         @Header(Constants.Authorization) token: String,
         @Body params: HashMap<String, Any>
     ): Call<ApiResponse>
 
-    @GET("termsConditions/get-terms-condition")
+    @GET(Const.GET_TERMS_CONDITIONS)
     fun getTermsConditions(): Call<TermsConditionsResponse>
 
-    @GET("privacyPolicy/get-privacy-policy")
+    @GET(Const.PRIVACY_POLICY)
     fun getPrivacyPolicy(): Call<TermsConditionsResponse>
 
-    @GET("cancellationPolicy/get-cancellation-Condition")
+    @GET(Const.CANCELLATION_POLICY)
     fun getCancellationPolicy(): Call<TermsConditionsResponse>
 
     @GET("user/getAboutUsPageContent")
     fun getAboutUsPageContent(): Call<TermsConditionsResponse>
 
-    @GET("faq/getAll")
+    @GET(Const.FAQ_ALL)
     fun getCategories(
-        @Query("limit") limit: Int,
-        @Query("offset") offset: Int
+        @Query(Const.LIMIT) limit: Int,
+        @Query(Const.OFFSET) offset: Int
     ): Call<FAQResponse>
 
-    @GET("faq/getAll")
+    @GET(Const.FAQ_ALL)
     fun getFAQsByCategory(
         @Query("limit") limit: Int,
         @Query("offset") offset: Int,
@@ -234,44 +248,44 @@ interface ApiService {
     ): Call<FAQResponse>
 
 
-    @POST("package/createOrder")
+    @POST(Const.CREATE_ORDER)
     fun createOrder(
-        @Header("Authorization") token: String?,
+        @Header(Constants.Authorization) token: String,
         @Body paymentData: HashMap<String, String>    ): Call<CreateOrderResponse>
 
 
 
     // Endpoint for verifying payment
-    @POST("package/verifyPayment")
+    @POST(Const.VERIFY_PAYMENT)
     fun verifyPayment(
-        @Header("Authorization") authToken: String,  // Send the token in Authorization header
+        @Header(Constants.Authorization) token: String,
         @Body paymentData: HashMap<String, String>  // Send the payment data as a HashMap
     ): Call<VerifyPaymentResponse>
 
-    @GET("mockTest/getAll")
+    @GET(Const.MOCK_TEST_ALL)
     fun getMockTests(
-        @Header("Authorization") authToken: String,
-        @Query("limit") limit: Int,
-        @Query("offset") offset: Int
+        @Header(Constants.Authorization) token: String,
+        @Query(Const.LIMIT) limit: Int,
+        @Query(Const.OFFSET) offset: Int
     ): Call<MockTestResponse>
 
-     @GET("blog/getAllBlogApp")
+     @GET(Const.ALL_BLOG_APP)
     fun getAllBlogApp(
-        @Header("Authorization") authToken: String,
+         @Header(Constants.Authorization) token: String,
 
     ): Call<GetAllBlogAppResponse>
 
-    @GET("blog/getBlogDetailsById")
+    @GET(Const.BLOG_DETAILS_BY_ID)
     fun getBlogDetails(
-        @Query("blog_id") blogId: String  // Pass the blog_id as a query parameter
+        @Query(Constants.blogId) blogId: String  // Pass the blog_id as a query parameter
     ): Call<BlogResponse>
 
-    @GET("blog/getAll") // Base URL is already defined in RetrofitClient
+    @GET(Const.BLOG_GET_ALL)
     fun getBlogs(
-        @Header("Authorization") token: String,
-        @Query("blog_Category_id") categoryId: String?,
-        @Query("limit") limit: Int,
-        @Query("offset") offset: Int
+        @Header(Constants.Authorization) token: String,
+        @Query(Constants.blog_Category_id) categoryId: String?,
+        @Query(Const.LIMIT) limit: Int,
+        @Query(Const.OFFSET) offset: Int
     ): Call<GetAllBlogAppResponse>
 
         @POST("user/logout")
@@ -281,61 +295,25 @@ interface ApiService {
         @Query("mockTest_id") mockTestId: String
     ): Call<QuestionComparisonResponse>
 
+    @GET(Const.SHOW_RESULT)
+    fun getShowResults(
+        @Header(Constants.Authorization) token: String,
+        @Query("mockTest_id") mockTestId: String,
+        @Query("order_id") orderId: String
+    ): Call<ShowResultReponce>
+
+
+    @GET(Const.VIEW_RESULT)
+    fun getPerformanceSummary(
+        @Header(Constants.Authorization) token: String,
+        @Query("mockTest_id") mockTestId: String,
+        @Query("mockTestSubmissions_id") mockTestSubmissionsId: String,
+        @Query("subject_id") subjectId: String? = null
+    ): Call<PerformanceSummaryResponse>
 }
 
 
-/*
-    @FormUrlEncoded
-    @POST("signInGoogle")
-    fun userLoginWithGoogel(@FieldMap hm: HashMap<String, String?>): Call<LoginData?>?
 
-    @GET(Const.getProfileApi)
-    fun getProfileApi(@Header(Constants.Authorization) token: String?): Call<AllResponseModel?>?
-
-    //@FormUrlEncoded
-    @GET(Const.changePasswordApi)
-    fun changePasswordApi(
-        @Header(Constants.Authorization) token: String?,
-        @QueryMap hm: HashMap<String, String?>
-    ): Call<VrificationOtp?>?
-
-    @Multipart
-    @POST(Const.updateSalesProfile)
-    fun updateSalesProfile(
-        @Header(Constants.Authorization) token: String?,
-        @PartMap hm: HashMap<String, RequestBody>,
-        @Part profilePic: MultipartBody.Part
-    ): Call<AllResponseModel?>?
-
-
-    @POST(Const.sendOtp)
-    fun forgotPassword(@Body body: RequestBody): Call<AllResponseModel>?
-
-
-    @FormUrlEncoded
-    @POST(Const.pushNotificationApi)
-    fun pushNotificationApi(
-        @FieldMap hm: HashMap<String, String?>,
-        @Header(Constants.Authorization) token: String?
-    ): Call<AllResponseModel?>?
-
-//jhfjidhf
-    @Multipart
-    @POST(Const.signUp)
-    fun signUp(
-        @PartMap hm: HashMap<String, RequestBody>,
-        @Part userImage: MultipartBody.Part,): Call<SignupResponse>
-
-    @FormUrlEncoded
-    @PUT(Const.verifyOtp)
-    fun verifyOtp(@FieldMap hm: HashMap<String, String>): Call<VrificationOtp>
-
-    @FormUrlEncoded
-    @PUT(Const.verifyOtp)
-    fun otpLogin(@FieldMap hm : HashMap<String, RequestBody>): Call<UserData>
-
-
-*/
 
 
 

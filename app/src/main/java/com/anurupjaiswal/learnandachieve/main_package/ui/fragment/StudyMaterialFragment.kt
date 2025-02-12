@@ -17,6 +17,7 @@ import com.anurupjaiswal.learnandachieve.basic.utilitytools.Constants
 import com.anurupjaiswal.learnandachieve.basic.utilitytools.NavigationManager
 import com.anurupjaiswal.learnandachieve.basic.utilitytools.StatusCodeConstant
 import com.anurupjaiswal.learnandachieve.basic.utilitytools.Utils
+import com.anurupjaiswal.learnandachieve.basic.utilitytools.Utils.E
 import com.anurupjaiswal.learnandachieve.databinding.FragmentHomeBinding
 import com.anurupjaiswal.learnandachieve.databinding.FragmentStudyMaterialBinding
 import com.anurupjaiswal.learnandachieve.main_package.adapter.StudyMaterialAdapter
@@ -105,14 +106,19 @@ class StudyMaterialFragment : Fragment() {
     private fun handleStudyMaterialsApiError(response: Response<GetAllStudyMaterial>) {
         when (response.code()) {
             StatusCodeConstant.UNAUTHORIZED -> {
+                Utils.UnAuthorizationToken(requireContext())
+            }
+
+            StatusCodeConstant.BAD_REQUEST -> {
                 response.errorBody()?.let { errorBody ->
-                    val message = Gson().fromJson(errorBody.charStream(), APIError::class.java)
-                    Utils.UnAuthorizationToken(requireContext())
+                    val apiError = Gson().fromJson(errorBody.charStream(), APIError::class.java)
+                    val errorMessage = apiError.error ?: "Bad Request Error"
+                    E("handleStudyMaterialsApiError BAD_REQUEST: $errorMessage")
                 }
             }
 
             else -> {
-                Utils.T(context, "Unknown error occurred.")
+                E("handleStudyMaterialsApiError Error: ${response.code()} - ${response.errorBody()?.string()}")
             }
         }
     }

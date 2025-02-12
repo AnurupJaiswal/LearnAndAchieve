@@ -136,76 +136,68 @@ binding.tvResendOtp.setOnClickListener(this)
 
 
     private fun otpVerificationApi() {
-
         val token = "Bearer ${Utils.GetSession().token}"
         val params = mapOf(
             Constants.Email to Utils.GetSession().email.toString(),
             Constants.otp to binding.PinView.text.toString(),
             "type" to "delete-user"
-
         )
-        apiservice?.verifyOtp(token,params)?.enqueue(object : retrofit2.Callback<VerifyOtpResponse> {
 
-
-            override fun onResponse(
-                call: Call<VerifyOtpResponse>, response: Response<VerifyOtpResponse>
-            ) {
-                Utils.toggleProgressBarAndText(true, binding.loading, binding.tvOtpVerification,binding.root)
+        apiservice?.verifyOtp(token, params)?.enqueue(object : retrofit2.Callback<VerifyOtpResponse> {
+            override fun onResponse(call: Call<VerifyOtpResponse>, response: Response<VerifyOtpResponse>) {
+                // Toggle progress to "success" state
+                Utils.toggleProgressBarAndText(true, binding.loading, binding.tvOtpVerification, binding.root)
                 try {
-                    if (response.code() == StatusCodeConstant.OK) {
-                        val verifyOtpResponse = response.body()
-                        verifyOtpResponse?.let {
-                            Utils.T(activity, it.message)
-                            Utils.I_finish(activity,LoginActivity::class.java,null)
-                        }
-                    } else if (response.code() == StatusCodeConstant.BAD_REQUEST) {
-
-
-                        Utils.toggleProgressBarAndText(false, binding.loading, binding.tvOtpVerification,binding.root)
-
-
-                        response.errorBody()?.let { errorBody ->
-                            val message = Gson().fromJson(errorBody.charStream(), APIError::class.java)
-                            val displayMessage = message.error ?: "InValid OTP"
-
-
-                            Toast.makeText(activity, displayMessage, Toast.LENGTH_SHORT).show()
-                        }
-                    }else if (response.code() == StatusCodeConstant.UNAUTHORIZED) {
-                        Utils.toggleProgressBarAndText(false, binding.loading, binding.tvOtpVerification,binding.root)
-
-                        response.errorBody()?.let { errorBody ->
-                            val message = Gson().fromJson(errorBody.charStream(), APIError::class.java)
-                            val displayMessage = message.message ?: "Unauthorized Access"
-
-                            // Ensure message is non-empty before showing Toast
-                            if (displayMessage.isNotEmpty()) {
-                                Toast.makeText(activity, displayMessage, Toast.LENGTH_SHORT).show()
-
+                    when (response.code()) {
+                        StatusCodeConstant.OK -> {
+                            response.body()?.let { verifyOtpResponse ->
+                                Utils.T(activity, verifyOtpResponse.message)
+                                Utils.I_finish(activity, LoginActivity::class.java, null)
                             }
-                            Utils.UnAuthorizationToken(activity)
+                        }
+                        StatusCodeConstant.BAD_REQUEST -> {
+                            Utils.toggleProgressBarAndText(false, binding.loading, binding.tvOtpVerification, binding.root)
+                            response.errorBody()?.let { errorBody ->
+                                val apiError = Gson().fromJson(errorBody.charStream(), APIError::class.java)
+                                val displayMessage = apiError.error ?: "Invalid OTP"
+                                Utils.T(activity, displayMessage)
+                            }
+                        }
+                        StatusCodeConstant.UNAUTHORIZED -> {
+                            Utils.toggleProgressBarAndText(false, binding.loading, binding.tvOtpVerification, binding.root)
+                            response.errorBody()?.let { errorBody ->
+                                val apiError = Gson().fromJson(errorBody.charStream(), APIError::class.java)
+                                val displayMessage = apiError.message ?: "Unauthorized Access"
+                                if (displayMessage.isNotEmpty()) {
+                                    Utils.T(activity, displayMessage)
+                                }
+                                Utils.E("otpVerificationApi UNAUTHORIZED: $displayMessage")
+                                Utils.UnAuthorizationToken(activity)
+                            }
+                        }
+                        StatusCodeConstant.NOT_FOUND -> {
+                            Utils.toggleProgressBarAndText(false, binding.loading, binding.tvOtpVerification, binding.root)
+                            Utils.E("otpVerificationApi: Not Found (404)")
+                        }
+                        else -> {
+                            Utils.toggleProgressBarAndText(false, binding.loading, binding.tvOtpVerification, binding.root)
+                            Utils.E("otpVerificationApi Error: ${response.code()} - ${response.errorBody()?.string()}")
+                            Utils.T(activity, "Unexpected error: ${response.code()}")
                         }
                     }
-
-
-
-                    else if (response.code() == StatusCodeConstant.NOT_FOUND) {
-                        Utils.toggleProgressBarAndText(false, binding.loading, binding.tvOtpVerification,binding.root)
-
-
-                    }
-
                 } catch (e: Exception) {
                     e.printStackTrace()
+                    Utils.toggleProgressBarAndText(false, binding.loading, binding.tvOtpVerification, binding.root)
+                    Utils.E("otpVerificationApi Exception: ${e.message}")
                 }
             }
 
             override fun onFailure(call: Call<VerifyOtpResponse>, t: Throwable) {
                 call.cancel()
                 t.printStackTrace()
-                Utils.toggleProgressBarAndText(false, binding.loading, binding.tvOtpVerification,binding.root)
-
-                Toast.makeText(activity, t.message ?: "Request failed Try Again Later", Toast.LENGTH_SHORT).show()
+                Utils.toggleProgressBarAndText(false, binding.loading, binding.tvOtpVerification, binding.root)
+                Utils.E("otpVerificationApi onFailure: ${t.message}")
+                Utils.T(activity, t.message ?: "Request failed. Try Again Later")
             }
         })
     }

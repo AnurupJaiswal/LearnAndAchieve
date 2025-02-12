@@ -1,13 +1,21 @@
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
-    android:width="5dp"
-    android:height="5dp"
-    android:viewportWidth="20"
-    android:viewportHeight="20">
-    <!-- Checkmark Path -->
-    <path
-        android:pathData="M5,10 L8,13 L15,6"
-        android:fillColor="@color/transparent"
-        android:strokeColor="@color/primaryColor"
-        android:strokeWidth="2"/>
+    android:width="16dp"
+    android:height="16dp"
+    android:viewportWidth="16"
+    android:viewportHeight="16">
 
+    <!-- Checkbox Background (Filled with Orange) -->
+    <path
+        android:strokeWidth="1"
+        android:pathData="M3,0.5L13,0.5A2.5,2.5 0,0 1,15.5 3L15.5,13A2.5,2.5 0,0 1,13 15.5L3,15.5A2.5,2.5 0,0 1,0.5 13L0.5,3A2.5,2.5 0,0 1,3 0.5z"
+        android:fillColor="#008000"
+    android:strokeColor="#008000" />
+
+    <!-- White Tick Mark -->
+    <path
+        android:strokeColor="#FFFFFF"
+    android:strokeWidth="1.5"
+    android:strokeLineCap="round"
+    android:strokeLineJoin="round"
+    android:pathData="M4.5,8L7,10.5L11.5,5.5" />
 </vector>

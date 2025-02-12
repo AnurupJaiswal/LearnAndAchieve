@@ -9,9 +9,11 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.anurupjaiswal.learnandachieve.R
+import com.anurupjaiswal.learnandachieve.basic.retrofit.APIError
 import com.anurupjaiswal.learnandachieve.basic.retrofit.RetrofitClient
 import com.anurupjaiswal.learnandachieve.basic.utilitytools.NavigationManager
 import com.anurupjaiswal.learnandachieve.basic.utilitytools.NetworkUtil
+import com.anurupjaiswal.learnandachieve.basic.utilitytools.StatusCodeConstant
 import com.anurupjaiswal.learnandachieve.basic.utilitytools.Utils
 import com.anurupjaiswal.learnandachieve.basic.utilitytools.Utils.E
 import com.anurupjaiswal.learnandachieve.databinding.FragmentMockTestBinding
@@ -19,6 +21,7 @@ import com.anurupjaiswal.learnandachieve.main_package.adapter.MockTestAdapter
 
 import com.anurupjaiswal.learnandachieve.model.MockTestItem
 import com.anurupjaiswal.learnandachieve.model.MockTestResponse
+import com.google.gson.Gson
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -78,46 +81,81 @@ class MockTestFragment : Fragment() {
     }
 
     private fun setupRecyclerView() {
-        adapter = MockTestAdapter(mockTestList) { mockTestId ->
-            val bundle = Bundle().apply {
-
-                putString("mockTest_id", mockTestId)
+        adapter = MockTestAdapter(
+            mockTestList,
+            onMockTestSelected = { mockTest ->
+                val bundle = Bundle().apply {
+                    putString("mockTest_id", mockTest.mockTest_id)
+                    putString("package_id", mockTest.package_id)
+                    putString("order_id", mockTest.order_id)
+                }
+                NavigationManager.navigateToFragment(findNavController(), R.id.QuestionComparisonFragment, bundle)
+            },
+            onViewResultsSelected = { mockTest ->
+                val bundle = Bundle().apply {
+                    putString("mockTest_id", mockTest.mockTest_id)
+                    putString("package_id", mockTest.package_id)
+                    putString("order_id", mockTest.order_id)
+                }
+                NavigationManager.navigateToFragment(findNavController(), R.id.ShowResultFragment, bundle)
             }
-           NavigationManager.navigateToFragment(findNavController(), R.id.QuestionComparisonFragment,bundle)
-        }
+        )
+
         binding.rvMockTest.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = this@MockTestFragment.adapter
         }
     }
 
+
     private fun fetchMockTests() {
         showProgressBar(true)
 
         val authToken = "Bearer ${Utils.GetSession().token}"  // Assuming the token is stored in session
 
-        RetrofitClient.client.getMockTests(authToken,limit = 20, offset = 0)
+        RetrofitClient.client.getMockTests(authToken, limit = 20, offset = 0)
             .enqueue(object : Callback<MockTestResponse> {
                 override fun onResponse(call: Call<MockTestResponse>, response: Response<MockTestResponse>) {
-                    if (response.isSuccessful && response.body() != null) {
-                        mockTestList.clear()
-                        mockTestList.addAll(response.body()!!.data)
-                        adapter.notifyDataSetChanged()
-                        showProgressBar(false)
+                    showProgressBar(false)
 
-                    } else {
-                        E("Error: ${response.message()}")
-                        E("Error: ${response.errorBody()}")
-                        showNoInternetMessage()
-                        showProgressBar(false)
+                    when (response.code()) {
+
+                        StatusCodeConstant.OK -> {
+                            showProgressBar(false)
+
+                            response.body()?.let { mockTestResponse ->
+                                mockTestList.clear()
+                                mockTestList.addAll(mockTestResponse.data)
+                                adapter.notifyDataSetChanged()
+                            }
+                        }
+
+                        StatusCodeConstant.UNAUTHORIZED -> {
+                            showProgressBar(false)
+
+                            E("fetchMockTests UNAUTHORIZED: ${response.message()}")
+                            Utils.UnAuthorizationToken(requireContext())
+                        }
+
+                        StatusCodeConstant.BAD_REQUEST -> {
+                            showProgressBar(false)
+
+                            response.errorBody()?.let { errorBody ->
+                                val apiError = Gson().fromJson(errorBody.charStream(), APIError::class.java)
+                                val errorMessage = apiError.error ?: "Bad Request Error"
+                                E("fetchMockTests BAD_REQUEST: $errorMessage")
+                            }
+                        }
+
+                        else -> {
+                            E("fetchMockTests Error: ${response.code()} - ${response.errorBody()?.string()}")
+                        }
                     }
                 }
 
                 override fun onFailure(call: Call<MockTestResponse>, t: Throwable) {
-                    Toast.makeText(requireContext(), "Error: ${t.message}", Toast.LENGTH_SHORT).show()
-                    showNoInternetMessage()
                     showProgressBar(false)
-
+                    E("fetchMockTests Failure: ${t.message}")
                 }
             })
     }

@@ -7,7 +7,7 @@ import com.google.gson.annotations.SerializedName
 import com.anurupjaiswal.learnandachieve.basic.retrofit.Const
 import com.anurupjaiswal.learnandachieve.basic.utilitytools.Utils
 import com.anurupjaiswal.learnandachieve.basic.utilitytools.Utils.E
-
+import com.anurupjaiswal.learnandachieve.model.ActiveDevice
 
 
 class User {
@@ -97,6 +97,9 @@ class User {
 
     @SerializedName("class_name")
     var className: String? = null
+    @SerializedName("activeDevices")
+    val activeDevices: List<ActiveDevice> = emptyList()
+
 }
 
 class UserData {

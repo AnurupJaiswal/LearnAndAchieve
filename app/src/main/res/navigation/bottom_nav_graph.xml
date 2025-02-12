@@ -141,6 +141,10 @@
         android:id="@+id/PerformanceSummaryFragment"
         android:name="com.anurupjaiswal.learnandachieve.main_package.ui.fragment.PerformanceSummaryFragment"
         tools:layout="@layout/fragment_performance_summary" />
+    <fragment
+        android:id="@+id/ResultQuestionsAndAnswersFragment"
+        android:name="com.anurupjaiswal.learnandachieve.main_package.ui.fragment.ResultQuestionsAndAnswersFragment"
+        tools:layout="@layout/fragment_result_questions_and_answers" />
 
 
     <fragment

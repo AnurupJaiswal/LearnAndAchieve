@@ -60,6 +60,9 @@
     <color name="gray72">#727272</color>
     <color name="mock_test_card_bg">#EFF5FF</color>
     <color name="desable">#CCCCCC</color>
+    <color name="answered">#368C36</color>
+    <color name="not_ans">#DB7C00</color>
+    <color name="not_viewedque">#686868</color>
 
 
 </resources>

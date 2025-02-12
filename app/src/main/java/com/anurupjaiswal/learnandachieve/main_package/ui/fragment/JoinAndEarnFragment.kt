@@ -29,6 +29,7 @@ import com.anurupjaiswal.learnandachieve.basic.utilitytools.Constants
 import com.anurupjaiswal.learnandachieve.basic.utilitytools.StatusCodeConstant
 import com.anurupjaiswal.learnandachieve.basic.utilitytools.Utils
 import com.anurupjaiswal.learnandachieve.basic.utilitytools.Utils.E
+import com.anurupjaiswal.learnandachieve.basic.utilitytools.Utils.T
 import com.anurupjaiswal.learnandachieve.basic.validation.Validation
 import com.anurupjaiswal.learnandachieve.basic.validation.ValidationModel
 import com.anurupjaiswal.learnandachieve.basic.wheelpicker.DatePicker
@@ -209,7 +210,7 @@ class JoinAndEarnFragment : Fragment() ,View.OnClickListener {
 
             if (!binding.checkboxTerms.isChecked) {
 
-                Toast.makeText(requireContext(), "Please accept the terms and conditions", Toast.LENGTH_SHORT).show()
+                T(requireContext(), "Please accept the terms and conditions")
                 return false
             }else{
 
@@ -412,16 +413,13 @@ class JoinAndEarnFragment : Fragment() ,View.OnClickListener {
                         // Set the selected state name in the EditText
                         binding.etState.setText(selectedName)
                         selectedStateId = selectedId // Save the selected state ID
-                        Log.d("State Selected ", "State: $selectedName, ID: $selectedId")
+                       E("State Selected  State: $selectedName, ID: $selectedId")
 
                     }
                 } else {
                     // Display a message if states are not available
-                    Toast.makeText(
-                        requireContext(),
-                        "States are not available. Please try again.",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                E("Join And Earn Fragment :- States are not available. Please try again.")
+
                 }
 
 

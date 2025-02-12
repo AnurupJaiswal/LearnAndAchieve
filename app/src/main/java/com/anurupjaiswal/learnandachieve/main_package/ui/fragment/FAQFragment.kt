@@ -10,6 +10,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.anurupjaiswal.learnandachieve.basic.retrofit.ApiService
 import com.anurupjaiswal.learnandachieve.basic.retrofit.RetrofitClient
+import com.anurupjaiswal.learnandachieve.basic.utilitytools.Utils.E
 import com.anurupjaiswal.learnandachieve.databinding.FragmentFAQBinding
 import com.anurupjaiswal.learnandachieve.main_package.adapter.FAQCategoryAdapter
 import com.anurupjaiswal.learnandachieve.model.FAQCategory
@@ -65,12 +66,12 @@ class FAQFragment : Fragment() {
                     categories = response.body()?.data?.faqCategoryData ?: emptyList()
                     faqCategoryAdapter.updateCategories(categories)
                 } else {
-                    Toast.makeText(requireContext(), "Failed to fetch categories", Toast.LENGTH_SHORT).show()
+                  E( "Failed to fetch categories")
                 }
             }
 
             override fun onFailure(call: Call<FAQResponse>, t: Throwable) {
-                Toast.makeText(requireContext(), "Error: ${t.message}", Toast.LENGTH_SHORT).show()
+                E("Error: ${t.message}")
             }
         })
     }
@@ -88,12 +89,12 @@ class FAQFragment : Fragment() {
                     // Notify the adapter that the questions have been updated for this category
                     faqCategoryAdapter.notifyItemChanged(position)
                 } else {
-                    Toast.makeText(requireContext(), "Failed to fetch FAQs", Toast.LENGTH_SHORT).show()
+                    E( "Error: Failed to fetch FAQs")
                 }
             }
 
             override fun onFailure(call: Call<FAQResponse>, t: Throwable) {
-                Toast.makeText(requireContext(), "Error: ${t.message}", Toast.LENGTH_SHORT).show()
+               E( "Error: ${t.message}")
             }
         })
     }

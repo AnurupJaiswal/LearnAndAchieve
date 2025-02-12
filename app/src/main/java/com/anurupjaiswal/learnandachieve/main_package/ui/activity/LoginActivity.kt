@@ -2,7 +2,10 @@ package com.anurupjaiswal.learnandachieve.main_package.ui.activity
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.Dialog
 import android.content.Context
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -31,9 +34,12 @@ import com.anurupjaiswal.learnandachieve.basic.validation.ResultReturn
 import com.anurupjaiswal.learnandachieve.basic.validation.Validation
 import com.anurupjaiswal.learnandachieve.basic.validation.ValidationModel
 import com.anurupjaiswal.learnandachieve.databinding.ActivityLoginBinding
+import com.anurupjaiswal.learnandachieve.databinding.DialogMultipleDeviceLoginBinding
+import com.anurupjaiswal.learnandachieve.model.ApiResponse
 import com.anurupjaiswal.learnandachieve.model.LoginData
 import com.google.gson.Gson
 import retrofit2.Call
+import retrofit2.Callback
 import retrofit2.Response
 
 class LoginActivity : BaseActivity(), View.OnClickListener {
@@ -42,6 +48,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
     private lateinit var binding: ActivityLoginBinding
     private var isPasswordVisible = false
     private var apiservice: ApiService? = null
+    private  var currentToken: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -230,9 +237,13 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
                             Utils.I_clear(activity, DashboardActivity::class.java, null)
                         }
                     } else if (response.code() == StatusCodeConstant.CREATED) {
-                        val userModel = response.body()
+                     val userModel = response.body()
+//
+                        currentToken = userModel?.token.toString()
+//                        Utils.T(activity,"${userModel?.message}") // Show Toast
 
-                        Utils.T(activity,"${userModel?.message}") // Show Toast
+                        val currentLoginDevice = userModel!!.user!!.activeDevices.firstOrNull()?.deviceName ?: "No active device"
+                        showMultipleDeviceLoginDialog(currentLoginDevice)
                     } else {
                         handleErrorResponse(response)
                     }
@@ -268,6 +279,46 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
                 Utils.UnAuthorizationToken(activity)
             }
         }
+    }
+    private fun showMultipleDeviceLoginDialog(currentLoginDevices:String) {
+        val dialog = Dialog(this)
+        val binding = DialogMultipleDeviceLoginBinding.inflate(layoutInflater)
+        dialog.setContentView(binding.root)
+
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog.setCancelable(false) // Prevent dismissal on outside touch
+        dialog.setCanceledOnTouchOutside(false) // Also prevents outside tap dismissal
+
+binding.tvDeviceInfo.text = currentLoginDevices
+        binding.mccLogoutFromDevices.setOnClickListener {
+            logoutUser()
+            dialog.dismiss()
+        }
+
+        binding.mcvCancel.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        dialog.show()
+    }
+
+    private fun logoutUser() {
+        Utils.toggleProgressBarAndText(true, binding.loading, binding.tvLogIN,binding.root)
+
+        apiservice?.logoutUser("Bearer $currentToken")?.enqueue(object : Callback<ApiResponse> {
+            override fun onResponse(call: Call<ApiResponse>, response: Response<ApiResponse>) {
+                if (response.isSuccessful) {
+                    E( response.message())
+                    userLogin() // Call login API after successful logout
+                } else {
+                    E( "Logout failed: ${response.errorBody()?.string()}")
+                }
+            }
+
+            override fun onFailure(call: Call<ApiResponse>, t: Throwable) {
+                E( "Logout API failed: ${t.message}")
+            }
+        })
     }
 
 }

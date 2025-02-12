@@ -18,15 +18,13 @@ data class MockTestItem(
     val remainingAttempts: Int,
     val isPackageExpired: Boolean,
     val subjectData: List<MockSubject>,
-    val numberOfQuestions: Int,
+    val numberOfQuestions: Int,   // Can be removed if not needed (already have totalQuestions)
     val totalQuestions: Int,
     val date: String,
     val expireDate: String
 )
 
-
 data class MockSubject(
     val subjectId: String,
     val subjectName: String
 )
-

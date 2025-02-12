@@ -35,6 +35,7 @@ import android.view.*
 import android.view.animation.DecelerateInterpolator
 import android.view.inputmethod.InputMethodManager
 import android.webkit.MimeTypeMap
+import android.webkit.WebSettings
 import android.webkit.WebView
 import android.widget.ImageView
 import android.widget.ProgressBar
@@ -146,6 +147,22 @@ object Utils {
         cx.startActivity(i)
     }
 
+
+    fun getUserAgent(): String {
+        val deviceModel = Build.MODEL ?: "Unknown" // Example: CPH2001
+        val osVersion = Build.VERSION.RELEASE ?: "Unknown" // Example: 11
+        val browser = "Chrome/0 Mobile" // Custom browser format
+
+        return "Device: $deviceModel | OS: Android $osVersion | Browser: $browser"
+    }
+
+    fun getUserAgent(context: Context): String {
+        val deviceName = deviceName
+        val osVersion = "Android ${Build.VERSION.RELEASE}"
+        val browser = WebSettings.getDefaultUserAgent(context) // Actual browser User-Agent
+        return "Device: $deviceName | OS: $osVersion |  : $browser"
+    }
+
     @JvmStatic
     val deviceName: String
         get() {
@@ -211,7 +228,7 @@ object Utils {
     fun UnAuthorizationToken(cx: Context) {
         UserDataHelper.instance.deleteAll()
 
-        T(cx, "Session expired. Please log in again.")
+        T(cx, "Session expired")
         I_clear(cx, LoginActivity::class.java, null)
     }
 

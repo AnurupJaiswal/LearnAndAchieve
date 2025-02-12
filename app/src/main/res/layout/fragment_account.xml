@@ -72,7 +72,7 @@
             android:id="@+id/rlPurchase"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingVertical="@dimen/_5sdp"
+            android:paddingVertical="@dimen/_10sdp"
             android:paddingHorizontal="@dimen/_10sdp">
 
 
@@ -93,7 +93,7 @@
                 android:layout_below="@+id/tvPackage"
                 android:fontFamily="@font/gilroy_regular"
                 android:includeFontPadding="false"
-                android:paddingVertical="@dimen/_2sdp"
+                android:layout_marginTop="@dimen/_5sdp"
                 android:text="Explore Exclusive Package Tailored Just For You!"
                 android:textSize="11sp" />
 
@@ -102,7 +102,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
-                android:layout_marginTop="@dimen/_10sdp"
+
+                android:layout_centerVertical="true"
                 android:src="@drawable/ic_package" />
         </RelativeLayout>
 
@@ -116,7 +117,7 @@
         <RelativeLayout
             android:id="@+id/rlStudentMaterial"
             android:layout_width="match_parent"
-            android:paddingVertical="@dimen/_5sdp"
+            android:paddingVertical="@dimen/_10sdp"
             android:layout_height="wrap_content"
             android:paddingHorizontal="@dimen/_10sdp">
 
@@ -126,7 +127,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/poppins_semi_bold"
-
                 android:includeFontPadding="false"
                 android:text="Study Material"
                 android:textColor="@color/black"
@@ -151,8 +151,7 @@
                 android:fontFamily="@font/gilroy_regular"
                 android:includeFontPadding="false"
                 android:maxLines="1"
-                android:paddingVertical="@dimen/_2sdp"
-
+                android:layout_marginTop="@dimen/_5sdp"
                 android:text="Watch Expert-Led Tutorials With Curated Youtube Links!"
                 android:textSize="11sp" />
 
@@ -161,7 +160,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
-                android:layout_marginTop="@dimen/_10sdp"
+                android:layout_centerVertical="true"
                 android:src="@drawable/ic_study_materials"
                 app:tint="@color/primaryColor" />
         </RelativeLayout>
@@ -177,7 +176,7 @@
             android:id="@+id/rlMockTest"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingVertical="@dimen/_5sdp"
+           android:paddingVertical="@dimen/_10sdp"
             android:paddingHorizontal="@dimen/_10sdp">
 
 
@@ -199,7 +198,7 @@
                 android:fontFamily="@font/gilroy_regular"
                 android:includeFontPadding="false"
                 android:maxLines="1"
-                android:paddingVertical="@dimen/_2sdp"
+               android:layout_marginTop="@dimen/_5sdp"
 
                 android:text="Challenge YourSelf With Real-Time Mock Tests!"
                 android:textSize="11sp" />
@@ -209,7 +208,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
-                android:layout_marginTop="@dimen/_10sdp"
+                android:layout_centerVertical="true"
                 android:src="@drawable/ic_mock"
                 app:tint="@color/primaryColor" />
         </RelativeLayout>
@@ -225,7 +224,7 @@
             android:id="@+id/rlOderHistory"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingVertical="@dimen/_5sdp"
+           android:paddingVertical="@dimen/_10sdp"
             android:paddingHorizontal="@dimen/_10sdp">
 
 
@@ -248,7 +247,7 @@
                 android:fontFamily="@font/gilroy_regular"
                 android:includeFontPadding="false"
                 android:maxLines="1"
-                android:paddingVertical="@dimen/_2sdp"
+               android:layout_marginTop="@dimen/_5sdp"
 
                 android:text="Review Your Purchases Anytime In Oder History!"
                 android:textSize="11sp" />
@@ -258,7 +257,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
-                android:layout_marginTop="@dimen/_10sdp"
+                android:layout_centerVertical="true"
                 android:src="@drawable/ic_package"
                 app:tint="@color/primaryColor" />
         </RelativeLayout>
@@ -274,7 +273,7 @@
             android:id="@+id/rlChangePass"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingVertical="@dimen/_5sdp"
+           android:paddingVertical="@dimen/_10sdp"
             android:paddingHorizontal="@dimen/_10sdp">
 
 
@@ -297,7 +296,7 @@
                 android:fontFamily="@font/gilroy_regular"
                 android:includeFontPadding="false"
                 android:maxLines="1"
-                android:paddingVertical="@dimen/_2sdp"
+               android:layout_marginTop="@dimen/_5sdp"
 
                 android:text="Secure Your Account: Update Your Password Here !"
                 android:textSize="11sp" />
@@ -307,7 +306,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
-                android:layout_marginTop="@dimen/_10sdp"
+                android:layout_centerVertical="true"
                 android:src="@drawable/ic_change_password"
                 app:tint="@color/primaryColor" />
         </RelativeLayout>
@@ -322,7 +321,7 @@
             android:id="@+id/rlProfile"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingVertical="@dimen/_5sdp"
+           android:paddingVertical="@dimen/_10sdp"
             android:paddingHorizontal="@dimen/_10sdp">
 
 
@@ -345,7 +344,7 @@
                 android:fontFamily="@font/gilroy_regular"
                 android:includeFontPadding="false"
                 android:maxLines="1"
-                android:paddingVertical="@dimen/_2sdp"
+               android:layout_marginTop="@dimen/_5sdp"
 
                 android:text="Manage Your Details And Preference In Your Profile !"
                 android:textSize="11sp" />
@@ -355,7 +354,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
-                android:layout_marginTop="@dimen/_10sdp"
+                android:layout_centerVertical="true"
                 android:src="@drawable/ic_profile_orange"
                 app:tint="@color/primaryColor" />
         </RelativeLayout>
@@ -371,7 +370,7 @@
             android:id="@+id/rlDeleteAccount"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingVertical="@dimen/_5sdp"
+           android:paddingVertical="@dimen/_10sdp"
             android:paddingHorizontal="@dimen/_10sdp">
 
             <TextView
@@ -394,7 +393,7 @@
                 android:fontFamily="@font/gilroy_regular"
                 android:includeFontPadding="false"
                 android:maxLines="2"
-                android:paddingVertical="@dimen/_2sdp"
+               android:layout_marginTop="@dimen/_5sdp"
                 android:text="Take control of your data—easily delete your account anytime."
                 android:textSize="11sp" />
 
@@ -404,7 +403,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
-                android:layout_marginTop="@dimen/_10sdp"
+                android:layout_centerVertical="true"
                 android:src="@drawable/ic_delete_bin"
                 app:tint="@color/primaryColor" />
         </RelativeLayout>
@@ -446,7 +445,7 @@
                     android:fontFamily="@font/gilroy_regular"
                     android:includeFontPadding="false"
                     android:maxLines="1"
-                    android:paddingVertical="@dimen/_2sdp"
+                   android:layout_marginTop="@dimen/_5sdp"
                     android:text="Join Now And Start Earning Rewards For Your Learning!"
                     android:textSize="11sp" />
 
@@ -455,7 +454,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
-                    android:layout_marginTop="@dimen/_10sdp"
+                    android:layout_centerVertical="true"
                     android:src="@drawable/ic_join_earn"
                     app:tint="@color/primaryColor" />
             </RelativeLayout>
@@ -494,7 +493,7 @@
                     android:fontFamily="@font/gilroy_regular"
                     android:includeFontPadding="false"
                     android:maxLines="2"
-                    android:paddingVertical="@dimen/_2sdp"
+                   android:layout_marginTop="@dimen/_5sdp"
                     android:text="The Bharat SAT Scholarship And Unlock Your Potential!"
                     android:textSize="11sp" />
 
@@ -503,7 +502,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
-                    android:layout_marginTop="@dimen/_10sdp"
+                    android:layout_centerVertical="true"
                     android:src="@drawable/ic_bharat_scholor"
                     app:tint="@color/primaryColor" />
             </RelativeLayout>
@@ -540,7 +539,7 @@
                     android:fontFamily="@font/gilroy_regular"
                     android:includeFontPadding="false"
                     android:maxLines="2"
-                    android:paddingVertical="@dimen/_2sdp"
+                   android:layout_marginTop="@dimen/_5sdp"
                     android:text="Discover Key Deatails About The Bharat SAT EXAM Here !"
                     android:textSize="11sp" />
 
@@ -549,7 +548,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
-                    android:layout_marginTop="@dimen/_10sdp"
+                    android:layout_centerVertical="true"
                     android:src="@drawable/ic_bharat_sat"
                     app:tint="@color/primaryColor" />
             </RelativeLayout>
@@ -803,13 +802,13 @@
 
 
 
-                    <ImageView
-                        android:layout_width="@dimen/_20sdp"
-                        android:layout_height="@dimen/_20sdp"
-                        android:layout_gravity="center"
-                        android:padding="@dimen/_3sdp"
-                        android:src="@drawable/ic_privacy_policy"
-                        tools:ignore="ContentDescription" />
+                        <ImageView
+                            android:layout_width="@dimen/_20sdp"
+                            android:layout_height="@dimen/_20sdp"
+                            android:layout_gravity="center"
+                            android:padding="@dimen/_3sdp"
+                            android:src="@drawable/ic_privacy_policy"
+                            tools:ignore="ContentDescription" />
                     </com.google.android.material.card.MaterialCardView>
 
 

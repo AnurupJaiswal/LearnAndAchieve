@@ -43,7 +43,19 @@ data class GetUser(
     val examAttempted: Boolean,
     val examTimeOver: Boolean,
     val paidSyllabus: Boolean,
-    val smartSchoolCredentials: String?
+    val smartSchoolCredentials: String?,
+    val activeDevices: List<ActiveDevice> // New field for device tracking
+
+)
+
+
+data class ActiveDevice(
+    val deviceType: String,
+    val deviceName: String,
+    val browser: String,
+    val currentToken: String,
+    val lastLogin: String,
+    val _id: String
 )
 
 class LoginData {

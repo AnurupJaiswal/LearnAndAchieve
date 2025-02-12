@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+
+    <!-- Background Color -->
+    <solid android:color="#F1F1F1" />  <!-- Adjust color if needed -->
+
+    <!-- Rounded Corners (Adjust values to match the image) -->
+    <corners
+
+        android:bottomLeftRadius="16dp"
+       />
+
+
+
+</shape>

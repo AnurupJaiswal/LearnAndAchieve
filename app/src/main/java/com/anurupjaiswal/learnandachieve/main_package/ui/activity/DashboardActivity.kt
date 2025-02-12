@@ -14,14 +14,17 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.anurupjaiswal.learnandachieve.R
+import com.anurupjaiswal.learnandachieve.basic.retrofit.APIError
 import com.anurupjaiswal.learnandachieve.basic.retrofit.ApiService
 import com.anurupjaiswal.learnandachieve.basic.retrofit.RetrofitClient
 import com.anurupjaiswal.learnandachieve.basic.utilitytools.BaseActivity
 import com.anurupjaiswal.learnandachieve.basic.utilitytools.NavigationManager
 import com.anurupjaiswal.learnandachieve.basic.utilitytools.StatusCodeConstant
 import com.anurupjaiswal.learnandachieve.basic.utilitytools.Utils
+import com.anurupjaiswal.learnandachieve.basic.utilitytools.Utils.E
 import com.anurupjaiswal.learnandachieve.databinding.ActivityDashboardBinding
 import com.anurupjaiswal.learnandachieve.model.AllCartResponse
+import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -237,17 +240,31 @@ class DashboardActivity : BaseActivity() {
         Token = Utils.GetSession().token
         val authToken = "Bearer $Token"
 
-        apiService.getCartData(authToken).enqueue(object :
-            Callback<AllCartResponse> {
+        apiService.getCartData(authToken).enqueue(object : Callback<AllCartResponse> {
             override fun onResponse(call: Call<AllCartResponse>, response: Response<AllCartResponse>) {
-                // Hide loading state
                 try {
-                    if (response.code() == StatusCodeConstant.OK) {
-                        val allCartResponse = response.body()
-
-                        updateCartCount(allCartResponse!!.cartCount)
-
-                    } else {
+                    when (response.code()) {
+                        StatusCodeConstant.OK -> {
+                            val allCartResponse = response.body()
+                            updateCartCount(allCartResponse!!.cartCount)
+                        }
+                        StatusCodeConstant.UNAUTHORIZED -> {
+                            Utils.UnAuthorizationToken(this@DashboardActivity)
+                        }
+                        else -> {
+                            val errorBody = response.errorBody()?.string()
+                            var errorMessage = "Unknown error"
+                            if (!errorBody.isNullOrEmpty()) {
+                                try {
+                                    val gson = Gson()
+                                    val apiError = gson.fromJson(errorBody, APIError::class.java)
+                                    errorMessage = apiError.message ?: apiError.error ?: "Unknown error"
+                                } catch (e: Exception) {
+                                    errorMessage = errorBody
+                                }
+                            }
+                            E("$errorMessage")
+                        }
                     }
                 } catch (e: Exception) {
                     e.printStackTrace()
@@ -256,13 +273,11 @@ class DashboardActivity : BaseActivity() {
 
             override fun onFailure(call: Call<AllCartResponse>, t: Throwable) {
                 call.cancel()
-
                 t.printStackTrace()
             }
         })
-
-
     }
+
 
 
 

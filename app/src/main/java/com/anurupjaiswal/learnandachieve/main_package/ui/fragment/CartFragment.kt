@@ -10,11 +10,13 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.anurupjaiswal.learnandachieve.R
+import com.anurupjaiswal.learnandachieve.basic.retrofit.APIError
 import com.anurupjaiswal.learnandachieve.basic.retrofit.ApiService
 import com.anurupjaiswal.learnandachieve.basic.retrofit.RetrofitClient
 import com.anurupjaiswal.learnandachieve.basic.utilitytools.NavigationManager
 import com.anurupjaiswal.learnandachieve.basic.utilitytools.StatusCodeConstant
 import com.anurupjaiswal.learnandachieve.basic.utilitytools.Utils
+import com.anurupjaiswal.learnandachieve.basic.utilitytools.Utils.E
 import com.anurupjaiswal.learnandachieve.databinding.FragmentCartBinding
 import com.anurupjaiswal.learnandachieve.main_package.adapter.CartAdapter
 import com.anurupjaiswal.learnandachieve.main_package.ui.activity.DashboardActivity
@@ -22,6 +24,7 @@ import com.anurupjaiswal.learnandachieve.model.AllCartResponse
 import com.anurupjaiswal.learnandachieve.model.CartItem
 import com.anurupjaiswal.learnandachieve.model.CartSummary
 import com.anurupjaiswal.learnandachieve.model.DeleteCartResponse
+import com.google.gson.Gson
 
 import retrofit2.Call
 import retrofit2.Callback
@@ -95,40 +98,46 @@ class CartFragment : Fragment() {
 
         apiService.getCartData(authToken).enqueue(object : Callback<AllCartResponse> {
             override fun onResponse(call: Call<AllCartResponse>, response: Response<AllCartResponse>) {
-                hideLoading() // Hide ProgressBar and show views when the API fails
+                hideLoading() // Hide ProgressBar and show views when the API call completes
                 try {
-                    if (response.code() == StatusCodeConstant.OK) {
-                        val allCartResponse = response.body()
-
-                        allCartResponse?.let {
-                            // Check if cartCount is less than 1 and show empty cart view
-                            if (it.cartCount < 1) {
-                                isCartEmpty(true)
-                                updateCartCount(allCartResponse.cartCount)
-
-                            } else {
-                                isCartEmpty(false)
-
-                                updateCartCount(allCartResponse.cartCount)
-                                updateCartList(it.cartList ?: emptyList())
-                                allCartResponse.summary?.let { summary -> updateSummary(summary) }
-
+                    when (response.code()) {
+                        StatusCodeConstant.OK -> {
+                            val allCartResponse = response.body()
+                            allCartResponse?.let {
+                                if (it.cartCount < 1) {
+                                    isCartEmpty(true)
+                                    updateCartCount(it.cartCount)
+                                } else {
+                                    isCartEmpty(false)
+                                    updateCartCount(it.cartCount)
+                                    updateCartList(it.cartList ?: emptyList())
+                                    it.summary?.let { summary -> updateSummary(summary) }
+                                }
                             }
                         }
-                    } else {
-                        Toast.makeText(requireContext(), "Error: ${response.code()}", Toast.LENGTH_SHORT).show()
+                        StatusCodeConstant.UNAUTHORIZED -> {
+                            // Handle unauthorized response
+                            Utils.UnAuthorizationToken(requireContext())
+                        }
+                        else -> {
+                            // Log any other response codes
+                            E("fetchCartData: Error code ${response.code()}")
+                        }
                     }
                 } catch (e: Exception) {
                     e.printStackTrace()
+                    E("fetchCartData: Exception ${e.message}")
                 }
             }
 
             override fun onFailure(call: Call<AllCartResponse>, t: Throwable) {
-                hideLoading() // Hide ProgressBar and show views when the API fails
+                hideLoading()
                 t.printStackTrace()
-                Toast.makeText(requireContext(), "Failed to fetch cart data", Toast.LENGTH_SHORT).show()
+                E("fetchCartData: Failure ${t.message}")
             }
-        })    }
+        })
+    }
+
 
     private fun updateCartList(cartList: List<CartItem>) {
         cartItems.clear()
@@ -143,31 +152,49 @@ class CartFragment : Fragment() {
         binding.tvTotal.text = "₹${summary.grandTotal ?: "0.0"}"
     }
 
-    private fun handleDelete(cartID :String) {
+    private fun handleDelete(cartID: String) {
         showLoading()
 
-        val authToken = "Bearer $token"  // Assuming your token is stored in the Token variable
-        val packageId = cartID // The ID of the item to delete
+        val authToken = "Bearer $token"  // Assuming your token is stored in the token variable
 
-        // Make the DELETE API call
-        apiService.deleteCartItem(authToken, packageId).enqueue(object : Callback<DeleteCartResponse> {
+        apiService.deleteCartItem(authToken, cartID).enqueue(object : Callback<DeleteCartResponse> {
             override fun onResponse(call: Call<DeleteCartResponse>, response: Response<DeleteCartResponse>) {
-                if (response.isSuccessful) {
-                    hideLoading()
-                    fetchCartData()
-                } else {
-                    Toast.makeText(requireContext(), "Failed to delete: ${response.code()}", Toast.LENGTH_SHORT).show()
+                hideLoading() // Ensure loading is hidden
+
+                try {
+                    when (response.code()) {
+                        StatusCodeConstant.OK -> {
+                            fetchCartData() // Refresh cart after successful deletion
+                        }
+
+                        StatusCodeConstant.UNAUTHORIZED -> {
+                            Utils.UnAuthorizationToken(requireContext()) // Handle unauthorized case
+                        }
+
+                        StatusCodeConstant.BAD_REQUEST -> {
+                            response.errorBody()?.let { errorBody ->
+                                val apiError = Gson().fromJson(errorBody.charStream(), APIError::class.java)
+                                val errorMessage = apiError.error ?: "Bad Request Error"
+                                E("handleDelete BAD_REQUEST: $errorMessage")
+                            }
+                        }
+
+                        else -> {
+                            E("handleDelete Error: ${response.code()} - ${response.errorBody()?.string()}")
+                        }
+                    }
+                } catch (e: Exception) {
+                    E("handleDelete Exception: ${e.message}")
                 }
             }
 
             override fun onFailure(call: Call<DeleteCartResponse>, t: Throwable) {
-
                 hideLoading()
-
-                Toast.makeText(requireContext(), "Error: ${t.message}", Toast.LENGTH_SHORT).show()
+                E("handleDelete Failure: ${t.message}")
             }
         })
     }
+
 
     override fun onDestroyView() {
         super.onDestroyView()

@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import com.anurupjaiswal.learnandachieve.R
 import com.anurupjaiswal.learnandachieve.basic.utilitytools.BaseActivity
 import com.anurupjaiswal.learnandachieve.basic.utilitytools.Utils
+import com.anurupjaiswal.learnandachieve.basic.utilitytools.Utils.E
 import com.anurupjaiswal.learnandachieve.basic.utilitytools.Utils.toggleProgressBarAndText
 import com.anurupjaiswal.learnandachieve.databinding.ActivitySignUpBinding
 import com.anurupjaiswal.learnandachieve.databinding.CustomStepperBinding
@@ -89,7 +90,7 @@ class SignUpActivity : BaseActivity() {
 
                     personalDetailsBundle?.keySet()?.forEach { key ->
                         val value = personalDetailsBundle?.get(key)
-                        Log.d("SignUpActivity", "Bundle Key: $key, Value: $value")
+                        E("SignUpActivity Bundle Key: $key, Value: $value")
                     }
 
                     goToNextFragment(personalDetailsBundle)
@@ -122,7 +123,7 @@ class SignUpActivity : BaseActivity() {
                             goToNextFragment(combinedBundle)
                         } else {
                             // Handle failure (optional: show a message or log)
-                            Toast.makeText(this, "Please try again.", Toast.LENGTH_SHORT).show()
+                            Utils.T(this, "Please try again.")
                         }
                     }
                 }

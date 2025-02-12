@@ -251,21 +251,56 @@ class HomeFragment : Fragment() {
                     response: Response<PackageResponse>
                 ) {
                     try {
-                        if (response.code() == StatusCodeConstant.OK) {
-                            val packageResponse = response.body()
-                            if (packageResponse != null) {
-
-
-                                val packageList = packageResponse.packages
-                                val adapter =
-                                    PopularPackagesAdapter(requireContext(), packageList, authToken,
+                        when (response.code()) {
+                            StatusCodeConstant.OK -> {
+                                val packageResponse = response.body()
+                                if (packageResponse != null) {
+                                    val packageList = packageResponse.packages
+                                    val adapter = PopularPackagesAdapter(
+                                        requireContext(),
+                                        packageList,
+                                        authToken,
                                         onPackageDetailsClick = { packageId, token ->
                                             navigateToPackageDetails(packageId, token)
                                         }
                                     )
-                                binding.mostPopularPackageRecyclerView.adapter = adapter
-                                adapter.notifyDataSetChanged()  // Notify that the data has been updated
-
+                                    binding.mostPopularPackageRecyclerView.adapter = adapter
+                                    adapter.notifyDataSetChanged()  // Notify that the data has been updated
+                                }
+                            }
+                            StatusCodeConstant.BAD_REQUEST -> {
+                                val errorBody = response.errorBody()?.string()
+                                var errorMessage = "Unknown error"
+                                if (!errorBody.isNullOrEmpty()) {
+                                    try {
+                                        val gson = Gson()
+                                        val apiError = gson.fromJson(errorBody, APIError::class.java)
+                                        errorMessage = apiError.message ?: apiError.error ?: "Unknown error"
+                                    } catch (e: Exception) {
+                                        errorMessage = errorBody
+                                    }
+                                }
+                             //   Utils.T(requireContext(), "Response: $errorMessage")
+                                E("GetPackages: Bad Request Error: $errorMessage")
+                            }
+                            StatusCodeConstant.UNAUTHORIZED -> {
+                                // Call the unauthorized token handling function
+                                Utils.UnAuthorizationToken(requireContext())
+                            }
+                            else -> {
+                                val errorBody = response.errorBody()?.string()
+                                var errorMessage = "Unknown error"
+                                if (!errorBody.isNullOrEmpty()) {
+                                    try {
+                                        val gson = Gson()
+                                        val apiError = gson.fromJson(errorBody, APIError::class.java)
+                                        errorMessage = apiError.message ?: apiError.error ?: "Unknown error"
+                                    } catch (e: Exception) {
+                                        errorMessage = errorBody
+                                    }
+                                }
+                    //            Utils.T(requireContext(), "Response: $errorMessage")
+                                E("GetPackages: Error: $errorMessage")
                             }
                         }
                     } catch (e: Exception) {
@@ -276,10 +311,12 @@ class HomeFragment : Fragment() {
                 override fun onFailure(call: Call<PackageResponse>, t: Throwable) {
                     call.cancel()
                     t.printStackTrace()
-                    Utils.T(activity, t.message)
-                    E("getMessage::" + t.message)
+                //    Utils.T(requireContext(), "Response: ${t.message}")
+                    E("GetPackages: Error: ${t.message}")
                 }
             })
+
+
     }
 
 
@@ -516,6 +553,7 @@ class HomeFragment : Fragment() {
             StatusCodeConstant.UNAUTHORIZED -> {
                 response.errorBody()?.let { errorBody ->
                     val message = Gson().fromJson(errorBody.charStream(), APIError::class.java)
+                    message.error?.let { E(it) }
                     Utils.UnAuthorizationToken(requireContext())
                 }
             }

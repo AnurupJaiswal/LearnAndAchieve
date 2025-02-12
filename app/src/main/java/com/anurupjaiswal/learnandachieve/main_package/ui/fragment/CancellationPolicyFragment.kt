@@ -10,6 +10,7 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.Toast
 import com.anurupjaiswal.learnandachieve.basic.retrofit.RetrofitClient
+import com.anurupjaiswal.learnandachieve.basic.utilitytools.Utils.E
 import com.anurupjaiswal.learnandachieve.databinding.FragmentCancellationPolicyBinding
 import com.anurupjaiswal.learnandachieve.model.TermsConditionsResponse
 import retrofit2.Call
@@ -48,12 +49,12 @@ class CancellationPolicyFragment  : Fragment() {
                         displayCancellationPolicy(htmlContent)
                     }
                 } else {
-                    Toast.makeText(requireContext(), "Failed to load cancellation policy", Toast.LENGTH_SHORT).show()
+                    E( "Failed to load cancellation policy")
                 }
             }
 
             override fun onFailure(call: Call<TermsConditionsResponse>, t: Throwable) {
-                Toast.makeText(requireContext(), "Error: ${t.message}", Toast.LENGTH_SHORT).show()
+               E("Error: ${t.message}")
             }
         })
     }

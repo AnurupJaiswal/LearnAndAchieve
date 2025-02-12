@@ -6,22 +6,22 @@ import androidx.recyclerview.widget.RecyclerView
 import com.anurupjaiswal.learnandachieve.databinding.ItemResultBinding
 import com.anurupjaiswal.learnandachieve.model.ShowResult
 
+import com.anurupjaiswal.learnandachieve.model.ShowResultData
 class ShowResultAdapter(
-    private val showResults: List<ShowResult>,
-    private val onResultClick: (ShowResult) -> Unit // Callback for item clicks
+    private val showResults: List<ShowResultData>,
+    private val onResultClick: (String, String) -> Unit // Pass both IDs
 ) : RecyclerView.Adapter<ShowResultAdapter.ResultViewHolder>() {
 
     inner class ResultViewHolder(private val binding: ItemResultBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(showResult: ShowResult) {
-            binding.tvDate.text = showResult.date
-            binding.tvExamTitle.text = showResult.examTitle
-            binding.tvMarks.text = showResult.marks
+        fun bind(showResult: ShowResultData) {
+            binding.tvDate.text = "N/A"
+            binding.tvExamTitle.text = showResult.mockTestName
+            binding.tvMarks.text = "${showResult.score}/${showResult.totalNumberOfMarks}"
 
-            // Set up click listener for the result item
             binding.tvViewResult.setOnClickListener {
-                onResultClick(showResult) // Callback to the fragment/activity
+                onResultClick(showResult.mockTestSubmissions_id, showResult.mockTest_id)
             }
         }
     }
@@ -32,7 +32,7 @@ class ShowResultAdapter(
     }
 
     override fun onBindViewHolder(holder: ResultViewHolder, position: Int) {
-        holder.bind(showResults[position]) // Bind data to the view
+        holder.bind(showResults[position])
     }
 
     override fun getItemCount(): Int = showResults.size

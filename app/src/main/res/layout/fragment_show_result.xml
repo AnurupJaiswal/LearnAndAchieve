@@ -1,28 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-
     tools:context=".main_package.ui.fragment.ShowResultFragment">
 
 
     <TextView
+        android:id="@+id/tvShowResultHead"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
         android:fontFamily="@font/gilroy_semibold"
         android:padding="@dimen/_10sdp"
         android:text="Show Results"
         android:textColor="@color/black"
         android:textSize="16sp" />
 
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvResults"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@+id/tvShowResultHead"
         android:clipToPadding="false"
         android:scrollbars="vertical" />
 
-</LinearLayout>
+    <TextView
+        android:id="@+id/tvMsg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:fontFamily="@font/gilroy_semibold"
+        android:gravity="center"
+        android:includeFontPadding="false"
+        android:padding="@dimen/_10sdp"
+        android:text="Please attempt the mock test first."
+        android:textColor="@color/primaryColor"
+        android:textSize="16sp"
+        android:visibility="gone" />
+
+
+</RelativeLayout>

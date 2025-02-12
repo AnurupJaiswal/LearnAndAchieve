@@ -11,13 +11,17 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2
 import com.anurupjaiswal.learnandachieve.R
+import com.anurupjaiswal.learnandachieve.basic.retrofit.APIError
 import com.anurupjaiswal.learnandachieve.basic.retrofit.RetrofitClient
+import com.anurupjaiswal.learnandachieve.basic.utilitytools.StatusCodeConstant
 import com.anurupjaiswal.learnandachieve.basic.utilitytools.Utils
+import com.anurupjaiswal.learnandachieve.basic.utilitytools.Utils.E
 import com.anurupjaiswal.learnandachieve.databinding.FragmentBlogDetailsBinding
 import com.anurupjaiswal.learnandachieve.main_package.adapter.RelatedBlogPagerAdapter
 import com.anurupjaiswal.learnandachieve.model.BlogResponse
 import com.anurupjaiswal.learnandachieve.model.DeailsBlogCategoryData
 import com.anurupjaiswal.learnandachieve.model.RelatedBlog
+import com.google.gson.Gson
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -42,7 +46,7 @@ class BlogDetailsFragment : Fragment() {
             getBlogDetails(it)
         }
         // Use the 'blogId' variable wherever necessary in this fragment
-        Log.d("BlogDetailsFragment", "Received Blog ID: $blogId")
+       E("BlogDetailsFragment Received Blog ID: $blogId")
 
         binding.tvBlogType.text = categoryName
     }
@@ -63,33 +67,44 @@ class BlogDetailsFragment : Fragment() {
 
         RetrofitClient.client.getBlogDetails(blogId).enqueue(object : Callback<BlogResponse> {
             override fun onResponse(call: Call<BlogResponse>, response: Response<BlogResponse>) {
-                if (response.isSuccessful) {
-                    val blogData = response.body()?.data?.blogCategoryData
-                    blogData?.let {
-                        // Set Title
-                        binding.tvTitle.text = it.title
-
-                        // Set Author
-                        binding.tvAuthor.text = it.name
-
-                        // Format the date using the Utils.formatDate function
-                        val formattedDate = Utils.formatDate(it.date)
-                        binding.tvDate.text = formattedDate
-                        loadBlogDetails(blogData)
-                        loadRelatedBlogs(response.body()!!.data.relatedBlogs) //
-
+                when (response.code()) {
+                    StatusCodeConstant.OK -> {
+                        response.body()?.let { blogResponse ->
+                            blogResponse.data.blogCategoryData?.let { blogData ->
+                                // Set Title
+                                binding.tvTitle.text = blogData.title
+                                // Set Author
+                                binding.tvAuthor.text = blogData.name
+                                // Format and set Date
+                                binding.tvDate.text = Utils.formatDate(blogData.date)
+                                // Load Blog Details & Related Blogs
+                                loadBlogDetails(blogData)
+                                loadRelatedBlogs(blogResponse.data.relatedBlogs)
+                            }
+                        }
                     }
-                } else {
-                    Toast.makeText(
-                        requireContext(),
-                        "Failed to load blog details",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    StatusCodeConstant.UNAUTHORIZED -> {
+                        Utils.E("getBlogDetails UNAUTHORIZED: ${response.message()}")
+                        Utils.UnAuthorizationToken(requireContext())
+                    }
+                    StatusCodeConstant.BAD_REQUEST -> {
+                        response.errorBody()?.let { errorBody ->
+                            val apiError = Gson().fromJson(errorBody.charStream(), APIError::class.java)
+                            val errorMessage = apiError.error ?: "Bad Request Error"
+                            Utils.E("getBlogDetails BAD_REQUEST: $errorMessage")
+                            Utils.T(requireContext(), errorMessage)
+                        }
+                    }
+                    else -> {
+                        Utils.E("getBlogDetails Error: ${response.code()} - ${response.errorBody()?.string()}")
+                        Utils.T(requireContext(), "Failed to load blog details")
+                    }
                 }
             }
 
             override fun onFailure(call: Call<BlogResponse>, t: Throwable) {
-                Toast.makeText(requireContext(), "Error: ${t.message}", Toast.LENGTH_SHORT).show()
+                Utils.E("getBlogDetails Failure: ${t.message}")
+                Utils.T(requireContext(), "Failed to load blog details")
             }
         })
     }

@@ -14,6 +14,7 @@ import com.anurupjaiswal.learnandachieve.basic.retrofit.RetrofitClient
 import com.anurupjaiswal.learnandachieve.basic.utilitytools.Constants
 import com.anurupjaiswal.learnandachieve.basic.utilitytools.NavigationManager
 import com.anurupjaiswal.learnandachieve.basic.utilitytools.Utils
+import com.anurupjaiswal.learnandachieve.basic.utilitytools.Utils.E
 import com.anurupjaiswal.learnandachieve.databinding.FragmentModuleBinding
 import com.anurupjaiswal.learnandachieve.main_package.adapter.ModulesAdapter
 import com.anurupjaiswal.learnandachieve.model.Module
@@ -56,7 +57,7 @@ private  var apiService :ApiService? = null
             if (token != null && subjectId != null && medium != null) {
                 fetchModules(token!!, subjectId!!, medium!!)
             } else {
-                Toast.makeText(context, "Missing required data (token, subject ID, or medium)", Toast.LENGTH_SHORT).show()
+              E("MODULE FRAGMENT Missing required data (token, subject ID, or medium)")
             }
         }
 
@@ -103,12 +104,12 @@ private  var apiService :ApiService? = null
  binding.recyclerViewModules.adapter = adapter
                     }
                 } else {
-                    Toast.makeText(context, "Failed to fetch modules", Toast.LENGTH_SHORT).show()
+                    E("Failed to fetch modules")
                 }
             }
 
             override fun onFailure(call: Call<ModuleResponse>, t: Throwable) {
-                Toast.makeText(context, "Network error: ${t.message}", Toast.LENGTH_SHORT).show()
+               E("Network error: ${t.message}")
             }
         })
     }

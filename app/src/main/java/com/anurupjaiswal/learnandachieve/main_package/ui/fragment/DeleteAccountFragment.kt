@@ -75,6 +75,7 @@ Utils.I(requireContext(),DeleteuserverifactionActivity::class.java,null)
 
                         val message = response.body()?.message ?: "Unauthorized access"
                         Utils.T(requireContext(), message)
+                        Utils.UnAuthorizationToken(requireContext())
                     }
                     StatusCodeConstant.BAD_REQUEST -> {
                         Utils.toggleProgressBarAndText(false, binding.loading, binding.tvOtpVerification,binding.root)

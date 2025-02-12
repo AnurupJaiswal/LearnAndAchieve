@@ -93,9 +93,8 @@ private var dateOfBirth: String? = null
        classId = arguments?.getString("classId")
     registeredBy = arguments?.getString("registeredBy")
      uniqueCode = arguments?.getString("uniqueCode")
-        Log.d(
-            "ContactDetailsFragment",
-            "Received Data - First Name: $firstName, Middle Name: $middleName, Last Name: $lastName, " + "Date of Birth: $dateOfBirth, Gender: $gender, School Name: $schoolName, Medium: $medium, " + "Class Name: $className, Class ID: $classId, Registered By: $registeredBy, Unique Code: $uniqueCode"
+       E(
+           "Received Data - First Name: $firstName, Middle Name: $middleName, Last Name: $lastName, Date of Birth: $dateOfBirth, Gender: $gender, School Name: $schoolName, Medium: $medium, Class Name: $className, Class ID: $classId, Registered By: $registeredBy, Unique Code: $uniqueCode"
         )
 
 
@@ -126,18 +125,14 @@ private var dateOfBirth: String? = null
                     // Set the selected state name in the EditText
                     binding.etState.setText(selectedName)
                     selectedStateId = selectedId // Save the selected state ID
-                    Log.d("State Selected ", "State: $selectedName, ID: $selectedId")
+                    E("State Selected  State: $selectedName, ID: $selectedId")
 
                     fetchDistricts(selectedId)
 
                 }
             } else {
                 // Display a message if states are not available
-                Toast.makeText(
-                    requireContext(),
-                    "States are not available. Please try again.",
-                    Toast.LENGTH_SHORT
-                ).show()
+               E("States are not available. Please try again.")
             }
         }
 
@@ -154,21 +149,14 @@ private var dateOfBirth: String? = null
                     // Set the selected district name in the EditText
                     binding.etDistrict.setText(selectedName)
                     selectedDistrictId = selectedId // Save the selected district ID
-                    Log.d(
-                        "District Selected",
-                        "District: $selectedName, ID: $selectedId , StateID: $selectedStateId"
+                   E(
+                        "District Selected District: $selectedName, ID: $selectedId , StateID: $selectedStateId"
                     )
-
-
                     fetchTalukas(selectedStateId ?: "", selectedId)
                 }
             } else {
                 // Display a message if districts are not available
-                Toast.makeText(
-                    requireContext(),
-                    "Districts are not available for this state. Please try again.",
-                    Toast.LENGTH_SHORT
-                ).show()
+               E("Districts are not available for this state. Please try again.")
             }
         }
 
@@ -187,8 +175,8 @@ private var dateOfBirth: String? = null
                     )
                 }
             } else {
-                Toast.makeText(requireContext(), "Talukas are not available.", Toast.LENGTH_SHORT)
-                    .show()
+                E("Talukas are not available.")
+
             }
         }
 
@@ -201,8 +189,7 @@ private var dateOfBirth: String? = null
                     this.selectedPincodeId = selectedPincode
                 }
             } else {
-                Toast.makeText(requireContext(), "Talukas are not available.", Toast.LENGTH_SHORT)
-                    .show()
+                E("Pincode are not available.")
             }
         }
 
@@ -286,9 +273,9 @@ private var dateOfBirth: String? = null
 
         // Final check for the checkbox
         if (!binding.checkboxTerms.isChecked) {
-            Toast.makeText(
-                requireContext(), "Please accept the terms and conditions.", Toast.LENGTH_SHORT
-            ).show()
+            Utils.T(
+                requireContext(), "Please accept the terms and conditions."
+            )
             return false
         }
 
@@ -546,7 +533,7 @@ private var dateOfBirth: String? = null
             addProperty("referralCode", referralCode)
         }
 
-        Log.d("API Request", "Request Body: $jsonRequest")
+        E("API Request Request Body: $jsonRequest")
 
         // Create the request body
         val requestBody = jsonRequest.toString().toRequestBody("application/json".toMediaTypeOrNull())
@@ -557,7 +544,7 @@ private var dateOfBirth: String? = null
                 if (response.code() == StatusCodeConstant.OK) {
                     // Handle success
                     val signupResponse = response.body()
-                    Log.d("API Success", "Response: ${signupResponse?.message}")
+                    E("API Success Response: ${signupResponse?.message}")
 
                     val combinedBundle = Bundle().apply {
                         putString("authToken", signupResponse?.token)
@@ -578,18 +565,18 @@ private var dateOfBirth: String? = null
                     val apiError = try {
                         Gson().fromJson(errorBody, APIError::class.java)
                     } catch (e: JsonSyntaxException) {
-                        Log.e("API Error Parsing", "Failed to parse error: ${e.message}")
+                       E("API Error Parsing Error: ${e.message}")
                         null
                     }
 
-                    Log.e("API Bad Request", "Code: ${response.code()}, Error: ${apiError?.message}")
+                    E("API Bad Request Code: ${response.code()}, Error: ${apiError?.message}")
 
                     Utils.T(activity, apiError?.message ?: "Invalid request. Please check your details and try again.")
                     onResponse(false, null)
                 } else {
                     // Handle other API errors
                     val errorBody = response.errorBody()?.string()
-                    Log.e("API Error", "Code: ${response.code()}, Error: $errorBody")
+                   E("API Error Code: ${response.code()}, Error: $errorBody")
                     Utils.T(activity, "Registration failed. Please try again.")
                     onResponse(false, null)
                 }
@@ -597,7 +584,7 @@ private var dateOfBirth: String? = null
 
             override fun onFailure(call: Call<SignupResponse>, t: Throwable) {
                 // Handle failure
-                Log.e("API Failure", "Error: ${t.message}")
+               E("API Failure Error: ${t.message}")
                 Utils.T(activity, "Something went wrong. Please try again.")
                 onResponse(false, null)
             }
@@ -616,15 +603,17 @@ private var dateOfBirth: String? = null
                     val stateApiResponse = response.body()
                     if (stateApiResponse != null) {
                         stateList = stateApiResponse.data ?: emptyList()
-                        Log.d("States Loaded", "Total States: ${stateList.size}")
+
+                        E("States Loaded Total States: ${stateList.size}")
                     }
                 } else {
-                    Log.e("API Error", "Response Error: ${response.code()}")
+                    E("API ErrorResponse Error: ${response.code()}")
+
                 }
             }
 
             override fun onFailure(call: Call<StateApiResponse>, t: Throwable) {
-                Log.e("API Error", "API Call Failed: ${t.message}")
+                E("API Error API Call Failed: ${t.message}")
             }
         })
     }
@@ -645,17 +634,13 @@ private var dateOfBirth: String? = null
                             districtList = districtApiResponse.data ?: emptyList()
                         } else {
                             // Handle case where no districts are found
-                            Toast.makeText(
-                                requireContext(),
-                                "No districts available.",
-                                Toast.LENGTH_SHORT
-                            ).show()
+                            E("No districts available.")
                             binding.etDistrict.visibility = View.GONE
                             binding.etTaluka.visibility = View.GONE
                             binding.etPincode.visibility = View.GONE
                         }
                     } else {
-                        Log.e("API Error", "Error fetching districts: ${response.code()}")
+                       E("API Error Error fetching districts: ${response.code()}")
                         binding.etDistrict.visibility = View.GONE
                         binding.etTaluka.visibility = View.GONE
                         binding.etPincode.visibility = View.GONE
@@ -663,7 +648,7 @@ private var dateOfBirth: String? = null
                 }
 
                 override fun onFailure(call: Call<DistrictApiResponse>, t: Throwable) {
-                    Log.e("API Error", "API call failed: ${t.message}")
+                   E("API Error API call failed: ${t.message}")
                     binding.etDistrict.visibility = View.GONE
                     binding.etTaluka.visibility = View.GONE
                     binding.etPincode.visibility = View.GONE
@@ -692,26 +677,23 @@ private var dateOfBirth: String? = null
                             // Update the list of talukas from the response
                             talukaList = talukaApiResponse.data!!
 
-                            Log.d("Talukas Loaded", "Total Talukas: ${talukaList.size}")
+                          E("Talukas Loaded Total Talukas: ${talukaList.size}")
                             // Make the Taluka EditText visible if talukas are available
                             binding.etTaluka.visibility = View.VISIBLE
                         } else {
                             // If no talukas are found, hide the EditText and show a toast
                             binding.etTaluka.visibility = View.GONE
                             binding.etPincode.visibility = View.GONE
-                            Toast.makeText(
-                                requireContext(),
-                                "No talukas found for this district.",
-                                Toast.LENGTH_SHORT
-                            ).show()
+                            E("No talukas found for this district.")
                         }
                     } else {
-                        Log.e("API Error", "Error fetching talukas: ${response.code()}")
+                      E("API Error Error fetching talukas: ${response.code()}")
                     }
                 }
 
                 override fun onFailure(call: Call<TalukaApiResponse>, t: Throwable) {
-                    Log.e("API Error", "API call failed: ${t.message}")
+                    E("API Error API call failed: ${t.message}")
+
                 }
             })
     }
@@ -737,25 +719,21 @@ private var dateOfBirth: String? = null
                             // Update the list of pincodes from the response
                             pincodeList = pincodeApiResponse.data!!
 
-                            Log.d("Pincodes Loaded", "Total Pincodes: ${pincodeList.size}")
-                            // Make the Pincode EditText visible if pincodes are available
+                         E("Pincodes Loaded Total Pincodes: ${pincodeList.size}")
+
                             binding.etPincode.visibility = View.VISIBLE
                         } else {
                             // If no pincodes are found, hide the EditText and show a toast
                             binding.etPincode.visibility = View.GONE
-                            Toast.makeText(
-                                requireContext(),
-                                "No pincodes found for this taluka.",
-                                Toast.LENGTH_SHORT
-                            ).show()
+                          E("No pincodes found for this taluka")
                         }
                     } else {
-                        Log.e("API Error", "Error fetching pincodes: ${response.code()}")
+                     E("API Error Error fetching pincodes: ${response.code()}")
                     }
                 }
 
                 override fun onFailure(call: Call<PincodeApiResponse>, t: Throwable) {
-                    Log.e("API Error", "API call failed: ${t.message}")
+               E("API Error API call failed: ${t.message}")
                 }
             })
     }

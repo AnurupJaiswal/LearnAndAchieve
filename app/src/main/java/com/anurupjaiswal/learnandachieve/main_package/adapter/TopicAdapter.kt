@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.anurupjaiswal.learnandachieve.R
+import com.anurupjaiswal.learnandachieve.basic.utilitytools.Utils
 import com.anurupjaiswal.learnandachieve.databinding.ItemTopicBinding
 import com.anurupjaiswal.learnandachieve.model.Topic
 import com.bumptech.glide.Glide
@@ -116,7 +117,7 @@ class TopicAdapter(
         holder.binding.shimmerLayout.visibility = View.GONE
         holder.binding.youtubeThumbnail.setImageResource(R.drawable.youtubethumnail)
         holder.itemView.setOnClickListener {
-            Toast.makeText(context, "No YouTube link available", Toast.LENGTH_SHORT).show()
+            Utils.T(context, "No YouTube link available" )
         }
     }
 }

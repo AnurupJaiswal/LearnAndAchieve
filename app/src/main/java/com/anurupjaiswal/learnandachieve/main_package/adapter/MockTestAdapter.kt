@@ -12,7 +12,8 @@ import java.text.SimpleDateFormat
 import java.util.*
 class MockTestAdapter(
     private val mockTestList: List<MockTestItem>,
-    private val onMockTestSelected: (String) -> Unit // Callback to handle navigation
+    private val onMockTestSelected: (MockTestItem) -> Unit,
+    private val onViewResultsSelected: (MockTestItem) -> Unit
 ) : RecyclerView.Adapter<MockTestAdapter.MockTestViewHolder>() {
 
     inner class MockTestViewHolder(private val binding: ItemMockTestBinding) :
@@ -37,7 +38,11 @@ class MockTestAdapter(
             }
 
             binding.unlockButton.setOnClickListener {
-                onMockTestSelected(mockTest.mockTest_id)
+                onMockTestSelected(mockTest)
+            }
+
+            binding.mcvViewResults.setOnClickListener {
+                onViewResultsSelected(mockTest)
             }
         }
     }

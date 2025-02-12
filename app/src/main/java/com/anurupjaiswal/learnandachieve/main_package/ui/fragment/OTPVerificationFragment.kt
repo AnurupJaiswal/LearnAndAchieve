@@ -13,13 +13,16 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.anurupjaiswal.learnandachieve.R
+import com.anurupjaiswal.learnandachieve.basic.retrofit.APIError
 import com.anurupjaiswal.learnandachieve.basic.retrofit.ApiService
 import com.anurupjaiswal.learnandachieve.basic.retrofit.RetrofitClient
+import com.anurupjaiswal.learnandachieve.basic.utilitytools.StatusCodeConstant
 import com.anurupjaiswal.learnandachieve.basic.utilitytools.Utils
 import com.anurupjaiswal.learnandachieve.basic.utilitytools.ValidationFragment
 import com.anurupjaiswal.learnandachieve.databinding.FragmentOTPVerificationBinding
 import com.anurupjaiswal.learnandachieve.model.SignupResponse
 import com.anurupjaiswal.learnandachieve.model.RegistrationVerifyOtpResponse
+import com.google.gson.Gson
 import com.google.gson.JsonObject
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
@@ -163,32 +166,55 @@ class OTPVerificationFragment : Fragment(), ValidationFragment {
         // Call the API using Retrofit (asynchronous call with enqueue)
         apiservice?.verifyOtpRegestation(authToken, otpRequest)?.enqueue(object : Callback<RegistrationVerifyOtpResponse> {
             override fun onResponse(call: Call<RegistrationVerifyOtpResponse>, response: Response<RegistrationVerifyOtpResponse>) {
-                if (response.isSuccessful) {
-                    // Handle success response
-
-                    Utils.T(requireContext(), "OTP verified successfully")
-                    val verifyOtpResponse = response.body()
-                    Log.d("OTPVerification", "Response: ${verifyOtpResponse?.message}")
-
-                    onResponse(true)
-                } else {
-                    // Handle error response
-                    val errorBody = response.errorBody()?.string()
-                    Log.e("OTPVerification", "Error: $errorBody")
-                    Toast.makeText(requireContext(), "OTP verification failed", Toast.LENGTH_SHORT).show()
-                    // Call the onResponse with false indicating failure
-                    onResponse(false)
+                when (response.code()) {
+                    StatusCodeConstant.OK, StatusCodeConstant.CREATED -> {
+                        val verifyOtpResponse = response.body()
+                        Utils.T(requireContext(), "Response: ${verifyOtpResponse?.message}")
+                        Log.d("OTPVerification", "Response: ${verifyOtpResponse?.message}")
+                        onResponse(true)
+                    }
+                    StatusCodeConstant.BAD_REQUEST -> {
+                        val errorBody = response.errorBody()?.string()
+                        var errorMessage = "Unknown error"
+                        if (!errorBody.isNullOrEmpty()) {
+                            try {
+                                val gson = Gson()
+                                val apiError = gson.fromJson(errorBody, APIError::class.java)
+                                errorMessage = apiError.message ?: apiError.error ?: "Unknown error"
+                            } catch (e: Exception) {
+                                errorMessage = errorBody
+                            }
+                        }
+                        Utils.T(requireContext(), "Response: $errorMessage")
+                        Log.e("OTPVerification", "Bad Request Error: $errorMessage")
+                        onResponse(false)
+                    }
+                    else -> {
+                        val errorBody = response.errorBody()?.string()
+                        var errorMessage = "Unknown error"
+                        if (!errorBody.isNullOrEmpty()) {
+                            try {
+                                val gson = Gson()
+                                val apiError = gson.fromJson(errorBody, APIError::class.java)
+                                errorMessage = apiError.message ?: apiError.error ?: "Unknown error"
+                            } catch (e: Exception) {
+                                errorMessage = errorBody
+                            }
+                        }
+                        Utils.T(requireContext(), "Response: $errorMessage")
+                        Log.e("OTPVerification", "Error: $errorMessage")
+                        onResponse(false)
+                    }
                 }
             }
 
             override fun onFailure(call: Call<RegistrationVerifyOtpResponse>, t: Throwable) {
-                // Handle failure
+                Utils.T(requireContext(), "Response: ${t.message}")
                 Log.e("OTPVerification", "Error: ${t.message}")
-                Toast.makeText(requireContext(), "Something went wrong. Please try again.", Toast.LENGTH_SHORT).show()
-                // Call the onResponse with false indicating failure
                 onResponse(false)
             }
         })
+
     }
 
 

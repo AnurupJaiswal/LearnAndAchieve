@@ -7,6 +7,7 @@
     android:orientation="vertical"
     tools:context=".main_package.ui.fragment.PerformanceSummaryFragment">
     <TextView
+        android:id="@+id/tvMockTestName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fontFamily="@font/gilroy_semibold"
@@ -334,6 +335,7 @@
                         android:paddingHorizontal="@dimen/_5sdp">
 
                         <TextView
+                            android:id="@+id/tvIncorrect"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/gilroy_medium"
@@ -358,13 +360,16 @@
 
 
     <TextView
+
+        android:id="@+id/tvViewQuestionsAns"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/gilroy_medium"
+        android:fontFamily="@font/gilroy_semibold"
         android:text="View questions and their answers"
         android:textColor="@color/primaryColor"
-        android:layout_marginTop="@dimen/_10sdp"
+        android:layout_marginTop="@dimen/_15sdp"
         android:paddingHorizontal="@dimen/_10sdp"
+        android:gravity="center"
         android:textSize="14sp"
 
         app:drawableEndCompat="@drawable/ic_forword_arrow" />

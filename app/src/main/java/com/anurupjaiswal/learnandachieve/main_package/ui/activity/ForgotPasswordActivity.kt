@@ -131,34 +131,32 @@ class ForgotPasswordActivity : BaseActivity(), View.OnClickListener {
                 response: retrofit2.Response<ForgetPasswordResponse>
             ) {
                 try {
-                    if (response.code() == StatusCodeConstant.OK) {
-                        // Navigate to OtpVerificationActivity with email
-
-                        Utils.T(activity, response.body()?.message)
-
-                        val bundle = Bundle()
-                        bundle.putString(Constants.Email, email)
-                        Utils.I(activity, OtpVerificationActivity::class.java, bundle)
-                    }  else if (response.code() == StatusCodeConstant.BAD_REQUEST) {
-                        response.errorBody()?.let { errorBody ->
-                            val message =
-                                Gson().fromJson(errorBody.charStream(), APIError::class.java)
-                            val displayMessage = message.error
-
-                                Toast.makeText(activity, displayMessage, Toast.LENGTH_SHORT).show()
-
-
+                    when (response.code()) {
+                        StatusCodeConstant.OK -> {
+                            // Navigate to OtpVerificationActivity with email
+                            Utils.T(activity, "Response: ${response.body()?.message}")
+                            val bundle = Bundle().apply {
+                                putString(Constants.Email, email)
+                            }
+                            Utils.I(activity, OtpVerificationActivity::class.java, bundle)
                         }
-                        }else {
-                        // Handle error response
-                        response.errorBody()?.let { errorBody ->
-                            val errorResponse =
-                                Gson().fromJson(errorBody.charStream(), APIError::class.java)
-                            val errorMessage = errorResponse.error ?: "Something went wrong"
-                            // Show error message in Toast
-
-                                Utils.T(activity, errorMessage)
-
+                        StatusCodeConstant.UNAUTHORIZED -> {
+                            // Handle unauthorized error by calling the specified function
+                            Utils.UnAuthorizationToken(activity)
+                        }
+                        StatusCodeConstant.BAD_REQUEST -> {
+                            response.errorBody()?.let { errorBody ->
+                                val apiError = Gson().fromJson(errorBody.charStream(), APIError::class.java)
+                                val displayMessage = apiError.error ?: "Unknown error"
+                                Utils.T(activity, "Response: $displayMessage")
+                            }
+                        }
+                        else -> {
+                            response.errorBody()?.let { errorBody ->
+                                val apiError = Gson().fromJson(errorBody.charStream(), APIError::class.java)
+                                val errorMessage = apiError.error ?: "Something went wrong"
+                                Utils.T(activity, "Response: $errorMessage")
+                            }
                         }
                     }
                 } catch (e: Exception) {
@@ -169,9 +167,7 @@ class ForgotPasswordActivity : BaseActivity(), View.OnClickListener {
             override fun onFailure(call: Call<ForgetPasswordResponse>, t: Throwable) {
                 call.cancel()
                 t.printStackTrace()
-
-                // Show failure message in Toast
-                Toast.makeText(activity, t.message ?: "Request failed", Toast.LENGTH_SHORT).show()
+                Utils.T(activity, "Response: ${t.message ?: "Request failed"}")
                 E("getMessage::" + t.message)
             }
         })
