@@ -9,11 +9,14 @@
     tools:context=".main_package.ui.fragment.QuestionComparisonFragment">
 
 
+
+
+
     <HorizontalScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fillViewport="true"
-        android:padding="8dp">
+      >
         <LinearLayout
             android:id="@+id/subjectContainer"
             android:layout_width="wrap_content"
@@ -21,10 +24,7 @@
             android:orientation="horizontal" />
     </HorizontalScrollView>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+
 
 
         <RelativeLayout
@@ -76,6 +76,18 @@ android:fontFamily="@font/gilroy_semibold"
             android:layout_marginTop="@dimen/_10sdp"
             android:background="@color/popupViewBg" />
 
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rcvQuestionComparison"
             android:layout_width="match_parent"
@@ -91,67 +103,69 @@ android:fontFamily="@font/gilroy_semibold"
             android:layout_marginTop="@dimen/_10sdp"
             android:background="@color/popupViewBg" />
 
-    </LinearLayout>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_10sdp">
-
-
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/mcvPrevious"
-            android:layout_width="wrap_content"
+        <RelativeLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:gravity="end"
-            app:cardBackgroundColor="@color/primaryColor"
-            app:cardCornerRadius="@dimen/_7sdp"
-            app:strokeWidth="0dp">
+            android:layout_marginTop="@dimen/_10sdp">
 
-            <TextView
 
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/mcvPrevious"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:fontFamily="@font/gilroy_semibold"
-                android:includeFontPadding="false"
+                android:gravity="end"
+                android:layout_alignParentStart="true"
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="@dimen/_7sdp"
+                app:strokeColor="@color/primaryColor"
+                app:strokeWidth="1.dp">
 
-                android:paddingHorizontal="@dimen/_20sdp"
-                android:paddingVertical="@dimen/_10sdp"
-                android:text="Previous"
-                android:textColor="@color/white"
-                android:textSize="16sp" />
-        </com.google.android.material.card.MaterialCardView>
+                <TextView
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:fontFamily="@font/gilroy_semibold"
+                    android:includeFontPadding="false"
+
+                    android:paddingHorizontal="@dimen/_19sdp"
+                    android:paddingVertical="@dimen/_10sdp"
+                    android:text="Previous"
+                    android:textColor="@color/primaryColor"
+                    android:textSize="16sp" />
+            </com.google.android.material.card.MaterialCardView>
 
 
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/mcvNext"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:gravity="end"
-            app:cardBackgroundColor="@color/primaryColor"
-            app:cardCornerRadius="@dimen/_7sdp"
-            app:strokeWidth="0dp">
-
-            <TextView
-
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/mcvNext"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:fontFamily="@font/gilroy_semibold"
-                android:includeFontPadding="false"
+                android:layout_alignParentEnd="true"
+                android:gravity="end"
+                app:cardBackgroundColor="@color/primaryColor"
+                app:cardCornerRadius="@dimen/_7sdp"
+                app:strokeWidth="0dp">
 
-                android:paddingHorizontal="@dimen/_30sdp"
-                android:paddingVertical="@dimen/_10sdp"
-                android:text="Next"
-                android:textColor="@color/white"
-                android:textSize="16sp" />
-        </com.google.android.material.card.MaterialCardView>
+                <TextView
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:fontFamily="@font/gilroy_semibold"
+                    android:includeFontPadding="false"
+
+                    android:paddingHorizontal="@dimen/_30sdp"
+                    android:paddingVertical="@dimen/_10sdp"
+                    android:text="Next"
+                    android:textColor="@color/white"
+                    android:textSize="16sp" />
+            </com.google.android.material.card.MaterialCardView>
 
 
-    </RelativeLayout>
+        </RelativeLayout>
+
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
 
 
 </LinearLayout>

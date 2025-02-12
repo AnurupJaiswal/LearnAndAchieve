@@ -20,6 +20,7 @@ import com.anurupjaiswal.learnandachieve.model.QuestionItem
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+
 class QuestionComparisonFragment : Fragment() {
 
     private var _binding: FragmentQuestionComparisonBinding? = null
@@ -28,6 +29,12 @@ class QuestionComparisonFragment : Fragment() {
     private lateinit var adapter: QuestionComparisonAdapter
     private var selectedSubjectId: String? = null
     private var mockTestData: QuestionComparisonResponse? = null
+
+    private var currentQuestionIndex = 0
+    private var currentSubjectIndex = 0
+    private var allSubjects: List<QuestionComparisonSubject> = emptyList()
+    private var currentQuestions: List<QuestionItem> = emptyList()
+    private var questionNumberOffset = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -52,6 +59,9 @@ class QuestionComparisonFragment : Fragment() {
         mockTestId?.let {
             fetchMockTestQuestions(it)
         } ?: Log.e("QuestionComparison", "MockTest ID is null!")
+
+        binding.mcvPrevious.setOnClickListener { showPreviousQuestion() }
+        binding.mcvNext.setOnClickListener { showNextQuestion() }
     }
 
     private fun fetchMockTestQuestions(mockTestId: String) {
@@ -63,13 +73,14 @@ class QuestionComparisonFragment : Fragment() {
                 if (response.isSuccessful) {
                     mockTestData = response.body()
                     mockTestData?.let { data ->
-                        setupSubjectTabs(data.data.subjects)
+                        allSubjects = data.data.subjects
+                        setupSubjectTabs(allSubjects)
                         val durationInMinutes = data.data.durationInMinutes ?: 0
                         Utils.startCountdownTimer(durationInMinutes, binding.tvTimer)
-                        // Automatically select the first subject
-                        if (data.data.subjects.isNotEmpty()) {
-                            val firstSubject = data.data.subjects.first()
-                            onSubjectSelected(firstSubject.subjectId)
+
+                        if (allSubjects.isNotEmpty()) {
+                            calculateQuestionOffsets()
+                            onSubjectSelected(0) // Select first subject by default
                         }
                     }
                 } else {
@@ -91,41 +102,111 @@ class QuestionComparisonFragment : Fragment() {
             val button = LayoutInflater.from(requireContext()).inflate(R.layout.item_subject_button, subjectContainer, false) as TextView
             button.text = subject.subjectName
             button.setOnClickListener {
-                onSubjectSelected(subject.subjectId)
+                onSubjectSelected(index)
             }
             subjectContainer.addView(button)
 
-            // Highlight the first subject by default
             if (index == 0) {
                 button.isSelected = true
             }
         }
     }
 
-    private fun onSubjectSelected(subjectId: String) {
-        selectedSubjectId = subjectId
+    private fun calculateQuestionOffsets() {
+        questionNumberOffset = 0
 
-        val allSubjects = mockTestData?.data?.subjects ?: emptyList()
-        val selectedSubjectIndex = allSubjects.indexOfFirst { it.subjectId == subjectId }
+        for (i in allSubjects.indices) {
+            val questionsInSubject = mockTestData?.data?.subjectQuestions
+                ?.firstOrNull { it.subjectId == allSubjects[i].subjectId }
+                ?.questions ?: emptyList()
 
-        // Calculate the start index based on previous subjects' question counts
-        val newStartIndex = allSubjects.take(selectedSubjectIndex).sumOf { subject ->
-            mockTestData?.data?.subjectQuestions?.firstOrNull { it.subjectId == subject.subjectId }?.questions?.size ?: 0
-        } + 1
+            var totalQuestions = questionsInSubject.size
 
-        val questions = mockTestData?.data?.subjectQuestions?.firstOrNull { it.subjectId == subjectId }?.questions ?: emptyList()
-        adapter.updateData(questions, newStartIndex)
+            // ✅ Adjust for sub-questions (subtracting 1 from total sub-question count)
+            for (question in questionsInSubject) {
+                val subCount = question.subQuestions?.size ?: 0
+                if (subCount > 0) totalQuestions += (subCount - 1)
+            }
 
-        // Highlight the selected subject button
-        for (i in 0 until binding.subjectContainer.childCount) {
-            val button = binding.subjectContainer.getChildAt(i) as TextView
-            val subject = mockTestData?.data?.subjects?.getOrNull(i)
-            button.isSelected = (subject?.subjectId == subjectId)
+            if (i < currentSubjectIndex) {
+                questionNumberOffset += totalQuestions
+            }
         }
     }
+
+
+    private fun onSubjectSelected(subjectIndex: Int) {
+        if (subjectIndex !in allSubjects.indices) return
+        currentSubjectIndex = subjectIndex
+        selectedSubjectId = allSubjects[subjectIndex].subjectId
+        currentQuestionIndex = 0
+
+        calculateQuestionOffsets()
+
+        currentQuestions = mockTestData?.data?.subjectQuestions?.firstOrNull { it.subjectId == selectedSubjectId }?.questions ?: emptyList()
+        updateQuestionDisplay()
+
+        for (i in 0 until binding.subjectContainer.childCount) {
+            val button = binding.subjectContainer.getChildAt(i) as TextView
+            button.isSelected = (i == subjectIndex)
+        }
+    }
+
+    private fun showPreviousQuestion() {
+        if (currentQuestionIndex > 0) {
+            currentQuestionIndex--
+        } else if (currentSubjectIndex > 0) {
+            onSubjectSelected(currentSubjectIndex - 1)
+            currentQuestionIndex = currentQuestions.size - 1
+        }
+        updateQuestionDisplay()
+    }
+
+    private fun showNextQuestion() {
+        if (currentQuestionIndex < currentQuestions.size - 1) {
+            currentQuestionIndex++
+        } else if (currentSubjectIndex < allSubjects.size - 1) {
+            onSubjectSelected(currentSubjectIndex + 1)
+            currentQuestionIndex = 0
+        }
+        updateQuestionDisplay()
+    }
+
+    private fun updateQuestionDisplay() {
+        if (currentQuestions.isNotEmpty()) {
+            val questionList = listOf(currentQuestions[currentQuestionIndex])
+            // Calculate the effective main question number (start index) for this question.
+            val effectiveNumber = getEffectiveQuestionNumberIndex()
+            adapter.updateData(questionList, effectiveNumber)
+        }
+
+        binding.mcvPrevious.visibility = if (currentSubjectIndex == 0 && currentQuestionIndex == 0) View.GONE else View.VISIBLE
+        binding.mcvNext.visibility = if (currentSubjectIndex == allSubjects.size - 1 && currentQuestionIndex == currentQuestions.size - 1) View.GONE else View.VISIBLE
+    }
+
+    /**
+     * Computes the effective main question number based on:
+     *   - The offset from previous subjects (questionNumberOffset), and
+     *   - For each question in the current subject before the current one:
+     *         • if the question has no sub‑questions, add 1;
+     *         • if the question has sub‑questions, add the sub‑question count.
+     * Then add 1 for the current question.
+     */
+    private fun getEffectiveQuestionNumberIndex(): Int {
+        var effective = questionNumberOffset
+        for (j in 0 until currentQuestionIndex) {
+            val subCount = currentQuestions[j].subQuestions?.size ?: 0
+            effective += if (subCount > 0) subCount else 1
+        }
+        effective += 1  // for the current question itself
+        return effective
+    }
+
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
 }
+
+
