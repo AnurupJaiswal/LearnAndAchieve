@@ -19,6 +19,7 @@ import com.anurupjaiswal.learnandachieve.basic.retrofit.APIError
 import com.anurupjaiswal.learnandachieve.basic.retrofit.RetrofitClient
 import com.anurupjaiswal.learnandachieve.basic.utilitytools.StatusCodeConstant
 import com.anurupjaiswal.learnandachieve.basic.utilitytools.Utils
+import com.anurupjaiswal.learnandachieve.basic.utilitytools.Utils.E
 import com.anurupjaiswal.learnandachieve.databinding.FragmentQuestionComparisonBinding
 import com.anurupjaiswal.learnandachieve.main_package.adapter.QuestionComparisonAdapter
 import com.anurupjaiswal.learnandachieve.main_package.adapter.QuestionStatus
@@ -72,14 +73,26 @@ class QuestionComparisonFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.rcvQuestionComparison.layoutManager = LinearLayoutManager(requireContext())
-        adapter = QuestionComparisonAdapter(emptyList(), startIndex = 1) { questionId, answer ->
-            if (answer.trim().isEmpty()) {
-                selectedAnswers.remove(questionId)
-            } else {
-                selectedAnswers[questionId] = answer
+        adapter = QuestionComparisonAdapter(
+            emptyList(),
+            startIndex = 1,
+            { questionId, answer ->
+                if (answer.trim().isEmpty()) {
+                    selectedAnswers.remove(questionId)
+                } else {
+                    selectedAnswers[questionId] = answer
+                }
+                updateQuestionDisplay()
+            },
+            {
+                if (isDrawerOpen) {
+                    closeDrawerWithAnimation()
+                }
             }
-            updateQuestionDisplay()
-        }
+        )
+
+        binding.rcvQuestionComparison.adapter = adapter
+
 
 
         binding.rcvQuestionComparison.adapter = adapter
@@ -101,6 +114,8 @@ class QuestionComparisonFragment : Fragment() {
             toggleDrawer()
         }
 
+
+
         mockTestId?.let {
             fetchMockTestQuestions(it)
         } ?: Log.e("QuestionComparison", "MockTest ID is null!")
@@ -120,6 +135,7 @@ class QuestionComparisonFragment : Fragment() {
             }
             false
         }
+
     }
     private fun fetchMockTestQuestions(mockTestId: String) {
         binding.progressBar.visibility = View.VISIBLE
@@ -129,30 +145,57 @@ class QuestionComparisonFragment : Fragment() {
         val token = Utils.GetSession().token
         apiService.getMockTestQuestions("Bearer $token", mockTestId).enqueue(object : Callback<QuestionComparisonResponse> {
             override fun onResponse(call: Call<QuestionComparisonResponse>, response: Response<QuestionComparisonResponse>) {
-                if (response.isSuccessful) {
-                    mockTestData = response.body()
-                    mockTestData?.let { data ->
-                        allSubjects = data.data.subjects
-                        setupSubjectTabs(allSubjects)
-                        val durationInMinutes = data.data.durationInMinutes ?: 0
-                        Utils.startCountdownTimer(durationInMinutes, binding.tvTimer)
-                        testStartTime = System.currentTimeMillis()
-                        if (allSubjects.isNotEmpty()) {
-                            calculateQuestionOffsets()
-                            onSubjectSelected(0) // Select first subject by default
-                            binding.progressBar.visibility = View.GONE
-                            binding.llMain.visibility = View.VISIBLE
+                when (response.code()) {
+                    StatusCodeConstant.OK -> {
+                        response.body()?.let { dataResponse ->
+                            mockTestData = dataResponse
+                            allSubjects = dataResponse.data.subjects
+                            setupSubjectTabs(allSubjects)
+                            val durationInMinutes = dataResponse.data.durationInMinutes ?: 0
+                            Utils.startCountdownTimer(durationInMinutes, binding.tvTimer)
+                            testStartTime = System.currentTimeMillis()
+                            if (allSubjects.isNotEmpty()) {
+                                calculateQuestionOffsets()
+                                onSubjectSelected(0) // Select first subject by default
+                                binding.progressBar.visibility = View.GONE
+                                binding.llMain.visibility = View.VISIBLE
+                            }
                         }
                     }
-                } else {
-                    Log.e("QuestionComparison", "API Error: ${response.message()}")
+                    StatusCodeConstant.UNAUTHORIZED -> {
+                        binding.progressBar.visibility = View.GONE
+                        binding.llMain.visibility = View.VISIBLE
+                        Utils.E("fetchMockTestQuestions UNAUTHORIZED: ${response.message()}")
+                        Utils.UnAuthorizationToken(requireContext())
+                    }
+                    StatusCodeConstant.BAD_REQUEST -> {
+                        binding.progressBar.visibility = View.GONE
+                        binding.llMain.visibility = View.VISIBLE
+                        response.errorBody()?.let { errorBody ->
+                            val apiError = Gson().fromJson(errorBody.charStream(), APIError::class.java)
+                            val errorMessage = apiError.error ?: "Bad Request Error"
+                            Utils.E("fetchMockTestQuestions BAD_REQUEST: $errorMessage")
+                            Utils.T(requireContext(), errorMessage)
+                        }
+                    }
+                    else -> {
+                        binding.progressBar.visibility = View.GONE
+                        binding.llMain.visibility = View.VISIBLE
+                        Utils.E("fetchMockTestQuestions Error: ${response.code()} - ${response.message()}")
+                        Utils.T(requireContext(), "Error: ${response.code()}")
+                    }
                 }
             }
+
             override fun onFailure(call: Call<QuestionComparisonResponse>, t: Throwable) {
-                Log.e("QuestionComparison", "API Call Failed: ${t.message}")
+                binding.progressBar.visibility = View.GONE
+                binding.llMain.visibility = View.VISIBLE
+                Utils.E("fetchMockTestQuestions API Call Failed: ${t.message}")
+                Utils.T(requireContext(), t.message ?: "Request failed. Try again later")
             }
         })
     }
+
     private fun setupSubjectTabs(subjects: List<QuestionComparisonSubject>) {
         val subjectContainer = binding.subjectContainer
         subjectContainer.removeAllViews()
@@ -197,7 +240,7 @@ class QuestionComparisonFragment : Fragment() {
             ?.questions ?: emptyList()
 
         if (questions.isEmpty()) {
-            Log.e("QuestionComparison", "No questions found for subject: $selectedSubjectId")
+          E("QuestionComparison No questions found for subject: $selectedSubjectId")
             return
         }
 
@@ -358,7 +401,7 @@ class QuestionComparisonFragment : Fragment() {
     private fun submitMockTest() {
         // Validate required IDs.
         if (mockTestId.isNullOrEmpty() || package_id.isNullOrEmpty() || order_id.isNullOrEmpty()) {
-            Log.e("SubmitMockTest", "Missing required IDs")
+            E("SubmitMockTes Missing required IDs")
             return
         }
 
@@ -486,9 +529,6 @@ class QuestionComparisonFragment : Fragment() {
             })
 
     }
-
-
-
 
 }
 

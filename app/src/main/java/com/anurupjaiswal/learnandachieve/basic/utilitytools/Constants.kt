@@ -164,6 +164,9 @@ interface Constants {
         const val confirmPassword = "confirmPassword"
         const val qualification = "qualification"
         const val notifyEmail = "notifyEmail"
+        const val faq_Category_id = "faq_Category_id"
+        const val mockTest_id = "mockTest_id"
+        const val order_id = "order_id"
 
         //new
         const val Login = "Login"

@@ -9,9 +9,9 @@ interface Const {
         const val Development = Constants.Debug
 
         //Live
-
+        const val HOST_URL = "https://api.learnandachieve.in/"
         //Debug
-        const val HOST_URL = "https://stage-api.learnandachieve.in/"
+       // const val HOST_URL = "https://stage-api.learnandachieve.in/"
 
         const val baseUrlForImage = "https://stage-api.learnandachieve.in/uploads/";
 
@@ -63,6 +63,7 @@ interface Const {
         const val ALL_BLOG_APP = "blog/getAllBlogApp"
         const val BLOG_DETAILS_BY_ID = "blog/getBlogDetailsById"
         const val BLOG_GET_ALL = "blog/getAll"
+        const val GET_MOCK_TEST_QUESTIONS = "mockTest/getAllQuestionById"
         const val SUBMIT_MOCK_TEST = "mockTest/submitMockTest"
         const val VIEW_RESULT = "mockTest/viewResult"
         const val SHOW_RESULT = "mockTest/getShowResults"

@@ -7,7 +7,6 @@ import com.anurupjaiswal.learnandachieve.model.BlogResponse
 import com.anurupjaiswal.learnandachieve.model.CartResponse
 import com.anurupjaiswal.learnandachieve.model.ChangePasswordResponse
 import com.anurupjaiswal.learnandachieve.model.ClassResponse
-import com.anurupjaiswal.learnandachieve.model.CreateOrderRequest
 import com.anurupjaiswal.learnandachieve.model.CreateOrderResponse
 import com.anurupjaiswal.learnandachieve.model.DeleteCartResponse
 import com.anurupjaiswal.learnandachieve.model.DistrictApiResponse
@@ -15,33 +14,31 @@ import com.anurupjaiswal.learnandachieve.model.FAQResponse
 import com.anurupjaiswal.learnandachieve.model.ForgetPasswordResponse
 import com.anurupjaiswal.learnandachieve.model.GetAllBlogAppResponse
 import com.anurupjaiswal.learnandachieve.model.GetAllStudyMaterial
+import com.anurupjaiswal.learnandachieve.model.GetUserResponse
 import com.anurupjaiswal.learnandachieve.model.LoginData
-import com.anurupjaiswal.learnandachieve.model.Module
+import com.anurupjaiswal.learnandachieve.model.MockTestResponse
 import com.anurupjaiswal.learnandachieve.model.ModuleResponse
+import com.anurupjaiswal.learnandachieve.model.OrderHistoryResponse
 import com.anurupjaiswal.learnandachieve.model.PackageDetailsResponse
 import com.anurupjaiswal.learnandachieve.model.PackageResponse
+import com.anurupjaiswal.learnandachieve.model.PerformanceSummaryResponse
 import com.anurupjaiswal.learnandachieve.model.PincodeApiResponse
+import com.anurupjaiswal.learnandachieve.model.QuestionComparisonResponse
 import com.anurupjaiswal.learnandachieve.model.RegistrationVerifyOtpResponse
+import com.anurupjaiswal.learnandachieve.model.ShowResultReponce
 import com.anurupjaiswal.learnandachieve.model.SignupResponse
 import com.anurupjaiswal.learnandachieve.model.StateApiResponse
-import com.anurupjaiswal.learnandachieve.model.TalukaApiResponse
-import com.anurupjaiswal.learnandachieve.model.TopicResponse
-import com.anurupjaiswal.learnandachieve.model.GetUserResponse
-import com.anurupjaiswal.learnandachieve.model.MockTestResponse
-import com.anurupjaiswal.learnandachieve.model.OrderHistoryResponse
-import com.anurupjaiswal.learnandachieve.model.PerformanceSummaryResponse
-import com.anurupjaiswal.learnandachieve.model.QuestionComparisonResponse
-import com.anurupjaiswal.learnandachieve.model.ShowResultReponce
 import com.anurupjaiswal.learnandachieve.model.SubmitMockTestRequest
 import com.anurupjaiswal.learnandachieve.model.SubmitMockTestResponse
+import com.anurupjaiswal.learnandachieve.model.TalukaApiResponse
 import com.anurupjaiswal.learnandachieve.model.TermsConditionsResponse
+import com.anurupjaiswal.learnandachieve.model.TopicResponse
 import com.anurupjaiswal.learnandachieve.model.VerifyOtpResponse
 import com.anurupjaiswal.learnandachieve.model.VerifyPaymentResponse
 import com.google.gson.JsonObject
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
-import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.FieldMap
@@ -58,11 +55,10 @@ import retrofit2.http.Query
 interface ApiService {
 
 
-        @POST(Const.SUBMIT_MOCK_TEST)
-        fun submitMockTest(
-            @Header(Constants.Authorization) token: String,
-            @Body request: SubmitMockTestRequest
-        ): Call<SubmitMockTestResponse>
+    @POST(Const.SUBMIT_MOCK_TEST)
+    fun submitMockTest(
+        @Header(Constants.Authorization) token: String, @Body request: SubmitMockTestRequest
+    ): Call<SubmitMockTestResponse>
 
 
     @FormUrlEncoded
@@ -120,21 +116,19 @@ interface ApiService {
 
 
     @POST(Const.VERIFY_OTP)
-    fun verifyOtp(  @Header(Constants.Authorization) authToken: String,
-                     @Body params: Map<String, String?>): Call<VerifyOtpResponse>
+    fun verifyOtp(
+        @Header(Constants.Authorization) authToken: String, @Body params: Map<String, String?>
+    ): Call<VerifyOtpResponse>
 
 
     @POST(Const.RESET_PASSWORD)
     fun resetPassword(
-        @Header(Constants.Authorization)
-        token: String,
-        @Body requestBody: Map<String, String>
+        @Header(Constants.Authorization) token: String, @Body requestBody: Map<String, String>
     ): Call<ForgetPasswordResponse>
 
     @GET(Const.PACKAGE_GET_ALL)
     fun getPackages(
-        @Header(Constants.Authorization)
-        token: String,
+        @Header(Constants.Authorization) token: String,
         @Query(Const.LIMIT) limit: Int,
         @Query(Const.OFFSET) offset: Int
     ): Call<PackageResponse>
@@ -183,7 +177,7 @@ interface ApiService {
     ): Call<TopicResponse>
 
     @GET(Const.GET_USER_DETAILS)
-     fun getUserDetails(
+    fun getUserDetails(
         @Header(Constants.Authorization) authorization: String
     ): Call<GetUserResponse>
 
@@ -193,11 +187,9 @@ interface ApiService {
     ): Call<OrderHistoryResponse>
 
 
-
     @POST(Const.CHANGE_PASSWORD)
     fun changePassword(
-        @Header(Constants.Authorization) token: String,
-        @Body body: HashMap<String, String>
+        @Header(Constants.Authorization) token: String, @Body body: HashMap<String, String>
     ): Call<ChangePasswordResponse>
 
     @Multipart
@@ -218,8 +210,7 @@ interface ApiService {
 
     @POST(Const.ADD_COORDINATOR)
     fun addCoordinator(
-        @Header(Constants.Authorization) token: String,
-        @Body params: HashMap<String, Any>
+        @Header(Constants.Authorization) token: String, @Body params: HashMap<String, Any>
     ): Call<ApiResponse>
 
     @GET(Const.GET_TERMS_CONDITIONS)
@@ -236,23 +227,21 @@ interface ApiService {
 
     @GET(Const.FAQ_ALL)
     fun getCategories(
-        @Query(Const.LIMIT) limit: Int,
-        @Query(Const.OFFSET) offset: Int
+        @Query(Const.LIMIT) limit: Int, @Query(Const.OFFSET) offset: Int
     ): Call<FAQResponse>
 
     @GET(Const.FAQ_ALL)
     fun getFAQsByCategory(
-        @Query("limit") limit: Int,
-        @Query("offset") offset: Int,
-        @Query("faq_Category_id") categoryId: String
+        @Query(Const.LIMIT) limit: Int,
+        @Query(Const.OFFSET) offset: Int,
+        @Query(Constants.faq_Category_id) categoryId: String
     ): Call<FAQResponse>
 
 
     @POST(Const.CREATE_ORDER)
     fun createOrder(
-        @Header(Constants.Authorization) token: String,
-        @Body paymentData: HashMap<String, String>    ): Call<CreateOrderResponse>
-
+        @Header(Constants.Authorization) token: String, @Body paymentData: HashMap<String, String>
+    ): Call<CreateOrderResponse>
 
 
     // Endpoint for verifying payment
@@ -269,11 +258,11 @@ interface ApiService {
         @Query(Const.OFFSET) offset: Int
     ): Call<MockTestResponse>
 
-     @GET(Const.ALL_BLOG_APP)
+    @GET(Const.ALL_BLOG_APP)
     fun getAllBlogApp(
-         @Header(Constants.Authorization) token: String,
+        @Header(Constants.Authorization) token: String,
 
-    ): Call<GetAllBlogAppResponse>
+        ): Call<GetAllBlogAppResponse>
 
     @GET(Const.BLOG_DETAILS_BY_ID)
     fun getBlogDetails(
@@ -288,27 +277,29 @@ interface ApiService {
         @Query(Const.OFFSET) offset: Int
     ): Call<GetAllBlogAppResponse>
 
-        @POST("user/logout")
-        fun logoutUser(@Header(Constants.Authorization) token: String): Call<ApiResponse>
-    @GET("mockTest/getAllQuestionById")
-    fun getMockTestQuestions(@Header(Constants.Authorization) token: String,
-        @Query("mockTest_id") mockTestId: String
+    @POST("user/logout")
+    fun logoutUser(@Header(Constants.Authorization) token: String): Call<ApiResponse>
+
+    @GET(Const.GET_MOCK_TEST_QUESTIONS)
+    fun getMockTestQuestions(
+        @Header(Constants.Authorization) token: String,
+        @Query(Constants.mockTest_id) mockTestId: String,
     ): Call<QuestionComparisonResponse>
 
     @GET(Const.SHOW_RESULT)
     fun getShowResults(
         @Header(Constants.Authorization) token: String,
-        @Query("mockTest_id") mockTestId: String,
-        @Query("order_id") orderId: String
+        @Query(Constants.mockTest_id) mockTestId: String,
+        @Query(Constants.order_id) orderId: String
     ): Call<ShowResultReponce>
 
 
     @GET(Const.VIEW_RESULT)
     fun getPerformanceSummary(
         @Header(Constants.Authorization) token: String,
-        @Query("mockTest_id") mockTestId: String,
+        @Query(Constants.mockTest_id) mockTestId: String,
         @Query("mockTestSubmissions_id") mockTestSubmissionsId: String,
-        @Query("subject_id") subjectId: String? = null
+        @Query(Constants.subjectId) subjectId: String? = null
     ): Call<PerformanceSummaryResponse>
 }
 

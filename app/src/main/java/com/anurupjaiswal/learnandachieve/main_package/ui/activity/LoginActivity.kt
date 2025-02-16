@@ -49,7 +49,6 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
     private var isPasswordVisible = false
     private var apiservice: ApiService? = null
     private  var currentToken: String = ""
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -63,16 +62,14 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
     @SuppressLint("ClickableViewAccessibility")
     private fun init() {
         apiservice = RetrofitClient.client
-
         binding.mcvLogin.setOnClickListener(this)
         binding.rlDontHaveAccount.setOnClickListener(this)
         binding.tvForgotPass.setOnClickListener(this)
-
         textChangeListener()
         binding.etPassword.isHapticFeedbackEnabled = false
 
         binding.etPassword.setOnTouchListener { _, event ->
-            val drawableEnd = 2 // Index for the end drawable (right icon)
+            val drawableEnd = 2
             if (event.action == MotionEvent.ACTION_UP) {
                 if (event.rawX >= (binding.etPassword.right - binding.etPassword.compoundDrawables[drawableEnd].bounds.width())) {
                     togglePasswordVisibility()
@@ -261,7 +258,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
 
                 Utils.toggleProgressBarAndText(false, binding.loading, binding.tvLogIN,binding.root)
 
-                Utils.T(activity, t.message)
+             //   Utils.T(activity, t.message)
                 E("getMessage::" + t.message)
             }
         })

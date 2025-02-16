@@ -18,7 +18,9 @@ import com.anurupjaiswal.learnandachieve.model.QuestionItem
 class QuestionComparisonAdapter(
     private var questions: List<QuestionItem>,
     private var startIndex: Int = 1,
-    private val onAnswerSelected: (questionId: String, answer: String) -> Unit
+    private val onAnswerSelected: (questionId: String, answer: String) -> Unit,
+    private val onOptionSelected: () -> Unit  // Callback for closing drawer
+
 ) : RecyclerView.Adapter<QuestionComparisonAdapter.QuestionViewHolder>() {
 
     private val selectedAnswers = mutableMapOf<String, String>() // Store selected answers
@@ -101,10 +103,13 @@ subTextView.textSize = 14f
                     // Unselect the option if already selected
                     selectedAnswers.remove(questionId)
                     onAnswerSelected(questionId, "")
+                    onOptionSelected.invoke()
                 } else {
                     // Store the option index as a string (e.g. "0", "1", etc.)
                     selectedAnswers[questionId] = "$index"
                     onAnswerSelected(questionId, "$index")
+                    onOptionSelected.invoke()
+
                 }
                 // Refresh the adapter so only one checkbox is selected.
                 notifyDataSetChanged()

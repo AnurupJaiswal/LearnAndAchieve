@@ -10,6 +10,7 @@ import android.net.Uri
 import android.util.Log
 
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.anurupjaiswal.learnandachieve.basic.retrofit.APIError
 import com.anurupjaiswal.learnandachieve.basic.retrofit.ApiService
 import com.anurupjaiswal.learnandachieve.basic.retrofit.Const
 import com.anurupjaiswal.learnandachieve.basic.retrofit.RetrofitClient
@@ -20,6 +21,7 @@ import com.anurupjaiswal.learnandachieve.databinding.FragmentTopicBinding
 import com.anurupjaiswal.learnandachieve.main_package.adapter.TopicAdapter
 import com.anurupjaiswal.learnandachieve.model.Topic
 import com.anurupjaiswal.learnandachieve.model.TopicResponse
+import com.google.gson.Gson
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -81,31 +83,42 @@ class TopicFragment : Fragment() {
     fun getTopics(moduleId: String, token: String) {
 
 
-        apiService?.getAllTopics(token, moduleId)?.enqueue(object :
-            Callback<TopicResponse> {
+        apiService?.getAllTopics(token, moduleId)?.enqueue(object : Callback<TopicResponse> {
             override fun onResponse(call: Call<TopicResponse>, response: Response<TopicResponse>) {
-                if (response.isSuccessful) {
-                    val topicResponse = response.body()
-                    topicResponse?.let {
-
-
-                        topicList.clear()
-                        topicList.addAll(it.topicList)
-
-                        if (topicList.isNotEmpty()) {
-                            val firstTopicName = topicList[0].topic_name
-                            binding.tvTopicName.text = firstTopicName
+                when (response.code()) {
+                    StatusCodeConstant.OK -> {
+                        response.body()?.let { topicResponse ->
+                            topicList.clear()
+                            topicList.addAll(topicResponse.topicList)
+                            if (topicList.isNotEmpty()) {
+                                binding.tvTopicName.text = topicList[0].topic_name
+                            }
+                            topicAdapter.notifyDataSetChanged()
                         }
-                        topicAdapter.notifyDataSetChanged()
                     }
-                } else {
-                    Log.e("API Error", "Code: ${response.code()}, Message: ${response.message()}")
+                    StatusCodeConstant.UNAUTHORIZED -> {
+                        Utils.E("getAllTopics UNAUTHORIZED: ${response.message()}")
+                        Utils.UnAuthorizationToken(requireContext())
+                    }
+                    StatusCodeConstant.BAD_REQUEST -> {
+                        response.errorBody()?.let { errorBody ->
+                            val apiError = Gson().fromJson(errorBody.charStream(), APIError::class.java)
+                            val displayMessage = apiError.error ?: "Bad Request Error"
+                            Utils.E("getAllTopics BAD_REQUEST: $displayMessage")
+                            Utils.T(requireContext(), displayMessage)
+                        }
+                    }
+                    else -> {
+                        Utils.E("getAllTopics Error: ${response.code()} - ${response.message()}")
+                    }
                 }
             }
 
             override fun onFailure(call: Call<TopicResponse>, t: Throwable) {
+                Utils.E("getAllTopics onFailure: ${t.message}")
             }
         })
+
     }
 
     override fun onDestroyView() {
