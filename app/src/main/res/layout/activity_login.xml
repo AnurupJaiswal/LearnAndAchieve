@@ -40,7 +40,6 @@
         android:text="@string/welcome_back"
         android:textColor="@color/white"
         android:textSize="25sp"
-
         />
 
 
@@ -56,10 +55,7 @@
         android:text="Login"
         android:textColor="@color/white"
         android:textSize="20sp"
-
         />
-
-
     <TextView
         android:id="@+id/tvLoginAccount"
         android:layout_width="wrap_content"
@@ -167,7 +163,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
-                android:fontFamily="@font/poppins_medium"
+                android:fontFamily="@font/gilroy_semibold"
                 android:includeFontPadding="false"
                 android:text="@string/forgot_password"
                 android:textColor="@color/blue"
@@ -246,7 +242,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginStart="2dp"
                 android:layout_toEndOf="@id/tvDontHave"
-                android:fontFamily="@font/gilroy_regular"
+                android:fontFamily="@font/gilroy_semibold"
                 android:includeFontPadding="false"
                 android:text="@string/sign_up"
                 android:textColor="@color/primaryColor"
@@ -263,9 +259,9 @@
     <ImageView
         android:id="@+id/ivPencil"
         android:layout_width="70dp"
-        android:layout_height="299dp"
+        android:layout_height="290dp"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="@dimen/_24sdp"
+        android:layout_marginTop="@dimen/_20sdp"
         android:layout_marginEnd="@dimen/_25sdp"
         android:adjustViewBounds="true"
         android:src="@drawable/ic_pencil" />

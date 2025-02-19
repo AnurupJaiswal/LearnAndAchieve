@@ -38,6 +38,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/tvStudentName"
+                android:layout_marginTop="@dimen/_2sdp"
                 android:fontFamily="@font/poppins_semi_bold"
                 android:text="Class 10 (English)"
                 android:textColor="@color/white"
@@ -55,8 +56,6 @@
                 app:strokeWidth="0dp">
 
 
-
-
                 <ImageView
                     android:id="@+id/ivProfile"
                     android:layout_width="40dp"
@@ -72,8 +71,8 @@
             android:id="@+id/rlPurchase"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingVertical="@dimen/_10sdp"
-            android:paddingHorizontal="@dimen/_10sdp">
+            android:paddingHorizontal="@dimen/_10sdp"
+            android:paddingVertical="@dimen/_10sdp">
 
 
             <TextView
@@ -91,9 +90,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/tvPackage"
+                android:layout_marginTop="@dimen/_5sdp"
                 android:fontFamily="@font/gilroy_regular"
                 android:includeFontPadding="false"
-                android:layout_marginTop="@dimen/_5sdp"
                 android:text="Explore Exclusive Package Tailored Just For You!"
                 android:textSize="11sp" />
 
@@ -102,8 +101,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
-
-                android:layout_centerVertical="true"
+ android:layout_alignEnd="@+id/tvPackage"
+                android:layout_marginEnd="@dimen/_10sdp"
                 android:src="@drawable/ic_package" />
         </RelativeLayout>
 
@@ -117,9 +116,9 @@
         <RelativeLayout
             android:id="@+id/rlStudentMaterial"
             android:layout_width="match_parent"
-            android:paddingVertical="@dimen/_10sdp"
             android:layout_height="wrap_content"
-            android:paddingHorizontal="@dimen/_10sdp">
+            android:paddingHorizontal="@dimen/_10sdp"
+            android:paddingVertical="@dimen/_10sdp">
 
 
             <TextView
@@ -137,10 +136,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_4sdp"
+                android:layout_marginTop="@dimen/_2sdp"
                 android:layout_toEndOf="@+id/tvStudyMaterial"
                 android:fontFamily="@font/gilroy_regular"
                 android:text="Basic"
-                android:layout_marginTop="@dimen/_2sdp"
                 android:textColor="@color/primaryColor"
                 android:textSize="12sp" />
 
@@ -148,10 +147,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/tvStudyMaterial"
+                android:layout_marginTop="@dimen/_5sdp"
                 android:fontFamily="@font/gilroy_regular"
                 android:includeFontPadding="false"
                 android:maxLines="1"
-                android:layout_marginTop="@dimen/_5sdp"
                 android:text="Watch Expert-Led Tutorials With Curated Youtube Links!"
                 android:textSize="11sp" />
 
@@ -160,7 +159,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
+                android:layout_alignEnd="@+id/tvStudyMaterial"
+                android:layout_marginEnd="@dimen/_10sdp"
+
                 android:src="@drawable/ic_study_materials"
                 app:tint="@color/primaryColor" />
         </RelativeLayout>
@@ -176,8 +177,8 @@
             android:id="@+id/rlMockTest"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-           android:paddingVertical="@dimen/_10sdp"
-            android:paddingHorizontal="@dimen/_10sdp">
+            android:paddingHorizontal="@dimen/_10sdp"
+            android:paddingVertical="@dimen/_10sdp">
 
 
             <TextView
@@ -195,10 +196,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/tvMockTest"
+                android:layout_marginTop="@dimen/_5sdp"
                 android:fontFamily="@font/gilroy_regular"
                 android:includeFontPadding="false"
                 android:maxLines="1"
-               android:layout_marginTop="@dimen/_5sdp"
 
                 android:text="Challenge YourSelf With Real-Time Mock Tests!"
                 android:textSize="11sp" />
@@ -208,8 +209,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
+                android:layout_alignEnd="@+id/tvMockTest"
                 android:src="@drawable/ic_mock"
+                android:layout_marginEnd="@dimen/_10sdp"
+
                 app:tint="@color/primaryColor" />
         </RelativeLayout>
 
@@ -220,12 +223,57 @@
             android:background="#f0ecec" />
 
 
+
+
+        <RelativeLayout
+            android:id="@+id/rlPradnyaTab"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_50sdp"
+            android:visibility="gone"
+            android:background="@drawable/pradnya_learnitics_tab"
+            android:paddingHorizontal="@dimen/_10sdp"
+            android:paddingVertical="@dimen/_10sdp">
+
+            <TextView
+                android:id="@+id/tvPradnya"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins_semi_bold"
+                android:includeFontPadding="false"
+                android:text="@string/pradnya_learnitics"
+                android:textColor="@color/white"
+                android:textSize="14sp" />
+
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tvPradnya"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:fontFamily="@font/gilroy_regular"
+                android:includeFontPadding="false"
+                android:maxLines="1"
+android:textColor="@color/white"
+                android:text="Unlock Premium Content with Our Paid Syllabus"
+                android:textSize="11sp" />
+
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+android:layout_alignEnd="@+id/tvPradnya"
+                android:layout_alignParentEnd="true"
+                android:src="@drawable/ic_crown"
+                android:layout_marginEnd="@dimen/_10sdp" />
+        </RelativeLayout>
+
         <RelativeLayout
             android:id="@+id/rlOderHistory"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-           android:paddingVertical="@dimen/_10sdp"
-            android:paddingHorizontal="@dimen/_10sdp">
+            android:paddingHorizontal="@dimen/_10sdp"
+            android:paddingVertical="@dimen/_10sdp">
 
 
             <TextView
@@ -233,7 +281,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/poppins_semi_bold"
-
                 android:includeFontPadding="false"
                 android:text="Oder History"
                 android:textColor="@color/black"
@@ -244,10 +291,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/tvOrderHistory"
+                android:layout_marginTop="@dimen/_5sdp"
                 android:fontFamily="@font/gilroy_regular"
                 android:includeFontPadding="false"
                 android:maxLines="1"
-               android:layout_marginTop="@dimen/_5sdp"
 
                 android:text="Review Your Purchases Anytime In Oder History!"
                 android:textSize="11sp" />
@@ -257,8 +304,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
                 android:src="@drawable/ic_package"
+                android:layout_marginEnd="@dimen/_10sdp"
+android:layout_alignEnd="@+id/tvOrderHistory"
                 app:tint="@color/primaryColor" />
         </RelativeLayout>
 
@@ -273,8 +321,8 @@
             android:id="@+id/rlChangePass"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-           android:paddingVertical="@dimen/_10sdp"
-            android:paddingHorizontal="@dimen/_10sdp">
+            android:paddingHorizontal="@dimen/_10sdp"
+            android:paddingVertical="@dimen/_10sdp">
 
 
             <TextView
@@ -293,10 +341,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/tvChangePass"
+                android:layout_marginTop="@dimen/_5sdp"
                 android:fontFamily="@font/gilroy_regular"
                 android:includeFontPadding="false"
                 android:maxLines="1"
-               android:layout_marginTop="@dimen/_5sdp"
 
                 android:text="Secure Your Account: Update Your Password Here !"
                 android:textSize="11sp" />
@@ -306,7 +354,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
+android:layout_alignEnd="@+id/tvChangePass"
+                android:layout_marginEnd="@dimen/_10sdp"
                 android:src="@drawable/ic_change_password"
                 app:tint="@color/primaryColor" />
         </RelativeLayout>
@@ -321,8 +370,8 @@
             android:id="@+id/rlProfile"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-           android:paddingVertical="@dimen/_10sdp"
-            android:paddingHorizontal="@dimen/_10sdp">
+            android:paddingHorizontal="@dimen/_10sdp"
+            android:paddingVertical="@dimen/_10sdp">
 
 
             <TextView
@@ -341,10 +390,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/tvProfile"
+                android:layout_marginTop="@dimen/_5sdp"
                 android:fontFamily="@font/gilroy_regular"
                 android:includeFontPadding="false"
                 android:maxLines="1"
-               android:layout_marginTop="@dimen/_5sdp"
 
                 android:text="Manage Your Details And Preference In Your Profile !"
                 android:textSize="11sp" />
@@ -354,7 +403,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
+                android:layout_marginEnd="@dimen/_10sdp"
+ android:layout_alignEnd="@+id/tvProfile"
                 android:src="@drawable/ic_profile_orange"
                 app:tint="@color/primaryColor" />
         </RelativeLayout>
@@ -370,8 +420,8 @@
             android:id="@+id/rlDeleteAccount"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-           android:paddingVertical="@dimen/_10sdp"
-            android:paddingHorizontal="@dimen/_10sdp">
+            android:paddingHorizontal="@dimen/_10sdp"
+            android:paddingVertical="@dimen/_10sdp">
 
             <TextView
                 android:id="@+id/tvDelete"
@@ -389,11 +439,11 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/tvDelete"
                 android:layout_alignParentStart="true"
+                android:layout_marginTop="@dimen/_5sdp"
                 android:layout_toStartOf="@+id/ic_Delete"
                 android:fontFamily="@font/gilroy_regular"
                 android:includeFontPadding="false"
                 android:maxLines="2"
-               android:layout_marginTop="@dimen/_5sdp"
                 android:text="Take control of your data—easily delete your account anytime."
                 android:textSize="11sp" />
 
@@ -403,12 +453,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
+                android:layout_alignEnd="@+id/tvDelete"
+                android:layout_marginEnd="@dimen/_10sdp"
+
                 android:src="@drawable/ic_delete_bin"
                 app:tint="@color/primaryColor" />
         </RelativeLayout>
-
-
 
 
         <LinearLayout
@@ -422,8 +472,8 @@
                 android:id="@+id/rlJoinAndEarn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingVertical="@dimen/_10sdp"
-                android:paddingHorizontal="@dimen/_10sdp">
+                android:paddingHorizontal="@dimen/_10sdp"
+                android:paddingVertical="@dimen/_10sdp">
 
 
                 <TextView
@@ -442,10 +492,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/tvJoinAndEarn"
+                    android:layout_marginTop="@dimen/_5sdp"
                     android:fontFamily="@font/gilroy_regular"
                     android:includeFontPadding="false"
                     android:maxLines="1"
-                   android:layout_marginTop="@dimen/_5sdp"
                     android:text="Join Now And Start Earning Rewards For Your Learning!"
                     android:textSize="11sp" />
 
@@ -454,7 +504,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
+                    android:layout_alignEnd="@id/tvJoinAndEarn"
+                    android:layout_marginEnd="@dimen/_10sdp"
                     android:src="@drawable/ic_join_earn"
                     app:tint="@color/primaryColor" />
             </RelativeLayout>
@@ -470,8 +521,8 @@
                 android:id="@+id/rlBharatSATScholar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingVertical="@dimen/_10sdp"
-                android:paddingHorizontal="@dimen/_10sdp">
+                android:paddingHorizontal="@dimen/_10sdp"
+                android:paddingVertical="@dimen/_10sdp">
 
 
                 <TextView
@@ -490,10 +541,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/tvBharatSATScholar"
+                    android:layout_marginTop="@dimen/_5sdp"
                     android:fontFamily="@font/gilroy_regular"
                     android:includeFontPadding="false"
                     android:maxLines="2"
-                   android:layout_marginTop="@dimen/_5sdp"
                     android:text="The Bharat SAT Scholarship And Unlock Your Potential!"
                     android:textSize="11sp" />
 
@@ -502,7 +553,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
+                    android:layout_alignEnd="@id/tvBharatSATScholar"
+                    android:layout_marginEnd="@dimen/_10sdp"
                     android:src="@drawable/ic_bharat_scholor"
                     app:tint="@color/primaryColor" />
             </RelativeLayout>
@@ -518,8 +570,9 @@
                 android:id="@+id/rlBharatSAT"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingVertical="@dimen/_10sdp"
-                android:paddingHorizontal="@dimen/_10sdp">
+                android:paddingHorizontal="@dimen/_10sdp"
+                android:paddingVertical="@dimen/_10sdp">
+
                 <TextView
                     android:id="@+id/tvBharatSAT"
                     android:layout_width="wrap_content"
@@ -536,10 +589,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/tvBharatSAT"
+                    android:layout_marginTop="@dimen/_5sdp"
                     android:fontFamily="@font/gilroy_regular"
                     android:includeFontPadding="false"
                     android:maxLines="2"
-                   android:layout_marginTop="@dimen/_5sdp"
                     android:text="Discover Key Deatails About The Bharat SAT EXAM Here !"
                     android:textSize="11sp" />
 
@@ -548,7 +601,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:layout_alignEnd="@id/tvBharatSAT"
+
                     android:src="@drawable/ic_bharat_sat"
                     app:tint="@color/primaryColor" />
             </RelativeLayout>
@@ -559,7 +614,6 @@
                 android:layout_marginHorizontal="@dimen/_10sdp"
                 android:background="#DADADA" />
         </LinearLayout>
-
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -575,9 +629,9 @@
                 android:id="@+id/logo"
                 android:layout_width="60dp"
                 android:layout_height="28dp"
+                android:layout_marginVertical="@dimen/_10sdp"
                 android:contentDescription="Logo"
                 android:scaleType="centerCrop"
-                android:layout_marginVertical="@dimen/_10sdp"
                 android:src="@drawable/learn_and_achieve_logo" />
 
 
@@ -601,11 +655,9 @@
                     <com.google.android.material.card.MaterialCardView
                         android:layout_width="@dimen/_30sdp"
                         android:layout_height="@dimen/_30sdp"
-                        app:strokeWidth="0dp"
                         app:cardBackgroundColor="#3D3D3D"
-                        app:cardCornerRadius="@dimen/_15sdp">
-
-
+                        app:cardCornerRadius="@dimen/_15sdp"
+                        app:strokeWidth="0dp">
 
 
                         <ImageView
@@ -628,7 +680,6 @@
                         android:textSize="12sp" />
                 </LinearLayout>
 
-                <!-- Our Services -->
                 <LinearLayout
                     android:id="@+id/llOurServices"
                     android:layout_width="0dp"
@@ -640,15 +691,12 @@
                     android:orientation="vertical">
 
 
-
                     <com.google.android.material.card.MaterialCardView
                         android:layout_width="@dimen/_30sdp"
                         android:layout_height="@dimen/_30sdp"
-                        app:strokeWidth="0dp"
                         app:cardBackgroundColor="#3D3D3D"
-                        app:cardCornerRadius="@dimen/_15sdp">
-
-
+                        app:cardCornerRadius="@dimen/_15sdp"
+                        app:strokeWidth="0dp">
 
 
                         <ImageView
@@ -675,26 +723,22 @@
 
 
                 <LinearLayout
+                    android:id="@+id/llFAQ"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_gravity="end"
                     android:layout_margin="8dp"
                     android:layout_weight="1"
-                    android:id="@+id/llFAQ"
                     android:gravity="center"
                     android:orientation="vertical">
-
-
 
 
                     <com.google.android.material.card.MaterialCardView
                         android:layout_width="@dimen/_30sdp"
                         android:layout_height="@dimen/_30sdp"
-                        app:strokeWidth="0dp"
                         app:cardBackgroundColor="#3D3D3D"
-                        app:cardCornerRadius="@dimen/_15sdp">
-
-
+                        app:cardCornerRadius="@dimen/_15sdp"
+                        app:strokeWidth="0dp">
 
 
                         <ImageView
@@ -705,7 +749,6 @@
                             android:src="@drawable/ic_faq"
                             tools:ignore="ContentDescription" />
                     </com.google.android.material.card.MaterialCardView>
-
 
 
                     <TextView
@@ -727,9 +770,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_10sdp"
+                android:baselineAligned="false"
                 android:orientation="horizontal"
-                android:weightSum="3"
-                android:baselineAligned="false">
+                android:weightSum="3">
 
                 <LinearLayout
                     android:id="@+id/llTermsAndConditions"
@@ -742,15 +785,12 @@
                     android:orientation="vertical">
 
 
-
-
                     <com.google.android.material.card.MaterialCardView
                         android:layout_width="@dimen/_30sdp"
                         android:layout_height="@dimen/_30sdp"
-                        app:strokeWidth="0dp"
                         app:cardBackgroundColor="#3D3D3D"
-                        app:cardCornerRadius="@dimen/_15sdp">
-
+                        app:cardCornerRadius="@dimen/_15sdp"
+                        app:strokeWidth="0dp">
 
 
                         <ImageView
@@ -761,10 +801,7 @@
                             android:src="@drawable/ic_terms" />
 
 
-
                     </com.google.android.material.card.MaterialCardView>
-
-
 
 
                     <TextView
@@ -795,11 +832,9 @@
                     <com.google.android.material.card.MaterialCardView
                         android:layout_width="@dimen/_30sdp"
                         android:layout_height="@dimen/_30sdp"
-                        app:strokeWidth="0dp"
                         app:cardBackgroundColor="#3D3D3D"
-                        app:cardCornerRadius="@dimen/_15sdp">
-
-
+                        app:cardCornerRadius="@dimen/_15sdp"
+                        app:strokeWidth="0dp">
 
 
                         <ImageView
@@ -838,11 +873,9 @@
                     <com.google.android.material.card.MaterialCardView
                         android:layout_width="@dimen/_30sdp"
                         android:layout_height="@dimen/_30sdp"
-                        app:strokeWidth="0dp"
                         app:cardBackgroundColor="#3D3D3D"
-                        app:cardCornerRadius="@dimen/_15sdp">
-
-
+                        app:cardCornerRadius="@dimen/_15sdp"
+                        app:strokeWidth="0dp">
 
 
                         <ImageView

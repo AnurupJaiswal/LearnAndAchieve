@@ -36,10 +36,10 @@
 
 
             <ImageView
+                android:id="@+id/ivFileDowload"
                 android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/ic_file_dowload"
-                />
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_file_dowload" />
         </LinearLayout>
 
 

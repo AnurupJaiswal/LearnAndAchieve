@@ -13,7 +13,7 @@
     <LinearLayout
         android:id="@+id/llMain"
         android:layout_width="match_parent"
-        android:visibility="gone"
+        android:visibility="visible"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
@@ -48,14 +48,22 @@
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/mcvSumit"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="@dimen/_100sdp"
+                android:layout_height="@dimen/_40sdp"
                 android:layout_alignParentEnd="true"
                 android:gravity="end"
                 app:cardBackgroundColor="@color/green"
                 app:cardCornerRadius="@dimen/_7sdp"
                 app:strokeWidth="0dp">
 
+                <ProgressBar
+                    android:id="@+id/loading"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center"
+                    android:layout_centerInParent="true"
+                    android:indeterminateTint="@android:color/white"
+                    android:visibility="gone" />
                 <TextView
 
                     android:layout_width="wrap_content"
@@ -63,9 +71,8 @@
                     android:layout_gravity="center"
                     android:fontFamily="@font/gilroy_semibold"
                     android:includeFontPadding="false"
-                    android:paddingHorizontal="@dimen/_20sdp"
-                    android:paddingVertical="@dimen/_10sdp"
                     android:text="Submit Test"
+                    android:id="@+id/tvSumit"
                     android:textColor="@color/white"
                     android:textSize="16sp" />
             </com.google.android.material.card.MaterialCardView>

@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.c#EFF5FFom/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="@dimen/_10sdp"
+    android:layout_margin="@dimen/_13sdp"
     android:background="@color/mock_test_card_bg"
     android:orientation="vertical"
     app:strokeWidth="0dp">
@@ -39,14 +39,26 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.7dp"
+                android:layout_marginTop="@dimen/_7sdp"
                 android:background="#D7E6FF" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_5sdp"
                 android:layout_gravity="center_vertical"
                 android:background="@color/mock_test_card_bg"
                 android:paddingVertical="@dimen/_3sdp">
+
+
+
+                <View
+
+                    android:id="@+id/circularView"
+                    android:layout_width="5dp"
+                    android:layout_height="5dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/circle_gray_mock_test"/>
 
 
                 <TextView
@@ -57,7 +69,7 @@
                     android:includeFontPadding="false"
                     android:text="Subjects:"
                     android:textColor="@color/grey"
-
+                    android:layout_marginStart="@dimen/_5sdp"
                     android:textSize="14sp" />
 
                 <TextView
@@ -80,8 +92,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:paddingVertical="@dimen/_3sdp">
+                android:layout_marginTop="@dimen/_5sdp"
+                >
+                <View
 
+                    android:id="@+id/circularView2"
+                    android:layout_width="5dp"
+                    android:layout_height="5dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/circle_gray_mock_test"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -89,6 +108,7 @@
                     android:fontFamily="@font/gilroy_medium"
                     android:includeFontPadding="false"
                     android:text="Total Questions:"
+                    android:layout_marginStart="@dimen/_5sdp"
                     android:textColor="@color/grey"
                     android:textSize="14sp" />
 
@@ -112,8 +132,14 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingVertical="@dimen/_3sdp">
-
+                android:layout_marginTop="@dimen/_5sdp"
+                >
+                <View
+                    android:id="@+id/circularView3"
+                    android:layout_width="5dp"
+                    android:layout_height="5dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/circle_gray_mock_test"/>
 
                 <TextView
 
@@ -122,6 +148,7 @@
                     android:fontFamily="@font/gilroy_medium"
                     android:includeFontPadding="false"
                     android:text="Time:"
+                    android:layout_marginStart="@dimen/_5sdp"
                     android:textColor="@color/grey"
                     android:textSize="14sp" />
 
@@ -144,8 +171,14 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingVertical="@dimen/_3sdp">
+                android:layout_marginTop="@dimen/_5sdp">
 
+                <View
+                    android:id="@+id/circularView4"
+                    android:layout_width="5dp"
+                    android:layout_height="5dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/circle_gray_mock_test"/>
 
                 <TextView
 
@@ -154,6 +187,7 @@
                     android:fontFamily="@font/gilroy_medium"
                     android:includeFontPadding="false"
                     android:text="No of Attempts:"
+                    android:layout_marginStart="@dimen/_5sdp"
                     android:textColor="@color/grey"
                     android:textSize="14sp" />
 
@@ -178,16 +212,19 @@
                 android:layout_width="match_parent"
                 android:layout_height="0.7dp"
                 android:background="#D7E6FF"
+
+                android:layout_marginTop="@dimen/_7sdp"
                 android:paddingVertical="@dimen/_3sdp" />
 
             <TextView
 
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/gilroy_regular"
+                android:fontFamily="@font/poppins_regular"
                 android:includeFontPadding="false"
                 android:paddingVertical="@dimen/_3sdp"
                 android:text="Note:"
+                android:layout_marginTop="@dimen/_8sdp"
                 android:textColor="@color/black"
                 android:textSize="14sp"
                 android:textStyle="italic" />

@@ -9,8 +9,8 @@
 >
 
     <com.google.android.material.card.MaterialCardView
-        android:layout_width="80dp"
-        android:layout_height="90dp"
+        android:layout_width="@dimen/_68sdp"
+        android:layout_height="@dimen/_75sdp"
         android:elevation="@dimen/_10sdp"
         app:cardBackgroundColor="@color/white"
         app:cardCornerRadius="@dimen/_10sdp"
@@ -20,26 +20,20 @@
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
-
             <ImageView
                 android:id="@+id/subjectIcon"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/_140sdp"
+                android:layout_width="@dimen/_68sdp"
+                android:layout_height="@dimen/_75sdp"
                 android:layout_alignParentTop="true"
                 android:contentDescription="@string/image"
                 android:scaleType="centerCrop"
                 android:src="@drawable/subjecttest" />
-
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@id/subjectIcon"
                 android:background="#59000000"
                 android:orientation="horizontal">
-
-
-
-
                 <TextView
                     android:id="@+id/subjectName"
                     android:layout_width="wrap_content"

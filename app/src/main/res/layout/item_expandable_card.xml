@@ -5,7 +5,7 @@
     android:layout_margin="8dp"
     app:cardCornerRadius="8dp"
     android:id="@+id/cardView"
-    app:cardElevation="3dp"
+    app:cardElevation="2dp"
     app:cardBackgroundColor="@color/lightBg">
 
     <LinearLayout
@@ -26,7 +26,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Title"
-                android:textSize="16sp"
+                android:textSize="14sp"
                 android:includeFontPadding="false"
                 android:fontFamily="@font/gilroy_semibold"
                 android:textColor="@color/midnight_blue"/>
@@ -39,7 +39,6 @@
                 android:rotation="0"/>
         </LinearLayout>
 
-
         <TextView
             android:id="@+id/descriptionTextView"
             android:layout_width="match_parent"
@@ -49,5 +48,6 @@
             android:textSize="14sp"
             android:visibility="gone"
             android:textColor="#2A2A2A"/>
+
     </LinearLayout>
 </androidx.cardview.widget.CardView>

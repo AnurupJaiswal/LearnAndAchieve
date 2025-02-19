@@ -68,10 +68,8 @@
                 android:background="@drawable/ic_notification_circle"
                 android:contentDescription="@string/todo" />
         </RelativeLayout>
-        <!-- Shop Icon with Badge -->
 
 
-        <!-- Shop Icon -->
         <ImageView
             android:id="@+id/shopIcon"
             android:layout_width="20dp"
@@ -191,7 +189,7 @@
             android:layout_height="51dp"
             android:layout_centerHorizontal="true"
             android:scaleType="centerInside"
-            android:src="@drawable/ic_premium"
+            android:src="@drawable/ic_premium_white"
             tools:ignore="ContentDescription" />
     </RelativeLayout>
 

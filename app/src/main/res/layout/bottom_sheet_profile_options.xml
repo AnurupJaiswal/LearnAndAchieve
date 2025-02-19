@@ -16,10 +16,11 @@
         <!-- Indicator -->
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/mcvIndicator"
-            android:layout_width="45dp"
-            android:layout_height="7dp"
+            android:layout_width="@dimen/_35sdp"
+            android:layout_height="6dp"
             android:layout_centerHorizontal="true"
-            app:cardBackgroundColor="#465D61"
+            app:cardBackgroundColor="@color/primaryColor"
+            app:cardCornerRadius="@dimen/_6sdp"
             app:strokeColor="@color/white" />
 
         <!-- Change Profile Option -->
@@ -34,21 +35,22 @@
                 android:id="@+id/tvChangeProfile"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
                 android:layout_marginTop="3dp"
                 android:text="@string/change_profile"
-                android:textColor="#0D1B1D"
+                android:textColor="@color/black"
+                android:fontFamily="@font/gilroy_bold"
+
                 android:textSize="14sp"
-                android:fontFamily="@font/gilroy_medium" />
+        />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/tvChangeProfile"
-                android:layout_marginStart="8dp"
                 android:text="@string/change_your_profile_photo"
-                android:textColor="#465D61"
+                android:textColor="@color/primaryColor"
                 android:textSize="12sp"
+                android:paddingVertical="@dimen/_2sdp"
                 android:fontFamily="@font/gilroy_regular" />
         </RelativeLayout>
 
@@ -64,21 +66,21 @@
                 android:id="@+id/tvDeleteProfile"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
                 android:layout_marginTop="3dp"
                 android:text="@string/delete_profile"
                 android:textColor="#0D1B1D"
                 android:textSize="14sp"
-                android:fontFamily="@font/gilroy_medium" />
+                android:fontFamily="@font/gilroy_bold" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/tvDeleteProfile"
-                android:layout_marginStart="8dp"
                 android:text="@string/remove_your_profile_photo"
-                android:textColor="#465D61"
+                android:textColor="@color/primaryColor"
                 android:textSize="12sp"
+                android:paddingVertical="@dimen/_2sdp"
+
                 android:fontFamily="@font/gilroy_regular" />
         </RelativeLayout>
     </RelativeLayout>

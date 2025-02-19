@@ -28,7 +28,7 @@
                 android:fontFamily="@font/gilroy_semibold"
                 android:text="Join and Earn"
                 android:textColor="@color/blue"
-                android:textSize="18sp" />
+                android:textSize="20sp" />
 
             <!-- Who Can Join Section -->
             <TextView
@@ -36,7 +36,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_5sdp"
                 android:layout_marginTop="@dimen/_10sdp"
-                android:fontFamily="@font/gilroy_semibold"
+                android:fontFamily="@font/gilroy_bold"
                 android:text="Who Can Join?"
                 android:textColor="@color/black"
                 android:textSize="18sp" />
@@ -47,6 +47,7 @@
                 android:layout_marginStart="@dimen/_5sdp"
                 android:layout_marginTop="@dimen/_10sdp"
                 android:fontFamily="@font/gilroy_regular"
+                android:lineSpacingExtra="@dimen/_5sdp"
                 android:text="If you're 18 years or older and have completed your 12th grade, you're eligible to join us as a Coordinator. Your age and qualification are your assets in this endeavor."
                 android:textColor="@color/black"
                 android:textSize="14sp" />
@@ -67,6 +68,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/gilroy_regular"
                     android:padding="@dimen/_10sdp"
+                    android:lineSpacingExtra="@dimen/_5sdp"
                     android:text="Are you a passionate individual looking to make a positive impact on the education landscape? Are you motivated to empower students in their quest for success? If so, we invite you to become a Coordinator with Learn and Achieve Edutech, where opportunities abound and your potential is unlimited."
                     android:textColor="@color/black"
                     android:textSize="14sp" />
@@ -86,7 +88,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/gilroy_semibold"
+                android:fontFamily="@font/gilroy_bold"
                 android:text="Two Exciting Categories"
                 android:textColor="@color/black"
                 android:textSize="18sp" />
@@ -123,6 +125,8 @@
                 android:baselineAligned="false"
                 android:fontFamily="@font/gilroy_regular"
                 android:includeFontPadding="false"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:lineSpacingExtra="@dimen/_5sdp"
                 android:text="As a Direct Coordinator, you'll directly engage with parents and students, helping them register for the prestigious BHARAT SAT Examination and offering our top-notch online study materials. Be the guiding light on their educational journey."
                 android:textColor="@color/midnight_blue"
                 android:textSize="14sp" />
@@ -159,8 +163,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_4ssp"
                 android:baselineAligned="false"
+                android:layout_marginTop="@dimen/_5sdp"
+
                 android:fontFamily="@font/gilroy_regular"
                 android:includeFontPadding="false"
+                android:lineSpacingExtra="@dimen/_5sdp"
                 android:text="If you prefer working with schools, our Indirect Coordinator role is perfect for you. Collaborate with our Learn and Achieve Edutech team to enroll students in the BHARAT SAT Examination through their schools. Team up with us to make education accessible to all."
                 android:textColor="@color/midnight_blue"
                 android:textSize="14sp" />
@@ -182,12 +189,11 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_15sdp"
                 android:fontFamily="@font/gilroy_semibold"
                 android:includeFontPadding="false"
                 android:text="Join Us"
                 android:textColor="@color/white"
-
                 android:textSize="18sp" />
 
 

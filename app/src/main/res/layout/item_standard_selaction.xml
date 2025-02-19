@@ -10,7 +10,7 @@
         android:id="@+id/ivTick"
         android:layout_width="@dimen/_20sdp"
         android:layout_height="@dimen/_20sdp"
-        android:src="@drawable/ic_tick"
+        android:src="@drawable/ic_simple_tick"
         android:layout_gravity="center"
         android:layout_marginEnd="8dp"
         />

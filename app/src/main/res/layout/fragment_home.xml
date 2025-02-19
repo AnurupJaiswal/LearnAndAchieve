@@ -200,7 +200,7 @@
                             android:lineSpacingExtra="@dimen/_5sdp"
                             android:text="A blog is an informational website  of discrete"
                             android:textColor="@android:color/white"
-                            android:textSize="16sp" />
+                            android:textSize="14sp" />
 
                         <com.google.android.material.card.MaterialCardView
                             android:layout_width="48dp"
@@ -257,7 +257,7 @@
 
                             android:text="A blog is an informational website  of discrete"
                             android:textColor="#013A74"
-                            android:textSize="16sp" />
+                            android:textSize="14sp" />
 
                         <com.google.android.material.card.MaterialCardView
                             android:layout_width="48dp"
@@ -323,7 +323,7 @@
 
                             android:text="A blog is an informational website  of discrete"
                             android:textColor="#013A74"
-                            android:textSize="16sp" />
+                            android:textSize="14sp" />
 
                         <com.google.android.material.card.MaterialCardView
                             android:layout_width="48dp"
@@ -380,7 +380,7 @@
                             android:includeFontPadding="false"
                             android:text="A blog is an informational website f discrete"
                             android:textColor="@android:color/white"
-                            android:textSize="16sp" />
+                            android:textSize="14sp" />
 
                         <com.google.android.material.card.MaterialCardView
                             android:layout_width="48dp"
