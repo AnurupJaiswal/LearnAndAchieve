@@ -1,10 +1,16 @@
 package com.anurupjaiswal.learnandachieve.main_package.ui.fragment
 
+import android.content.ContentValues.TAG
+import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
@@ -17,12 +23,15 @@ import com.anurupjaiswal.learnandachieve.basic.utilitytools.NavigationManager
 import com.anurupjaiswal.learnandachieve.basic.utilitytools.StatusCodeConstant
 import com.anurupjaiswal.learnandachieve.basic.utilitytools.Utils
 import com.anurupjaiswal.learnandachieve.basic.utilitytools.Utils.E
+import com.anurupjaiswal.learnandachieve.basic.validation.Validation
+import com.anurupjaiswal.learnandachieve.basic.validation.ValidationModel
 import com.anurupjaiswal.learnandachieve.databinding.FragmentCartBinding
 import com.anurupjaiswal.learnandachieve.main_package.adapter.CartAdapter
 import com.anurupjaiswal.learnandachieve.main_package.ui.activity.DashboardActivity
 import com.anurupjaiswal.learnandachieve.model.AllCartResponse
 import com.anurupjaiswal.learnandachieve.model.CartItem
 import com.anurupjaiswal.learnandachieve.model.CartSummary
+import com.anurupjaiswal.learnandachieve.model.CheckReferralResponse
 import com.anurupjaiswal.learnandachieve.model.DeleteCartResponse
 import com.google.gson.Gson
 
@@ -30,12 +39,14 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class CartFragment : Fragment() {
+class CartFragment : Fragment(), View.OnClickListener  {
 
     private var _binding: FragmentCartBinding? = null
     private val binding get() = _binding!!
-
+    private val errorValidationModels = mutableListOf<ValidationModel>()
+ private  var  isReferralApplied : Boolean = false
     private val cartItems = mutableListOf<CartItem>()
+    private var currentSummary: CartSummary? = null
 
     private lateinit var navController: NavController
 
@@ -54,9 +65,10 @@ class CartFragment : Fragment() {
         val dashboardActivity = requireActivity() as DashboardActivity
         navController = dashboardActivity.navController
         binding.lbProceed.setOnClickListener {
-            NavigationManager.navigateToFragment(
-                navController, R.id.CheckoutFragment
-            )
+            val bundle = Bundle().apply {
+                putBoolean("isReferralApplied", isReferralApplied)
+            }
+            NavigationManager.navigateToFragment(navController, R.id.CheckoutFragment,bundle)
 
         }
 
@@ -80,13 +92,15 @@ class CartFragment : Fragment() {
 
 
         fetchCartData()
+
+         binding.mcvApply.setOnClickListener(this)
     }
 
     private fun setupRecyclerView() {
         val cartAdapter = CartAdapter(cartItems,true) { position ->
-
-                  handleDelete(position)
+            handleDelete(position)
         }
+
         binding.recyclerViewCart.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerViewCart.adapter = cartAdapter
     }
@@ -111,6 +125,7 @@ class CartFragment : Fragment() {
                                     isCartEmpty(false)
                                     updateCartCount(it.cartCount)
                                     updateCartList(it.cartList ?: emptyList())
+                                    currentSummary = it.summary
                                     it.summary?.let { summary -> updateSummary(summary) }
                                 }
                             }
@@ -138,7 +153,6 @@ class CartFragment : Fragment() {
         })
     }
 
-
     private fun updateCartList(cartList: List<CartItem>) {
         cartItems.clear()
         cartItems.addAll(cartList)
@@ -146,11 +160,14 @@ class CartFragment : Fragment() {
     }
 
     private fun updateSummary(summary: CartSummary) {
-
+        binding.tvTotal.text = "₹${if (isReferralApplied) summary.grandTotalCoordinator else summary.grandTotal ?: "0.0"}"
         binding.tvSubtotal.text = "₹${summary.subTotal ?: "0.0"}"
+        binding.llDiscount.apply {
+            visibility = if (isReferralApplied) View.VISIBLE else View.GONE
+        }
         binding.tvDiscount.text = "- ₹${summary.discountAmt ?: "0.0"}"
-        binding.tvTotal.text = "₹${summary.grandTotal ?: "0.0"}"
     }
+
 
     private fun handleDelete(cartID: String) {
         showLoading()
@@ -196,6 +213,81 @@ class CartFragment : Fragment() {
     }
 
 
+    private fun checkReferralCode(referralCode: String) {
+        Utils.toggleProgressBarAndText(true, binding.referralloading, binding.tvApply, binding.root)
+
+
+        val referralData = hashMapOf<String, String>().apply {
+            put("referralCode", referralCode)
+        }
+
+
+        val authToken = "Bearer ${Utils.GetSession().token}"
+
+
+        apiService.checkReferralCode(authToken, referralData).enqueue(object : Callback<CheckReferralResponse> {
+            override fun onResponse(
+                call: Call<CheckReferralResponse>,
+                response: Response<CheckReferralResponse>
+            ) {
+                try {
+                    when (response.code()) {
+                        StatusCodeConstant.OK -> {
+                            // Successful response
+                            response.body()?.let { checkReferralResponse ->
+                                E("Response: ${checkReferralResponse.message}")
+                                Utils.T(requireContext(),checkReferralResponse.message)
+                                Utils.toggleProgressBarAndText(false, binding.referralloading, binding.tvApply, binding.root)
+                                isReferralApplied = true
+                                currentSummary?.let { updateSummary(it) }
+
+                            }
+                        }
+                        StatusCodeConstant.UNAUTHORIZED -> {
+                            isReferralApplied = false
+                            currentSummary?.let { updateSummary(it) }
+
+                            Utils.toggleProgressBarAndText(false, binding.referralloading, binding.tvApply, binding.root)
+                            E("Unauthorized: ${response.message()}")
+                            Utils.UnAuthorizationToken(requireContext())
+                        }
+                        StatusCodeConstant.BAD_REQUEST -> {
+                            Utils.toggleProgressBarAndText(false, binding.referralloading, binding.tvApply, binding.root)
+                            isReferralApplied = false
+                            currentSummary?.let { updateSummary(it) }
+                            response.errorBody()?.let { errorBody ->
+                                val apiError = Gson().fromJson(errorBody.charStream(), APIError::class.java)
+                                val displayMessage = apiError.error ?: "Unknown error"
+                                Utils.T(requireContext(), displayMessage)
+                                E(displayMessage)
+                            }
+                        }
+                        else -> {
+                            isReferralApplied = false
+                            Utils.toggleProgressBarAndText(false, binding.referralloading, binding.tvApply, binding.root)
+                            response.errorBody()?.let { errorBody ->
+                                val apiError = Gson().fromJson(errorBody.charStream(), APIError::class.java)
+                                val errorMessage = apiError.error ?: "Something went wrong"
+                               E( "Response: $errorMessage")
+                            }
+                        }
+                    }
+                } catch (e: Exception) {
+                    Utils.toggleProgressBarAndText(false, binding.referralloading, binding.tvApply, binding.root)
+                    e.printStackTrace()
+                   E( "An error occurred: ${e.message}")
+                }
+            }
+            override fun onFailure(call: Call<CheckReferralResponse>, t: Throwable) {
+                Utils.toggleProgressBarAndText(false, binding.referralloading, binding.tvApply, binding.root)
+
+                E("Error: ${t.message}")
+            }
+        })
+    }
+
+
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
@@ -214,7 +306,6 @@ class CartFragment : Fragment() {
         binding.progressBar.visibility = View.GONE
     }
 
-
     private fun updateCartCount(cartCount:Int) {
         (context as? DashboardActivity)?.updateCartCount(cartCount)
     }
@@ -230,6 +321,44 @@ class CartFragment : Fragment() {
             binding.llEmptyCartLayout.visibility = View.GONE
         }
     }
+
+
+
+    override fun onClick(view: View) {
+        if (view == binding.mcvApply) {
+
+            errorValidationModels.clear()
+            errorValidationModels.add(
+                ValidationModel(
+                    Validation.Type.Empty, binding.etReferral, binding.tvRefferralEror
+                )
+            )
+
+
+
+            val validation = Validation.instance
+            val validationResult = validation?.CheckValidation(requireContext(), errorValidationModels)
+
+            if (validationResult?.aBoolean == true) {
+                checkReferralCode(binding.etReferral.text.toString().trim())
+            } else {
+                binding.tvRefferralEror.visibility = View.VISIBLE
+                binding.tvRefferralEror.text =
+                    validationResult?.errorMessage ?: validation?.errorMessage
+                binding.tvRefferralEror.startAnimation(
+                    AnimationUtils.loadAnimation(requireContext(), R.anim.top_to_bottom)
+                )
+
+                validation?.EditTextPointer?.requestFocus()
+                val imm = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.showSoftInput(validation?.EditTextPointer, InputMethodManager.SHOW_IMPLICIT)
+
+            }
+        }
+
+
+    }
+
 
 
 }

@@ -167,6 +167,7 @@ interface Constants {
         const val faq_Category_id = "faq_Category_id"
         const val mockTest_id = "mockTest_id"
         const val order_id = "order_id"
+        const val PradnyaLearningPackageName = "com.pradnyalearning"
 
         //new
         const val Login = "Login"

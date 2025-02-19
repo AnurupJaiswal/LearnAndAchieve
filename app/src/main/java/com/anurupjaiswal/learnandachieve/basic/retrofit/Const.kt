@@ -9,11 +9,14 @@ interface Const {
         const val Development = Constants.Debug
 
         //Live
-        const val HOST_URL = "https://api.learnandachieve.in/"
-        //Debug
-       // const val HOST_URL = "https://stage-api.learnandachieve.in/"
 
-        const val baseUrlForImage = "https://stage-api.learnandachieve.in/uploads/";
+     // const val HOST_URL = "https://api.learnandachieve.in/"
+
+      // const val baseUrlForImage = "https://api.learnandachieve.in/uploads/"
+
+        //Debug
+        const val HOST_URL = "https://stage-api.learnandachieve.in/"
+       const val baseUrlForImage = "https://stage-api.learnandachieve.in/uploads/"
 
 
         const val razorpayKeyName: String = "rzp_live_S6CW342Go2QiOT"
@@ -67,7 +70,6 @@ interface Const {
         const val SUBMIT_MOCK_TEST = "mockTest/submitMockTest"
         const val VIEW_RESULT = "mockTest/viewResult"
         const val SHOW_RESULT = "mockTest/getShowResults"
-
 
     }
 }
