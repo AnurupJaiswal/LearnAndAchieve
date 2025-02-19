@@ -24,7 +24,7 @@ class Talukas {
 class District {
     var _id: String? = null
     var name: String? = null
-    var state: String? = null // State is a String in the District object
+    var state: String? = null
     var is_active: Boolean = false
     var is_deleted: Boolean = false
     var created_date: String? = null

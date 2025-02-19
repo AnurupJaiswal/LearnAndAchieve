@@ -116,6 +116,9 @@
     <string name="discount_format">- ₹ %d</string>
     <string name="welcome_back">Welcome Back!</string>
     <string name="privacy_policy">Privacy Policy</string>
+    <string name="packages">Packages</string>
+    <string name="logout">Logout</string>
+    <string name="pradnya_learnitics">Pradnya Learnitics</string>
 
 
 </resources>

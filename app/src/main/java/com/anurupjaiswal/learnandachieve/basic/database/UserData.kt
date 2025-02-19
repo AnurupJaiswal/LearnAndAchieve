@@ -97,8 +97,10 @@ class User {
 
     @SerializedName("class_name")
     var className: String? = null
-    @SerializedName("activeDevices")
-    val activeDevices: List<ActiveDevice> = emptyList()
+    @SerializedName("deviceType")
+    var deviceType: String? = null
+    @SerializedName("deviceName")
+    var deviceName: String? = null
 
 }
 

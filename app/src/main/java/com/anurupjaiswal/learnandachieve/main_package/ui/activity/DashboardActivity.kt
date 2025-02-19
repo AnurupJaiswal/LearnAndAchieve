@@ -8,23 +8,28 @@ import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.anurupjaiswal.learnandachieve.R
+import com.anurupjaiswal.learnandachieve.basic.database.User
+import com.anurupjaiswal.learnandachieve.basic.database.UserDataHelper
 import com.anurupjaiswal.learnandachieve.basic.retrofit.APIError
 import com.anurupjaiswal.learnandachieve.basic.retrofit.ApiService
+import com.anurupjaiswal.learnandachieve.basic.retrofit.Const
 import com.anurupjaiswal.learnandachieve.basic.retrofit.RetrofitClient
 import com.anurupjaiswal.learnandachieve.basic.utilitytools.BaseActivity
+import com.anurupjaiswal.learnandachieve.basic.utilitytools.Constants
 import com.anurupjaiswal.learnandachieve.basic.utilitytools.NavigationManager
 import com.anurupjaiswal.learnandachieve.basic.utilitytools.StatusCodeConstant
 import com.anurupjaiswal.learnandachieve.basic.utilitytools.Utils
 import com.anurupjaiswal.learnandachieve.basic.utilitytools.Utils.E
 import com.anurupjaiswal.learnandachieve.databinding.ActivityDashboardBinding
 import com.anurupjaiswal.learnandachieve.model.AllCartResponse
+import com.anurupjaiswal.learnandachieve.model.GetUserResponse
 import com.google.gson.Gson
+import com.razorpay.PaymentResultListener
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -34,12 +39,12 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class DashboardActivity : BaseActivity() {
-    private val BhartSTA: Boolean = false
-    private val premiumIcons = listOf(R.drawable.ic_premium, R.drawable.ic_premium2)
-    private val premiumIconChangeInterval = 1_000L
+class DashboardActivity : BaseActivity(), PaymentResultListener {
+    private var BharatSAT: Boolean = false
+    private val premiumIcons = listOf(R.drawable.ic_premium, R.drawable.ic_premium_white)
+    private val premiumIconChangeInterval = 3_000L
     private var currentIconIndex = 0
-    private var cartCount = 0 // Directly store the cart count here
+    private var cartCount = 0
     private lateinit var apiService: ApiService
     var Token: String? = null
 
@@ -78,11 +83,11 @@ class DashboardActivity : BaseActivity() {
         binding.shopBadge.setOnClickListener {
             NavigationManager.navigateToFragment(navController, R.id.cartFragment)
         }
-        getCartAllCount()
 
-
-
-
+        Token = Utils.GetSession().token
+        val authToken = "Bearer $Token"
+        getCartAllCount(authToken)
+        Token?.let { getUserDetails(it) }
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
 
@@ -151,19 +156,19 @@ class DashboardActivity : BaseActivity() {
             }
         }
         updateCartBadge()
-
-
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 if (!navController.navigateUp()) {
                     finish()
                 }
             }
+
         })
 
-        if (BhartSTA) {
-            startPremiumIconChange()
-        }
+         binding.ivPremiumCenterIcon.setOnClickListener{
+             Utils.openAppOrPlayStore(this, Constants.PradnyaLearningPackageName)
+         }
+
 
         binding.ivBack.setOnClickListener {
             onBackPressedDispatcher.onBackPressed()
@@ -172,16 +177,28 @@ class DashboardActivity : BaseActivity() {
 
 
     private fun startPremiumIconChange() {
-        // Start a coroutine in the main thread
         premiumIconJob = CoroutineScope(Dispatchers.Main).launch {
             while (true) {
-                // Update the icon
-                binding.ivPremiumCenterIcon.setImageResource(premiumIcons[currentIconIndex])
+                // Fade out animation
+                binding.ivPremiumCenterIcon.animate()
+                    .alpha(0f)
+                    .setDuration(500)
+                    .withEndAction {
+                        // Update the image resource when fade-out is complete
+                        binding.ivPremiumCenterIcon.setImageResource(premiumIcons[currentIconIndex])
 
-                // Switch the icon
+                        // Fade in animation
+                        binding.ivPremiumCenterIcon.animate()
+                            .alpha(1f)
+                            .setDuration(0)
+                            .start()
+                    }
+                    .start()
+
+                // Update the current icon index for the next iteration
                 currentIconIndex = (currentIconIndex + 1) % premiumIcons.size
 
-                // Delay for the next update (30 seconds)
+                // Wait for the specified interval before the next change
                 delay(premiumIconChangeInterval)
             }
         }
@@ -202,7 +219,7 @@ class DashboardActivity : BaseActivity() {
         binding.ivBack.visibility = backButtonVisibility
         binding.view.visibility = toolbarVisibility
 
-        val centerIconVisibility = if (isBottomNavVisible && BhartSTA) View.VISIBLE else View.GONE
+        val centerIconVisibility = if (isBottomNavVisible && BharatSAT) View.VISIBLE else View.GONE
         binding.mcvCenterIcon.visibility = centerIconVisibility
         binding.rlFloatingCenterIconContainer.visibility = centerIconVisibility
 
@@ -235,10 +252,9 @@ class DashboardActivity : BaseActivity() {
     }
 
 
-    fun getCartAllCount() {
+    fun getCartAllCount(authToken:String) {
 
-        Token = Utils.GetSession().token
-        val authToken = "Bearer $Token"
+
 
         apiService.getCartData(authToken).enqueue(object : Callback<AllCartResponse> {
             override fun onResponse(call: Call<AllCartResponse>, response: Response<AllCartResponse>) {
@@ -279,6 +295,141 @@ class DashboardActivity : BaseActivity() {
     }
 
 
+    override fun onPaymentSuccess(razorpayPaymentId: String) {
+        // Forward callback to the current fragment if it implements PaymentResultListener.
+        val navHostFragment = supportFragmentManager
+            .findFragmentById(R.id.fragmentContainerView) as? NavHostFragment
+        val currentFragment = navHostFragment?.childFragmentManager?.fragments?.firstOrNull()
+        if (currentFragment is PaymentResultListener) {
+            currentFragment.onPaymentSuccess(razorpayPaymentId)
+        }
+    }
 
+    override fun onPaymentError(code: Int, description: String) {
+        val navHostFragment = supportFragmentManager
+            .findFragmentById(R.id.fragmentContainerView) as? NavHostFragment
+        val currentFragment = navHostFragment?.childFragmentManager?.fragments?.firstOrNull()
+        if (currentFragment is PaymentResultListener) {
+            currentFragment.onPaymentError(code, description)
+        }
+    }
+
+    private fun getUserDetails(authToken: String) {
+
+      val Token = "Bearer $authToken"
+
+        apiService?.getUserDetails(Token)?.enqueue(object : Callback<GetUserResponse> {
+            override fun onResponse(
+                call: Call<GetUserResponse>,
+                response: Response<GetUserResponse>
+            ) {
+                try {
+                    if (response.code() == StatusCodeConstant.OK) {
+                        val userModel = response.body()
+
+                        if (userModel?.user != null) {
+                            val getUser = userModel.user
+
+                            E("User ID: ${getUser.user_id}")
+                            E("Full API Response: ${response.body()}")
+                            BharatSAT = getUser.smartSchoolCredentials?.username?.isNotEmpty() ?: false
+                            if (BharatSAT && premiumIconJob == null) {
+                                startPremiumIconChange()
+                            }
+                            updatePremiumIconVisibility()
+
+                            val userData = User().apply {
+                                _id = getUser.user_id
+                                token = authToken
+                                firstName = getUser.firstName
+                                middleName = getUser.middleName
+                                lastName = getUser.lastName
+                                dateOfBirth = getUser.dateOfBirth
+                                gender = getUser.gender
+                                schoolName = getUser.schoolName
+                                medium = getUser.medium
+                                classId = getUser.class_id
+                                profilePicture = getUser.profilePicture
+                                registerBy = getUser.registerBy
+                                referralCode = getUser.referralCode
+                                email = getUser.email
+                                mobile = getUser.mobile
+                                addressLineOne = getUser.addressLineOne
+                                addressLineTwo = getUser.addressLineTwo
+                                state = getUser.state
+                                district = getUser.district
+                                taluka = getUser.taluka
+                                createdDate = getUser.created_date
+                                updatedDate = getUser.updated_date
+                                className = getUser.class_name
+                            }
+
+                            // Insert or update into the local database
+                            UserDataHelper.instance.insertData(userData)
+                            E("User data inserted into local database successfully.")
+                        } else {
+                            // Log or handle case where 'getUser' is null
+                            E("Error: 'getUser' is null in response.")
+                        }
+
+                    } else {
+                        handleGetUserResponseApiError(response)
+                    }
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    Utils.T(this@DashboardActivity, "Error processing the request.")
+                }
+            }
+
+            override fun onFailure(call: Call<GetUserResponse>, t: Throwable) {
+                call.cancel()
+                // Hide loading state
+                t.printStackTrace()
+                Utils.T(this@DashboardActivity, t.message ?: "Request failed. Please try again later.")
+            }
+        })
+
+
+    }
+    private fun handleGetUserResponseApiError(response: Response<GetUserResponse>) {
+        when (response.code()) {
+            StatusCodeConstant.BAD_REQUEST -> {
+                response.errorBody()?.let { errorBody ->
+                    val message = Gson().fromJson(errorBody.charStream(), APIError::class.java)
+                    val displayMessage = message.error ?: "Invalid Request"
+                    Utils.T(this@DashboardActivity, displayMessage)
+                }
+            }
+
+            StatusCodeConstant.UNAUTHORIZED -> {
+                response.errorBody()?.let { errorBody ->
+                    val message = Gson().fromJson(errorBody.charStream(), APIError::class.java)
+                    val displayMessage = message.message ?: "Unauthorized Access"
+                    Utils.T(this@DashboardActivity, displayMessage)
+                    Utils.UnAuthorizationToken(this@DashboardActivity)
+                }
+            }
+
+            StatusCodeConstant.NOT_FOUND -> {
+                response.errorBody()?.let { errorBody ->
+                    val message = Gson().fromJson(errorBody.charStream(), APIError::class.java)
+                    val displayMessage = message.message ?: "Package not found. Please try again."
+                    Utils.T(this@DashboardActivity, displayMessage)
+                }
+            }
+
+            else -> {
+                Utils.T(this@DashboardActivity, "Unknown error occurred.")
+
+            }
+        }
+    }
+    private fun updatePremiumIconVisibility() {
+        val isBottomNavVisible = binding.bottomNavigationView.visibility == View.VISIBLE
+        val visibility = if (isBottomNavVisible && BharatSAT) View.VISIBLE else View.GONE
+
+        binding.mcvCenterIcon.visibility = visibility
+        binding.rlFloatingCenterIconContainer.visibility = visibility
+    }
 
 }
