@@ -6,6 +6,7 @@ import com.anurupjaiswal.learnandachieve.model.ApiResponse
 import com.anurupjaiswal.learnandachieve.model.BlogResponse
 import com.anurupjaiswal.learnandachieve.model.CartResponse
 import com.anurupjaiswal.learnandachieve.model.ChangePasswordResponse
+import com.anurupjaiswal.learnandachieve.model.CheckReferralResponse
 import com.anurupjaiswal.learnandachieve.model.ClassResponse
 import com.anurupjaiswal.learnandachieve.model.CreateOrderResponse
 import com.anurupjaiswal.learnandachieve.model.DeleteCartResponse
@@ -38,6 +39,7 @@ import com.anurupjaiswal.learnandachieve.model.VerifyPaymentResponse
 import com.google.gson.JsonObject
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -50,6 +52,7 @@ import retrofit2.http.POST
 import retrofit2.http.Part
 import retrofit2.http.Path
 import retrofit2.http.Query
+import retrofit2.http.Url
 
 
 interface ApiService {
@@ -301,7 +304,26 @@ interface ApiService {
         @Query("mockTestSubmissions_id") mockTestSubmissionsId: String,
         @Query(Constants.subjectId) subjectId: String? = null
     ): Call<PerformanceSummaryResponse>
+
+
+
+        @POST("package/checkReferralCode")
+        fun checkReferralCode(
+            @Header(Constants.Authorization) token: String,
+            @Body referralData: HashMap<String, String>
+        ): Call<CheckReferralResponse>
+
+    @GET
+    fun downloadFile(
+        @Url fileUrl: String,
+        @Header("Authorization") token: String
+    ): Call<ResponseBody>
 }
+
+
+
+
+
 
 
 
