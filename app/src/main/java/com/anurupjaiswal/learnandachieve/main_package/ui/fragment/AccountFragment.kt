@@ -11,16 +11,25 @@
     import androidx.navigation.findNavController
     import androidx.navigation.fragment.findNavController
     import com.anurupjaiswal.learnandachieve.R
+    import com.anurupjaiswal.learnandachieve.basic.database.User
+    import com.anurupjaiswal.learnandachieve.basic.database.UserDataHelper
+    import com.anurupjaiswal.learnandachieve.basic.retrofit.APIError
     import com.anurupjaiswal.learnandachieve.basic.retrofit.ApiService
     import com.anurupjaiswal.learnandachieve.basic.retrofit.RetrofitClient
+    import com.anurupjaiswal.learnandachieve.basic.utilitytools.Constants
     import com.anurupjaiswal.learnandachieve.basic.utilitytools.NavigationManager
+    import com.anurupjaiswal.learnandachieve.basic.utilitytools.StatusCodeConstant
     import com.anurupjaiswal.learnandachieve.basic.utilitytools.Utils
-    import com.anurupjaiswal.learnandachieve.databinding.DialogLogoutBinding
+    import com.anurupjaiswal.learnandachieve.basic.utilitytools.Utils.E
+    import com.anurupjaiswal.learnandachieve.databinding.BottomSheetLogoutBinding
     import com.anurupjaiswal.learnandachieve.databinding.FragmentAccountBinding
     import com.anurupjaiswal.learnandachieve.main_package.ui.activity.DashboardActivity
     import com.anurupjaiswal.learnandachieve.main_package.ui.activity.LoginActivity
     import com.anurupjaiswal.learnandachieve.model.ApiResponse
+    import com.anurupjaiswal.learnandachieve.model.GetUserResponse
+    import com.google.android.material.bottomsheet.BottomSheetDialog
     import com.google.android.material.card.MaterialCardView
+    import com.google.gson.Gson
     import retrofit2.Call
     import retrofit2.Callback
     import retrofit2.Response
@@ -42,6 +51,7 @@
 
 
         fun init() {
+
             apiService = RetrofitClient.client
             val dashboardActivity = requireActivity() as DashboardActivity
             navController = dashboardActivity.navController
@@ -70,6 +80,9 @@
             binding.rlBharatSAT.setOnClickListener(this)
             binding.rlStudentMaterial.setOnClickListener(this)
             binding.lbLogout.setOnClickListener(this)
+            binding.rlPradnyaTab.setOnClickListener(this)
+
+            Utils.GetSession().token?.let { getUserDetails(it) }
         }
 
         override fun onClick(view: View) {
@@ -89,10 +102,6 @@
                 )
 
                 binding.llTermsAndConditions ->{
-
-
-
-
                     val bundle = Bundle()
                 bundle.putBoolean("isFromAccountFragment", true)
                         NavigationManager.navigateToFragment(
@@ -152,41 +161,146 @@
                 )
 
                 binding.lbLogout -> {
-                    showLogoutDialog()
+                    showLogoutBottomSheet()
                 }
+
+                 binding.rlPradnyaTab->{
+                     Utils.openAppOrPlayStore(requireContext(),Constants.PradnyaLearningPackageName)
+                 }
             }
 
         }
 
-        private fun showLogoutDialog() {
-            val binding = DialogLogoutBinding.inflate(layoutInflater)
-            val dialog = AlertDialog.Builder(requireContext())
-                .setView(binding.root)
-                .setCancelable(false) // Prevent accidental dismissals
-                .create()
+        private fun showLogoutBottomSheet() {
+            val dialog = BottomSheetDialog(requireContext())
+
+            // Inflate the layout using binding
+            val binding = BottomSheetLogoutBinding.inflate(layoutInflater)
+            dialog.setContentView(binding.root)
+            dialog.setCancelable(false) // Prevent accidental dismissals
 
             binding.mcvLogout.setOnClickListener {
-                logoutUser(
-                    binding.loading,   // Pass ProgressBar
-                    binding.mcvLogout, // Pass Button
-                    binding.tvLogout,  // Pass "Log Out" Text
-                    dialog             // Pass Dialog
-                )
+                logoutUser(binding.loading, binding.mcvLogout, binding.Logout, dialog)
             }
 
             binding.mcvCancel.setOnClickListener {
                 dialog.dismiss() // Dismiss on cancel
             }
-
             dialog.show()
         }
 
 
-        private fun logoutUser(
-            loading: ProgressBar,
-            logoutButton: MaterialCardView,
-            tvLogout: TextView,
-            dialog: AlertDialog
+        private fun getUserDetails(authToken: String) {
+
+            val Token = "Bearer $authToken"
+
+            apiService?.getUserDetails(Token)?.enqueue(object : Callback<GetUserResponse> {
+                override fun onResponse(
+                    call: Call<GetUserResponse>,
+                    response: Response<GetUserResponse>
+                ) {
+                    try {
+                        if (response.code() == StatusCodeConstant.OK) {
+                            val userModel = response.body()
+
+                            if (userModel?.user != null) {
+                                val getUser = userModel.user
+
+                                E("User ID: ${getUser.user_id}")
+                                E("Full API Response: ${response.body()}")
+                                val BharatSAT = getUser.smartSchoolCredentials?.username?.isNotEmpty() ?: false
+                                binding.rlPradnyaTab.visibility = if (BharatSAT) View.VISIBLE else View.GONE
+
+                                val userData = User().apply {
+                                    _id = getUser.user_id
+                                    token = authToken
+                                    firstName = getUser.firstName
+                                    middleName = getUser.middleName
+                                    lastName = getUser.lastName
+                                    dateOfBirth = getUser.dateOfBirth
+                                    gender = getUser.gender
+                                    schoolName = getUser.schoolName
+                                    medium = getUser.medium
+                                    classId = getUser.class_id
+                                    profilePicture = getUser.profilePicture
+                                    registerBy = getUser.registerBy
+                                    referralCode = getUser.referralCode
+                                    email = getUser.email
+                                    mobile = getUser.mobile
+                                    addressLineOne = getUser.addressLineOne
+                                    addressLineTwo = getUser.addressLineTwo
+                                    state = getUser.state
+                                    district = getUser.district
+                                    taluka = getUser.taluka
+                                    createdDate = getUser.created_date
+                                    updatedDate = getUser.updated_date
+                                    className = getUser.class_name
+                                }
+
+                                // Insert or update into the local database
+                                UserDataHelper.instance.insertData(userData)
+                                E("User data inserted into local database successfully.")
+                            } else {
+                                // Log or handle case where 'getUser' is null
+                                E("Error: 'getUser' is null in response.")
+                            }
+
+                        } else {
+                            handleGetUserResponseApiError(response)
+                        }
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                        Utils.T(requireContext(), "Error processing the request.")
+                    }
+                }
+
+                override fun onFailure(call: Call<GetUserResponse>, t: Throwable) {
+                    call.cancel()
+                    // Hide loading state
+                    t.printStackTrace()
+                    Utils.T(requireContext(), t.message ?: "Request failed. Please try again later.")
+                }
+            })
+
+
+        }
+        private fun handleGetUserResponseApiError(response: Response<GetUserResponse>) {
+            when (response.code()) {
+                StatusCodeConstant.BAD_REQUEST -> {
+                    response.errorBody()?.let { errorBody ->
+                        val message = Gson().fromJson(errorBody.charStream(), APIError::class.java)
+                        val displayMessage = message.error ?: "Invalid Request"
+                        Utils.E(displayMessage)
+                    }
+                }
+
+                StatusCodeConstant.UNAUTHORIZED -> {
+                    response.errorBody()?.let { errorBody ->
+                        val message = Gson().fromJson(errorBody.charStream(), APIError::class.java)
+                        val displayMessage = message.message ?: "Unauthorized Access"
+                        Utils.T(requireContext(), displayMessage)
+                        Utils.UnAuthorizationToken(requireContext())
+                    }
+                }
+
+                StatusCodeConstant.NOT_FOUND -> {
+                    response.errorBody()?.let { errorBody ->
+                        val message = Gson().fromJson(errorBody.charStream(), APIError::class.java)
+                        val displayMessage = message.message ?: "Package not found. Please try again."
+
+                        Utils.E(displayMessage)
+
+                    }
+                }
+
+                else -> {
+                   E("Unknown error occurred.")
+
+                }
+            }
+        }
+
+        private fun logoutUser(loading: ProgressBar, logoutButton: MaterialCardView, tvLogout: TextView, dialog: BottomSheetDialog
         ) {
             // Show loading, hide text, disable button
             loading.visibility = View.VISIBLE
@@ -219,8 +333,6 @@
                 }
             })
         }
-
-
 
         override fun onDestroyView() {
             super.onDestroyView()
