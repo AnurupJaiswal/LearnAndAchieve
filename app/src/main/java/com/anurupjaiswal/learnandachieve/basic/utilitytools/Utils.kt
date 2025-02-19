@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AlertDialog
 import android.app.Dialog
+import android.content.ActivityNotFoundException
 import android.content.ContentResolver
 import android.content.Context
 import android.content.DialogInterface
@@ -52,7 +53,6 @@ import com.anurupjaiswal.learnandachieve.basic.retrofit.Const
 import com.anurupjaiswal.learnandachieve.basic.utilitytools.loadingButton.LoadingButton
 import com.anurupjaiswal.learnandachieve.databinding.AlertdialogBinding
 import com.anurupjaiswal.learnandachieve.databinding.CustomToastBinding
-import com.anurupjaiswal.learnandachieve.databinding.DialogLogoutBinding
 import com.anurupjaiswal.learnandachieve.main_package.ui.activity.LoginActivity
 import com.google.android.material.card.MaterialCardView
 
@@ -228,7 +228,7 @@ object Utils {
     fun UnAuthorizationToken(cx: Context) {
         UserDataHelper.instance.deleteAll()
 
-        T(cx, "Session expired")
+        T(cx, "Session Expired")
         I_clear(cx, LoginActivity::class.java, null)
     }
 
@@ -299,43 +299,7 @@ object Utils {
         dialog.show()
     }
 
-    fun logoutAlertDialog(c: Context): Dialog {
-        val dialog = Dialog(c, android.R.style.Theme_DeviceDefault_Dialog_Alert)
-        dialog.setCanceledOnTouchOutside(false)
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialog.setContentView(R.layout.logout)
-        dialog.findViewById<View>(R.id.tvOK).setOnClickListener { view: View? ->
-            UnAuthorizationToken(c)
-            dialog.dismiss()
-        }
-        dialog.findViewById<View>(R.id.tvCancel)
-            .setOnClickListener { view: View? -> dialog.cancel() }
-        dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        dialog.setCanceledOnTouchOutside(false)
-        dialog.setCancelable(false)
-        dialog.show()
-        return dialog
-    }
 
-    fun deleteAccountAlertDialog(c: Context): Dialog {
-        val dialog = Dialog(c, android.R.style.Theme_DeviceDefault_Dialog_Alert)
-        dialog.setCanceledOnTouchOutside(false)
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialog.setContentView(R.layout.logout)
-        val textView = dialog.findViewById<TextView>(R.id.tvDesc)
-        textView.setText(R.string.are_you_sure_want_to_delete_your_account)
-        dialog.findViewById<View>(R.id.tvOK).setOnClickListener { view: View? ->
-            //deleteUserAccount(c)
-            dialog.dismiss()
-        }
-        dialog.findViewById<View>(R.id.tvCancel)
-            .setOnClickListener { view: View? -> dialog.cancel() }
-        dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        dialog.setCanceledOnTouchOutside(false)
-        dialog.setCancelable(false)
-        dialog.show()
-        return dialog
-    }
 
     fun Picasso(Url: String, imageView: ImageView?, dummy: Int) {
         Picasso.get().load(Const.baseUrlForImage + Url)
@@ -745,37 +709,41 @@ object Utils {
         }.start()
 
     }
-    fun showLogoutDialog(
-        context: Context,
-        onLogoutConfirmed: (ProgressBar, MaterialCardView) -> Unit, // Pass UI elements for visibility handling
-        onCancel: () -> Unit = {} // Optional cancel callback
-    ) {
-        val binding = DialogLogoutBinding.inflate(LayoutInflater.from(context))
 
-        val dialog = AlertDialog.Builder(context)
-            .setView(binding.root)
-            .setCancelable(false)
-            .create()
+    fun openAppOrPlayStore(context: Context, packageName: String) {
+        val packageManager = context.packageManager
+        try {
+            // Check if the app is installed
+            packageManager.getPackageInfo(packageName, PackageManager.GET_ACTIVITIES)
 
-        dialog.setCanceledOnTouchOutside(false)
-
-        // Handle Logout button click
-        binding.mcvLogout.setOnClickListener {
-            binding.loading.visibility = View.VISIBLE // Show loading indicator
-            binding.mcvLogout.isEnabled = false // Disable logout button
-
-            onLogoutConfirmed(binding.loading, binding.mcvLogout) // Pass views to handle UI updates
+            // If installed, launch the app
+            val launchIntent = packageManager.getLaunchIntentForPackage(packageName)
+            if (launchIntent != null) {
+                context.startActivity(launchIntent)
+            } else {
+                // If no launch intent found, open Play Store
+                openPlayStore(context, packageName)
+            }
+        } catch (e: PackageManager.NameNotFoundException) {
+            // If app is not installed, open Play Store
+            openPlayStore(context, packageName)
         }
-
-        // Handle Cancel button click
-        binding.mcvCancel.setOnClickListener {
-            onCancel()
-            dialog.dismiss()
-        }
-
-        dialog.show()
     }
 
 
+    fun openPlayStore(context: Context, packageName: String) {
+        try {
+            // Open Play Store explicitly (forces Play Store, avoids other markets)
 
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=$packageName"))
+            intent.setPackage("com.android.vending") // Ensures only Google Play Store is used
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            context.startActivity(intent)
+        } catch (e: ActivityNotFoundException) {
+            // If Play Store app is not available, open in browser
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=$packageName"))
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            context.startActivity(intent)
+        }
+    }
 }

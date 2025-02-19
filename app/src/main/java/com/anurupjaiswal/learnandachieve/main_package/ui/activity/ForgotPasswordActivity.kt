@@ -42,6 +42,7 @@ class ForgotPasswordActivity : BaseActivity(), View.OnClickListener {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
+
         binding = ActivityForgotPasswordBinding.inflate(layoutInflater)
         setContentView(binding.root)
         apiservice = RetrofitClient.client

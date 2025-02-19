@@ -63,6 +63,15 @@ class HomeFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
+
+        return binding.root
+    }
+
+
+    @SuppressLint("ClickableViewAccessibility")
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
         init()
         setUpShopNowViewpager()
 
@@ -74,15 +83,6 @@ class HomeFragment : Fragment() {
         binding.tvViewAllPackages.setOnClickListener {
             NavigationManager.navigateToFragment(findNavController(), R.id.PurchasePackage)
         }
-
-
-        return binding.root
-    }
-
-
-    @SuppressLint("ClickableViewAccessibility")
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
 
 
         val cards = listOf(

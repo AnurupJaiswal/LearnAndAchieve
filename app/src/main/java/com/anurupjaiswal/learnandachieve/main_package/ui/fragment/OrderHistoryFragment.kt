@@ -4,12 +4,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
+import android.widget.ProgressBar
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.anurupjaiswal.learnandachieve.R
 import com.anurupjaiswal.learnandachieve.basic.retrofit.ApiService
 import com.anurupjaiswal.learnandachieve.basic.retrofit.RetrofitClient
+import com.anurupjaiswal.learnandachieve.basic.utilitytools.FileDownloadListener
 import com.anurupjaiswal.learnandachieve.basic.utilitytools.NavigationManager
 import com.anurupjaiswal.learnandachieve.basic.utilitytools.StatusCodeConstant
 import com.anurupjaiswal.learnandachieve.basic.utilitytools.Utils
@@ -20,12 +23,15 @@ import com.anurupjaiswal.learnandachieve.model.OrderHistoryResponse
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.io.File
 
-class OrderHistoryFragment : Fragment() {
+class OrderHistoryFragment : Fragment(), FileDownloadListener {
 
     private var _binding: FragmentOrderHistoryBinding? = null
     private val binding get() = _binding!!
  private  lateinit var apiService: ApiService
+    private lateinit var progressBar: ProgressBar
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -56,6 +62,11 @@ class OrderHistoryFragment : Fragment() {
                 findNavController(), R.id.PurchasePackage
             )
         }
+
+        progressBar =binding.progressBar
+        progressBar.progress = 0
+        progressBar.visibility = View.GONE
+
     }
 
     private fun fetchOrderHistory(token: String) {
@@ -93,7 +104,7 @@ class OrderHistoryFragment : Fragment() {
     }
 
     private fun setupRecyclerView(orders: List<Order>) {
-        val adapter = OrderHistoryAdapter(orders)
+        val adapter = OrderHistoryAdapter(orders,this)
         binding.rvOrderHistory.apply {
             layoutManager = LinearLayoutManager(requireContext())
             this.adapter = adapter
@@ -103,5 +114,27 @@ class OrderHistoryFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onProgressUpdate(progress: Int) {
+        // When download starts (progress == 0), disable touch events on the UI.
+        if (progress == 0) {
+            activity?.window?.setFlags(
+                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
+            )
+            progressBar.visibility = View.VISIBLE
+        }
+        progressBar.progress = progress
+    }
+    override fun onDownloadComplete(file: File) {
+        progressBar.visibility = View.GONE
+        activity?.window?.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+    }
+
+    override fun onDownloadFailed(error: String) {
+        progressBar.visibility = View.GONE
+        activity?.window?.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+
     }
 }

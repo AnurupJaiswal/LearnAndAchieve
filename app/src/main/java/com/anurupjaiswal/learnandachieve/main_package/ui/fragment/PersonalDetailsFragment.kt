@@ -36,6 +36,7 @@ import com.anurupjaiswal.learnandachieve.model.ClassData
 import com.anurupjaiswal.learnandachieve.model.ClassResponse
 import com.anurupjaiswal.learnandachieve.model.SignupResponse
 import com.google.gson.Gson
+import com.google.gson.JsonObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -57,14 +58,20 @@ class PersonalDetailsFragment : Fragment(), ValidationFragment {
         binding = FragmentPersonalDetailsBinding.inflate(inflater, container, false)
         apiservice = RetrofitClient.client
 
+
+        return binding.root
+    }
+
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
         setupPopups()
         getAllClasses()
         binding.etDateOfBirth.setOnClickListener {
             showDatePickerBottomSheet()
         }
-        return binding.root
     }
-
 
     override fun validateFields(): Boolean {
         val errorValidationModels = mutableListOf<ValidationModel>()
@@ -280,13 +287,20 @@ class PersonalDetailsFragment : Fragment(), ValidationFragment {
 
 
     private fun handleErrorResponse(response: retrofit2.Response<ClassResponse>) {
-        val message = Gson().fromJson(
-            response.errorBody()?.charStream(), APIError::class.java
-        )
+        val errorBody = response.errorBody()?.charStream()
+        val message = try {
+            val errorResponse = Gson().fromJson(errorBody, APIError::class.java)
+            errorResponse?.message ?: Gson().fromJson(errorBody, JsonObject::class.java)
+                ?.get("error")?.asString ?: "Something went wrong"
+        } catch (e: Exception) {
+            "Something went wrong"
+        }
+
         when (response.code()) {
-            StatusCodeConstant.BAD_REQUEST -> Utils.T(activity, message.message)
+            StatusCodeConstant.BAD_REQUEST ->
+                Utils.T(activity, message)
             StatusCodeConstant.UNAUTHORIZED -> {
-                Utils.T(activity, message.message)
+           //     Utils.T(activity, message)
                 Utils.UnAuthorizationToken(requireContext())
             }
         }
@@ -312,6 +326,7 @@ class PersonalDetailsFragment : Fragment(), ValidationFragment {
 
         bundle.putString("gender", binding.etGender.text?.toString())
         bundle.putString("classId", selectedClassId)
+
         bundle.putString("dateOfBirth", binding.etDateOfBirth.text?.toString())
         return bundle
     }

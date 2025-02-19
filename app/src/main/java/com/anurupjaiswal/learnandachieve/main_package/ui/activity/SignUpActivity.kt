@@ -71,18 +71,8 @@ class SignUpActivity : BaseActivity() {
             .commit()
     }
 
-
-
-
-
-
-
-
-
-
     private fun handleNextButtonClick() {
         val currentFragment = fragments[currentFragmentIndex]
-
         when (currentFragment) {
             is PersonalDetailsFragment -> {
                 if (currentFragment.validateFields()) {
@@ -122,8 +112,7 @@ class SignUpActivity : BaseActivity() {
                             // Pass the combinedBundle containing both personal and contact details
                             goToNextFragment(combinedBundle)
                         } else {
-                            // Handle failure (optional: show a message or log)
-                            Utils.T(this, "Please try again.")
+                         //   Utils.T(this, "Please try again.")
                         }
                     }
                 }
@@ -199,6 +188,7 @@ class SignUpActivity : BaseActivity() {
             stepperBinding.tvContactDetails,
             stepperBinding.tvOtpVerification
         )
+      //  You can access your mock test from February 15, 2025, onwards.
 
         stepDots.forEachIndexed { index, dot ->
             dot.setBackgroundResource(if (index <= position) dotResources[0] else dotResources[1])

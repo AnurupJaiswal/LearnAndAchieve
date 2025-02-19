@@ -5,7 +5,6 @@ data class MockTestResponse(
     val data: List<MockTestItem>,
     val availableDataCount: Int
 )
-
 data class MockTestItem(
     val order_id: String,
     val package_id: String,
@@ -22,6 +21,7 @@ data class MockTestItem(
     val totalQuestions: Int,
     val date: String,
     val expireDate: String
+
 )
 
 data class MockSubject(

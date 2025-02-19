@@ -49,6 +49,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
     private var isPasswordVisible = false
     private var apiservice: ApiService? = null
     private  var currentToken: String = ""
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -62,14 +63,16 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
     @SuppressLint("ClickableViewAccessibility")
     private fun init() {
         apiservice = RetrofitClient.client
+
         binding.mcvLogin.setOnClickListener(this)
         binding.rlDontHaveAccount.setOnClickListener(this)
         binding.tvForgotPass.setOnClickListener(this)
+
         textChangeListener()
         binding.etPassword.isHapticFeedbackEnabled = false
 
         binding.etPassword.setOnTouchListener { _, event ->
-            val drawableEnd = 2
+            val drawableEnd = 2 // Index for the end drawable (right icon)
             if (event.action == MotionEvent.ACTION_UP) {
                 if (event.rawX >= (binding.etPassword.right - binding.etPassword.compoundDrawables[drawableEnd].bounds.width())) {
                     togglePasswordVisibility()
@@ -97,7 +100,6 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
             }
         }
     }
-
 
     private fun validateField(type: Validation.Type, editText: EditText, errorTextView: TextView) {
         val validation = Validation.instance
@@ -199,7 +201,6 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
         })
     }
 
-
     private fun userLogin() {
         Utils.toggleProgressBarAndText(true, binding.loading, binding.tvLogIN,binding.root)
 
@@ -234,12 +235,12 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
                             Utils.I_clear(activity, DashboardActivity::class.java, null)
                         }
                     } else if (response.code() == StatusCodeConstant.CREATED) {
-                     val userModel = response.body()
+                        val userModel = response.body()
 //
                         currentToken = userModel?.token.toString()
 //                        Utils.T(activity,"${userModel?.message}") // Show Toast
 
-                        val currentLoginDevice = userModel!!.user!!.activeDevices.firstOrNull()?.deviceName ?: "No active device"
+                        val currentLoginDevice = userModel?.data!!.firstOrNull()?.browser ?: "No active device"
                         showMultipleDeviceLoginDialog(currentLoginDevice)
                     } else {
                         handleErrorResponse(response)
@@ -258,7 +259,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
 
                 Utils.toggleProgressBarAndText(false, binding.loading, binding.tvLogIN,binding.root)
 
-             //   Utils.T(activity, t.message)
+                Utils.T(activity, t.message)
                 E("getMessage::" + t.message)
             }
         })
@@ -282,11 +283,13 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
         val binding = DialogMultipleDeviceLoginBinding.inflate(layoutInflater)
         dialog.setContentView(binding.root)
 
+
+
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         dialog.setCancelable(false) // Prevent dismissal on outside touch
         dialog.setCanceledOnTouchOutside(false) // Also prevents outside tap dismissal
 
-binding.tvDeviceInfo.text = currentLoginDevices
+        binding.tvDeviceInfo.text = currentLoginDevices
         binding.mccLogoutFromDevices.setOnClickListener {
             logoutUser()
             dialog.dismiss()
@@ -317,5 +320,4 @@ binding.tvDeviceInfo.text = currentLoginDevices
             }
         })
     }
-
 }

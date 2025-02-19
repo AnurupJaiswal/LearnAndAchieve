@@ -559,25 +559,34 @@ private var dateOfBirth: String? = null
                     }
 
                     onResponse(true, combinedBundle)
-                } else if (response.code() == StatusCodeConstant.BAD_REQUEST) {
+                }else if (response.code() == StatusCodeConstant.BAD_REQUEST) {
                     // Directly parse the error response
                     val errorBody = response.errorBody()?.string()
                     val apiError = try {
                         Gson().fromJson(errorBody, APIError::class.java)
                     } catch (e: JsonSyntaxException) {
-                       E("API Error Parsing Error: ${e.message}")
+                        E("API Error Parsing Error: ${e.message}")
                         null
                     }
 
-                    E("API Bad Request Code: ${response.code()}, Error: ${apiError?.message}")
+                    // Extract the error message (fallback to "error" key if needed)
+                    val errorMessage = apiError?.message ?: try {
+                        Gson().fromJson(errorBody, JsonObject::class.java)
+                            ?.get("error")?.asString
+                    } catch (e: Exception) {
+                        "Invalid request. Please check your details and try again."
+                    }
 
-                    Utils.T(activity, apiError?.message ?: "Invalid request. Please check your details and try again.")
+                    E("API Bad Request Code: ${response.code()}, Error: $errorMessage")
+
+                    Utils.T(activity, errorMessage ?: "Invalid request. Please check your details and try again.")
                     onResponse(false, null)
-                } else {
+                }
+                else {
                     // Handle other API errors
                     val errorBody = response.errorBody()?.string()
                    E("API Error Code: ${response.code()}, Error: $errorBody")
-                    Utils.T(activity, "Registration failed. Please try again.")
+                  //  Utils.T(activity, "Registration failed. Please try again.")
                     onResponse(false, null)
                 }
             }

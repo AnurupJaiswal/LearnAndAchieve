@@ -122,11 +122,13 @@ class MockTestFragment : Fragment() {
 
                         StatusCodeConstant.OK -> {
                             showProgressBar(false)
-
                             response.body()?.let { mockTestResponse ->
-                                mockTestList.clear()
-                                mockTestList.addAll(mockTestResponse.data)
-                                adapter.notifyDataSetChanged()
+                                if (mockTestResponse.data.isNotEmpty()){
+                                    mockTestList.clear()
+                                    mockTestList.addAll(mockTestResponse.data)
+                                    adapter.notifyDataSetChanged()
+                                }
+
                             }
                         }
 

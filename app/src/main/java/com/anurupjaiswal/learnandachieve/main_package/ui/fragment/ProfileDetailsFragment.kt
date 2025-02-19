@@ -354,6 +354,7 @@ class ProfileDetailsFragment : Fragment(R.layout.fragment_profile_details) {
                         val message = response.body()?.message
                         binding.ivProfile.setImageResource(R.drawable.ic_profile) // Reset to a default image
                         Utils.T(requireContext(), "Profile picture deleted")
+                        getUserDetails(Utils.GetSession().token!!)
                     }
 
                     StatusCodeConstant.BAD_REQUEST -> {

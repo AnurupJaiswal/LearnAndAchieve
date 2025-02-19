@@ -484,7 +484,8 @@ class QuestionComparisonFragment : Fragment() {
             submittedTime = elapsedTimeString
         )
 
-        binding.progressBar.visibility = View.VISIBLE
+    //    binding.progressBar.visibility = View.VISIBLE
+        Utils.toggleProgressBarAndText(true, binding.loading, binding.tvSumit, binding.root)
 
         RetrofitClient.client.submitMockTest("Bearer $token", request)
             .enqueue(object : Callback<SubmitMockTestResponse> {
@@ -492,18 +493,29 @@ class QuestionComparisonFragment : Fragment() {
                     call: Call<SubmitMockTestResponse>,
                     response: Response<SubmitMockTestResponse>
                 ) {
-                    binding.progressBar.visibility = View.GONE
+                    Utils.toggleProgressBarAndText(false, binding.loading, binding.tvSumit, binding.root)
+
 
                     when (response.code()) {
                         StatusCodeConstant.OK -> {
                             Utils.T(requireContext(), "Mock Test submitted successfully!")
-                            findNavController().popBackStack()
+                          findNavController().popBackStack()
 
+                         /*   val bundle = Bundle().apply {
+                                putString("mockTest_id", mockTest.mockTest_id)
+                                putString("package_id", mockTest.package_id)
+                                putString("order_id", mockTest.order_id)
+                            }
+                            NavigationManager.navigateToFragment(findNavController(), R.id.QuestionComparisonFragment, bundle)
+
+*/
                         }
 
                         StatusCodeConstant.UNAUTHORIZED -> {
                             Utils.E("submitMockTest UNAUTHORIZED: ${response.message()}")
                             Utils.UnAuthorizationToken(requireContext())
+                            Utils.toggleProgressBarAndText(false, binding.loading, binding.tvSumit, binding.root)
+
                         }
 
                         StatusCodeConstant.BAD_REQUEST -> {
@@ -511,10 +523,14 @@ class QuestionComparisonFragment : Fragment() {
                                 val apiError = Gson().fromJson(errorBody.charStream(), APIError::class.java)
                                 val errorMessage = apiError.error ?: "Bad Request Error"
                                 Utils.E("submitMockTest BAD_REQUEST: $errorMessage")
+                                Utils.toggleProgressBarAndText(false, binding.loading, binding.tvSumit, binding.root)
+
                             }
                         }
 
                         else -> {
+                            Utils.toggleProgressBarAndText(false, binding.loading, binding.tvSumit, binding.root)
+
                             Utils.E("submitMockTest Error: ${response.code()} - ${response.errorBody()?.string()}")
                             Utils.T(requireContext(), "Submission failed. Please try again.")
                         }

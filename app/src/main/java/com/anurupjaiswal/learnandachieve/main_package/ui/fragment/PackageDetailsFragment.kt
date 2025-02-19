@@ -64,12 +64,12 @@ class PackageDetailsFragment : Fragment(R.layout.fragment_package_details) {
                 try {
                     if (response.code() == StatusCodeConstant.OK) {
                         val packageDetailsResponse = response.body()
-
                         packageDetailsResponse?.packageDetails?.let { details ->
                             binding.titleTextView.text = details.packageName
                             binding.price.text = "₹ ${details.actualPrice}"
                             binding.strikethroughPrice.text = "₹ ${details.discountedPrice}"
                              Utils.SetHtmlContent(binding.descriptionTextView,details.details)
+
                         }
                         } else {
                         handlePackageDetailsApiError(response)

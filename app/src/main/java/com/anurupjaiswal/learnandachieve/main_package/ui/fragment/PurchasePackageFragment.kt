@@ -94,7 +94,8 @@ class PurchasePackageFragment : Fragment() {
                                         )
                                     }
                                 )
-                            } else showNoInternetMessage()
+                            } else binding.noInternetText.visibility = View.VISIBLE
+                             binding.noInternetText.text = "Not Available"
                         }
                         StatusCodeConstant.UNAUTHORIZED -> Utils.UnAuthorizationToken(requireContext())
                         else -> showNoInternetMessage()
@@ -112,7 +113,11 @@ class PurchasePackageFragment : Fragment() {
         binding.rcvPurchasePackage.visibility = if (isVisible) View.GONE else View.VISIBLE
     }
 
+
+
+
     private fun showNoInternetMessage() {
+        binding.noInternetText.text = "No Internet Connection"
         binding.progressBar.visibility = View.GONE
         binding.rcvPurchasePackage.visibility = View.GONE
         binding.noInternetText.visibility = View.VISIBLE
