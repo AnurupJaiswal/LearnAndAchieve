@@ -86,7 +86,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-             >
+              android:layout_marginTop="@dimen/_5sdp"
+                >
 
 
             <TextView
@@ -121,7 +122,9 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_5sdp"
+                >
 
 
                 <TextView
@@ -130,32 +133,35 @@
                     android:text="Transaction Id:"
                     android:textSize="14sp"
                     android:singleLine="true"
-
                     android:includeFontPadding="false"
                     android:fontFamily="@font/gilroy_regular"
                     android:textStyle="italic"
                     android:textColor="@color/black"/>
 
 
-                <TextView
-                    android:id="@+id/tvTransactionId"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text=" ABGHSDFJBJKNKF"
-                    android:textSize="14sp"
-                    android:paddingStart="@dimen/_4ssp"
-                    android:maxLines="1"
-                    android:includeFontPadding="false"
-                    android:fontFamily="@font/gilroy_semibold"
-                    android:gravity="start"
-                    android:textColor="@color/black"/>
 
             </LinearLayout>
 
 
+            <TextView
+                android:id="@+id/tvTransactionId"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=" TBGHSDFJBJKNKF"
+                android:textSize="14sp"
+                android:maxLines="1"
+                android:layout_marginTop="@dimen/_2sdp"
+                android:includeFontPadding="false"
+                android:fontFamily="@font/gilroy_semibold"
+                android:gravity="start"
+                android:textColor="@color/black"/>
+
+
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_5sdp"
+                >
 
 
 

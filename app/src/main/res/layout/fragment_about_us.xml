@@ -58,6 +58,7 @@
                     android:layout_marginTop="@dimen/_10sdp"
                     android:fontFamily="@font/gilroy_regular"
                     android:includeFontPadding="false"
+                    android:lineSpacingExtra="@dimen/_3sdp"
                     android:text="At Learn and Achieve, we are a passionate group of young individuals with diverse backgrounds and dynamic personalities who share a common vision: to revolutionize the Indian educational system. We remember the challenges and hurdles we faced during our academic journeys, and we are determined to ensure that the new generation doesn’t have to go through the same struggles. Our primary focus is on establishing a strong foundation for child education, empowering them with essential skills that will prepare them for the competitive world ahead."
                     android:textColor="@color/black"
                     android:textSize="14sp" />
@@ -107,6 +108,7 @@
                     android:layout_marginTop="@dimen/_10sdp"
                     android:fontFamily="@font/gilroy_regular"
                     android:includeFontPadding="false"
+                    android:lineSpacingExtra="@dimen/_5sdp"
                     android:text="We believe in equipping children with the knowledge and skills they need to confidently face the challenges of an AI-driven future. Our mission is to make every child academically and mentally robust, arming them with fundamental skills that will be their pillars of strength as they navigate the modern world. We understand the importance of early exposure to competitive examinations like IIT JEE, NEET, AIIMS, AFMC, CAT, SAT, GRE, NATA, CET and GMAT. Therefore, we are dedicated to providing students with the awareness and resources they need from the early years of their academic lives."
                     android:textColor="@color/black"
                     android:textSize="14sp" />

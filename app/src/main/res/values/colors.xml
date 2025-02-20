@@ -63,6 +63,8 @@
     <color name="answered">#368C36</color>
     <color name="not_ans">#DB7C00</color>
     <color name="not_viewedque">#686868</color>
+    <color name="dark_blue">#00255d</color>
+    <color name="light_red">#FF2B2B</color>
 
 
 </resources>

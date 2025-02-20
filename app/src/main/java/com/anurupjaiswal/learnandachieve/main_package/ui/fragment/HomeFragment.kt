@@ -24,6 +24,8 @@ import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import androidx.viewpager2.widget.ViewPager2
 import com.anurupjaiswal.learnandachieve.R
+import com.anurupjaiswal.learnandachieve.basic.database.User
+import com.anurupjaiswal.learnandachieve.basic.database.UserDataHelper
 import com.anurupjaiswal.learnandachieve.basic.retrofit.APIError
 import com.anurupjaiswal.learnandachieve.basic.retrofit.ApiService
 import com.anurupjaiswal.learnandachieve.basic.retrofit.RetrofitClient
@@ -40,6 +42,7 @@ import com.anurupjaiswal.learnandachieve.main_package.adapter.PurchasePackageAda
 import com.anurupjaiswal.learnandachieve.main_package.adapter.StudyMaterialAdapter
 import com.anurupjaiswal.learnandachieve.model.GetAllBlogAppResponse
 import com.anurupjaiswal.learnandachieve.model.GetAllStudyMaterial
+import com.anurupjaiswal.learnandachieve.model.GetUserResponse
 import com.anurupjaiswal.learnandachieve.model.HomeViewpagerIteam
 import com.anurupjaiswal.learnandachieve.model.PackageResponse
 import com.anurupjaiswal.learnandachieve.model.PopularPackageItem
@@ -47,6 +50,9 @@ import com.google.gson.Gson
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 import kotlin.math.abs
 
 class HomeFragment : Fragment() {
@@ -93,16 +99,13 @@ class HomeFragment : Fragment() {
         binding.horizontalScrollView.setOnTouchListener { _, event ->
             when (event.action) {
                 MotionEvent.ACTION_DOWN -> {
-                    // Pause the auto-scroll when the user presses/holds the screen
                     pauseAutoScroll()
                 }
-
                 MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
                     // Resume the auto-scroll when the user releases the screen
                     resumeAutoScroll(cards)
                 }
             }
-            // Handle the swipe gestures
             gestureDetector.onTouchEvent(event)
             true
         }
@@ -132,7 +135,13 @@ class HomeFragment : Fragment() {
             getPackages(token!!)
 
             getAllBlogData(token!!)
+            getUserDetails(token!!)
+             binding.llHallTicket.setOnClickListener {
+                 NavigationManager.navigateToFragment(
+                     findNavController(), R.id.BharatSatExamInstructionsFragment)
+             }
         } else {
+            
             Utils.T(requireContext(), "Please Check Internet Connection!")
             binding.llBlogContainer.visibility = View.GONE
             binding.progressBar.visibility = View.GONE
@@ -564,7 +573,6 @@ class HomeFragment : Fragment() {
         }
     }
 
-
     fun getAllBlogData(authToken: String) {
 
 
@@ -667,7 +675,6 @@ class HomeFragment : Fragment() {
         )
     }
 
-
     private fun showLoading(isLoading: Boolean) {
         if (isLoading) {
             binding.progressBar.visibility = View.VISIBLE
@@ -677,5 +684,88 @@ class HomeFragment : Fragment() {
             binding.llHomeContainer.visibility = View.VISIBLE
         }
     }
-}
 
+    private fun getUserDetails(authToken: String) {
+
+        apiservice?.getUserDetails(authToken)?.enqueue(object : Callback<GetUserResponse> {
+            override fun onResponse(
+                call: Call<GetUserResponse>,
+                response: Response<GetUserResponse>
+            ) {
+                try {
+                    if (response.code() == StatusCodeConstant.OK) {
+                        val userModel = response.body()
+
+                        if (userModel?.user != null) {
+                            val getUser = userModel.user
+
+                            E("User ID: ${getUser.user_id}")
+                            E("Full API Response: ${response.body()}")
+
+                            val today = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date()
+                            )
+
+                            val examDate = getUser.bharatSatExamDate?.substring(0, 10)
+                            if (examDate == today) {
+                                binding.llHallTicket.visibility = View.VISIBLE
+                            } else {
+                                binding.llHallTicket.visibility = View.VISIBLE
+                            }
+                        } else {
+
+                            E("Error: 'getUser' is null in response.")
+                        }
+
+                    } else {
+                        handleGetUserResponseApiError(response)
+                    }
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    Utils.T(requireContext(), "Error processing the request.")
+                }
+            }
+
+            override fun onFailure(call: Call<GetUserResponse>, t: Throwable) {
+                call.cancel()
+                // Hide loading state
+                t.printStackTrace()
+                Utils.T(requireContext(), t.message ?: "Request failed. Please try again later.")
+            }
+        })
+
+
+    }
+
+    private fun handleGetUserResponseApiError(response: Response<GetUserResponse>) {
+        when (response.code()) {
+            StatusCodeConstant.BAD_REQUEST -> {
+                response.errorBody()?.let { errorBody ->
+                    val message = Gson().fromJson(errorBody.charStream(), APIError::class.java)
+                    val displayMessage = message.error ?: "Invalid Request"
+                    Utils.T(requireContext(), displayMessage)
+                }
+            }
+
+            StatusCodeConstant.UNAUTHORIZED -> {
+                response.errorBody()?.let { errorBody ->
+                    val message = Gson().fromJson(errorBody.charStream(), APIError::class.java)
+                    val displayMessage = message.message ?: "Unauthorized Access"
+                    Utils.T(requireContext(), displayMessage)
+                    Utils.UnAuthorizationToken(requireContext())
+                }
+            }
+
+            StatusCodeConstant.NOT_FOUND -> {
+                response.errorBody()?.let { errorBody ->
+                    val message = Gson().fromJson(errorBody.charStream(), APIError::class.java)
+                    val displayMessage = message.message ?: "Package not found. Please try again."
+                    Utils.T(requireContext(), displayMessage)
+                }
+            }
+            else -> {
+                Utils.T(requireContext(), "Unknown error occurred.")
+
+            }
+        }
+    }
+}

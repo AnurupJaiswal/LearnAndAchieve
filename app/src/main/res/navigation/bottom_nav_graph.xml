@@ -169,5 +169,16 @@
         tools:layout="@layout/fragment_checkout"
         android:name="com.anurupjaiswal.learnandachieve.main_package.ui.fragment.CheckoutFragment"
         android:label="CheckoutFragment" />
+     <fragment
+        android:id="@+id/BharatSatExamTicketFragment"
+        tools:layout="@layout/fragment_bharat_sat_exam_ticket"
+        android:name="com.anurupjaiswal.learnandachieve.main_package.ui.fragment.BharatSatExamTicketFragment"
+        android:label="BharatSatExamTicketFragment" />
+
+    <fragment
+        android:id="@+id/BharatSatExamInstructionsFragment"
+        tools:layout="@layout/fragment_bharat_sat_exam_instructions"
+        android:name="com.anurupjaiswal.learnandachieve.main_package.ui.fragment.BharatSatExamInstructionsFragment"
+        android:label="BharatSatExamInstructionsFragment" />
 
 </navigation>

@@ -1,0 +1,411 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingHorizontal="@dimen/_10sdp"
+    android:paddingVertical="@dimen/_10sdp"
+    tools:context=".main_package.ui.fragment.BharatSatExamInstructionsFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/gilroy_semibold"
+            android:includeFontPadding="false"
+            android:paddingVertical="@dimen/_3sdp"
+            android:text="Instructions :"
+            android:textColor="@color/blue"
+            android:textSize="20sp" />
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/gilroy_medium"
+            android:includeFontPadding="false"
+            android:lineSpacingExtra="@dimen/_3sdp"
+            android:paddingVertical="@dimen/_3sdp"
+            android:text="Please read the instructions carefully before starting the test."
+            android:textColor="@color/light_red"
+            android:textSize="16sp"
+            android:textStyle="italic" />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:fontFamily="@font/gilroy_medium"
+                android:includeFontPadding="false"
+                android:lineSpacingExtra="@dimen/_5sdp"
+                android:paddingVertical="@dimen/_3sdp"
+                android:text="1."
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="italic" />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_2sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:fontFamily="@font/gilroy_medium"
+                android:includeFontPadding="false"
+                android:lineSpacingExtra="@dimen/_5sdp"
+                android:paddingVertical="@dimen/_3sdp"
+                android:text="Camera Visibility: Ensure your camera is on and you are clearly visible from head to chest throughout the examination."
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="italic" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:fontFamily="@font/gilroy_medium"
+                android:includeFontPadding="false"
+                android:lineSpacingExtra="@dimen/_5sdp"
+                android:paddingVertical="@dimen/_3sdp"
+                android:text="2."
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="italic" />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_2sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:fontFamily="@font/gilroy_medium"
+                android:includeFontPadding="false"
+                android:lineSpacingExtra="@dimen/_5sdp"
+                android:paddingVertical="@dimen/_3sdp"
+                android:text="Fair Play: Maintain academic integrity. Do not engage in any form of cheating or malpractice."
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="italic" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:fontFamily="@font/gilroy_medium"
+                android:includeFontPadding="false"
+                android:lineSpacingExtra="@dimen/_5sdp"
+                android:paddingVertical="@dimen/_3sdp"
+                android:text="3."
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="italic" />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_2sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:fontFamily="@font/gilroy_medium"
+                android:includeFontPadding="false"
+                android:lineSpacingExtra="@dimen/_5sdp"
+                android:paddingVertical="@dimen/_3sdp"
+                android:text="No Communication: Refrain from communicating with anyone during the examination."
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="italic" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:fontFamily="@font/gilroy_medium"
+                android:includeFontPadding="false"
+                android:lineSpacingExtra="@dimen/_5sdp"
+                android:paddingVertical="@dimen/_3sdp"
+                android:text="4."
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="italic" />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_2sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:fontFamily="@font/gilroy_medium"
+                android:includeFontPadding="false"
+                android:lineSpacingExtra="@dimen/_5sdp"
+                android:text="No External Assistance: Do not seek help from any external source, including textbooks, notes, or online resources."
+                android:paddingVertical="@dimen/_3sdp"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="italic" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:fontFamily="@font/gilroy_medium"
+                android:includeFontPadding="false"
+                android:lineSpacingExtra="@dimen/_5sdp"
+                android:paddingVertical="@dimen/_3sdp"
+                android:text="5."
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="italic" />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_2sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:fontFamily="@font/gilroy_medium"
+                android:includeFontPadding="false"
+                android:lineSpacingExtra="@dimen/_5sdp"
+                android:paddingVertical="@dimen/_3sdp"
+                android:text="Time Management: The examination duration is 90 minutes. Allocate time wisely to answer all questions."
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="italic" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:fontFamily="@font/gilroy_medium"
+                android:includeFontPadding="false"
+                android:lineSpacingExtra="@dimen/_5sdp"
+                android:paddingVertical="@dimen/_3sdp"
+                android:text="6."
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="italic" />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_2sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:fontFamily="@font/gilroy_medium"
+                android:includeFontPadding="false"
+                android:lineSpacingExtra="@dimen/_5sdp"
+                android:text="Question Format: The examination consists of 100 Multiple Choice Questions (MCQs)."
+                android:paddingVertical="@dimen/_3sdp"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="italic" />
+        </LinearLayout>
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:fontFamily="@font/gilroy_medium"
+                android:includeFontPadding="false"
+                android:lineSpacingExtra="@dimen/_5sdp"
+                android:paddingVertical="@dimen/_3sdp"
+                android:text="7."
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="italic" />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_2sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:fontFamily="@font/gilroy_medium"
+                android:includeFontPadding="false"
+                android:lineSpacingExtra="@dimen/_5sdp"
+                android:paddingVertical="@dimen/_3sdp"
+                android:text="Marking Scheme: Each correct answer carries 2 marks."
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="italic" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:fontFamily="@font/gilroy_medium"
+                android:includeFontPadding="false"
+                android:lineSpacingExtra="@dimen/_5sdp"
+                android:paddingVertical="@dimen/_3sdp"
+                android:text="8."
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="italic" />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_2sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:fontFamily="@font/gilroy_medium"
+                android:includeFontPadding="false"
+                android:lineSpacingExtra="@dimen/_5sdp"
+                android:paddingVertical="@dimen/_3sdp"
+                android:text="Submission Deadline: The examination will be automatically submitted after 90 minutes. Ensure you submit your answers before the deadline."
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="italic" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:fontFamily="@font/gilroy_medium"
+                android:includeFontPadding="false"
+                android:lineSpacingExtra="@dimen/_5sdp"
+                android:paddingVertical="@dimen/_3sdp"
+                android:text="9."
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="italic" />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_2sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:fontFamily="@font/gilroy_medium"
+                android:includeFontPadding="false"
+                android:lineSpacingExtra="@dimen/_5sdp"
+                android:paddingVertical="@dimen/_3sdp"
+                android:text="Result Implications: Any violation of the examination rules may lead to the cancellation of your result."
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="italic" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:fontFamily="@font/gilroy_medium"
+                android:includeFontPadding="false"
+                android:lineSpacingExtra="@dimen/_5sdp"
+                android:paddingVertical="@dimen/_3sdp"
+                android:text="10."
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="italic" />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_2sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:fontFamily="@font/gilroy_medium"
+                android:includeFontPadding="false"
+                android:lineSpacingExtra="@dimen/_5sdp"
+                android:paddingVertical="@dimen/_3sdp"
+                android:text="The merit list will be prepared based on the marks obtained by the student and the time they took to complete the test."
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="italic" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:fontFamily="@font/gilroy_medium"
+                android:includeFontPadding="false"
+                android:lineSpacingExtra="@dimen/_5sdp"
+                android:paddingVertical="@dimen/_3sdp"
+                android:text="11."
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="italic" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_2sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:fontFamily="@font/gilroy_medium"
+                android:includeFontPadding="false"
+                android:lineSpacingExtra="@dimen/_5sdp"
+                android:paddingVertical="@dimen/_3sdp"
+                android:text="Each incorrect answer will result in a deduction of 0.5 marks from your total score. Please be mindful of this when answering the questions."
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="italic" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.core.widget.NestedScrollView>

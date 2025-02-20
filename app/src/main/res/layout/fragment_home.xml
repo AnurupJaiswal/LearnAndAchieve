@@ -21,7 +21,18 @@
         android:elevation="@dimen/_7sdp"
         >
 
-
+<LinearLayout
+    android:id="@+id/llHallTicket"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:visibility="gone">
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_gravity="center"
+        android:scaleType="fitXY"
+        android:layout_height="@dimen/_120sdp"
+        android:src="@drawable/tickit"/>
+</LinearLayout>
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rcvStudyMaterial"
             android:layout_width="match_parent"

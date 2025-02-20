@@ -11,8 +11,10 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.text.method.HideReturnsTransformationMethod
 import android.text.method.PasswordTransformationMethod
+import android.view.Gravity
 import android.view.MotionEvent
 import android.view.View
+import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
@@ -278,16 +280,17 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
             }
         }
     }
-    private fun showMultipleDeviceLoginDialog(currentLoginDevices:String) {
+    private fun showMultipleDeviceLoginDialog(currentLoginDevices: String) {
         val dialog = Dialog(this)
         val binding = DialogMultipleDeviceLoginBinding.inflate(layoutInflater)
         dialog.setContentView(binding.root)
 
-
-
+        // Set background transparent
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        dialog.setCancelable(false) // Prevent dismissal on outside touch
-        dialog.setCanceledOnTouchOutside(false) // Also prevents outside tap dismissal
+
+        // Prevent dismissal on outside touch
+        dialog.setCancelable(false)
+        dialog.setCanceledOnTouchOutside(false)
 
         binding.tvDeviceInfo.text = currentLoginDevices
         binding.mccLogoutFromDevices.setOnClickListener {
@@ -298,6 +301,17 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
         binding.mcvCancel.setOnClickListener {
             dialog.dismiss()
         }
+        // Set dialog width to 80% of screen width and wrap content height
+        dialog.window?.setLayout(
+            (resources.displayMetrics.widthPixels * 0.8).toInt(),
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        )
+        dialog.window?.setGravity(Gravity.CENTER)
+        val marginInPx = (20 * resources.displayMetrics.density + 0.5f).toInt()
+        // Apply the vertical margin by adjusting the y position
+        val params = dialog.window?.attributes
+        params?.y = marginInPx
+        dialog.window?.attributes = params
 
         dialog.show()
     }

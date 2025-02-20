@@ -42,6 +42,7 @@
             android:layout_marginTop="@dimen/_10sdp"
             android:fontFamily="@font/gilroy_regular"
             android:includeFontPadding="false"
+            android:lineSpacingExtra="@dimen/_3sdp"
             android:paddingHorizontal="@dimen/_10sdp"
             android:text="@string/welcome_to_bharat_sat_a_flagship_initiative_of_the_learn_and_achieve_edutech_project_aimed_at_transforming_the_educational_landscape_of_india_bharat_sat_is_an_all_india_level_examination_specially_designed_for_students_from_5th_to_10th_grade_this_initiative_stands_out_for_its_unique_approach_combining_competition_and_diagnostic_evaluation_to_empower_students_on_their_educational_journey"
             android:textSize="14sp"/>
@@ -77,6 +78,7 @@
                     android:layout_weight="1"
                     android:maxWidth="300dp"
                     android:ellipsize="end"
+                    android:lineSpacingExtra="@dimen/_3sdp"
                     android:scrollHorizontally="false"
                     android:text="@string/skill_enhancement_participating_in_bharat_sat_encourages_students_to_develop_a_broad_spectrum_of_skills_from_problem_solving_to_time_management_fostering_their_holistic_growth"
                     android:textColor="#000000"
@@ -104,6 +106,8 @@
                     android:layout_weight="1"
                     android:maxWidth="300dp"
                     android:ellipsize="end"
+                    android:lineSpacingExtra="@dimen/_3sdp"
+
                     android:scrollHorizontally="false"
                     android:text="@string/healthy_competition_healthy_competition_is_the_cornerstone_of_personal_development_bharat_sat_instills_a_sense_of_competitiveness_in_students_motivating_them_to_strive_for_excellence"
                     android:textColor="#000000"
@@ -132,6 +136,7 @@
                     android:text="@string/scholarships_with_monthly_scholarships_awarded_to_the_top_performers_at_various_levels_bharat_sat_eases_the_financial_burden_on_families_making_quality_education_more_accessible"
                     android:maxWidth="300dp"
                     android:ellipsize="end"
+                    android:lineSpacingExtra="@dimen/_3sdp"
                     android:scrollHorizontally="false"
                     android:textColor="#000000"
                     android:textSize="14sp" />
@@ -157,6 +162,7 @@
                     android:layout_weight="1"
                     android:maxWidth="300dp"
                     android:ellipsize="end"
+                    android:lineSpacingExtra="@dimen/_3sdp"
                     android:scrollHorizontally="false"
                     android:text="@string/identify_potential_bharat_sat_s_diagnostic_aspect_helps_students_and_educators_identify_their_strengths_and_weaknesses_enabling_them_to_tailor_their_educational_paths_for_optimal_growth"
                     android:textColor="#000000"
@@ -182,6 +188,7 @@
                     android:layout_marginStart="8dp"
                     android:layout_weight="1"
                     android:maxWidth="300dp"
+                    android:lineSpacingExtra="@dimen/_3sdp"
                     android:ellipsize="end"
                     android:scrollHorizontally="false"
                     android:text="@string/national_recognition_achieving_success_in_bharat_sat_is_a_badge_of_honor_signifying_excellence_at_a_national_level_which_can_open_doors_to_a_world_of_opportunities"
@@ -198,11 +205,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/exam_fee"
-            android:textSize="14sp"
+            android:textSize="18sp"
             android:fontFamily="@font/gilroy_semibold"
             android:includeFontPadding="false"
             android:layout_gravity="center"/>
-
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -505,6 +511,234 @@
 
 
         </com.google.android.material.card.MaterialCardView>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+
+            >
+
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="@font/gilroy_semibold"
+                android:includeFontPadding="false"
+                android:text="Key Highlights"
+                android:paddingVertical="@dimen/_10sdp"
+                android:textSize="14sp" />
+
+
+            <androidx.cardview.widget.CardView
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="8dp"
+                android:layout_margin="@dimen/_10sdp"
+                app:cardElevation="3dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/pastelYellow60"
+
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/gilroy_semibold"
+                            android:includeFontPadding="false"
+                            android:text="01."
+                            android:textSize="25sp" />
+
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/gilroy_semibold"
+                            android:text="All India Level Examination:"
+                            android:textSize="18sp" />
+                    </LinearLayout>
+
+
+                    <TextView
+                        android:id="@+id/descriptionTextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+
+                        android:text="BHARAT SAT is an examination that spans the entire nation, bringing students from every corner of the country together in the pursuit of knowledge and excellence."
+                        android:textColor="#2A2A2A"
+                        android:textSize="14sp"
+                        android:visibility="visible" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+
+            <androidx.cardview.widget.CardView
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_10sdp"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="3dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/lightBg"
+
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/gilroy_semibold"
+                            android:includeFontPadding="false"
+                            android:text="02."
+                            android:textSize="25sp" />
+
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/gilroy_semibold"
+                            android:text="For 5th to 10 Classes:"
+                            android:textSize="18sp" />
+                    </LinearLayout>
+
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="We believe that nurturing talent should begin at an early age. BHARAT SAT is designed to cater to students from 5th to 10th standard, ensuring inclusivity and equal opportunity for all."
+                        android:textColor="#2A2A2A"
+                        android:textSize="14sp"
+                        android:visibility="visible" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+
+            <androidx.cardview.widget.CardView
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_10sdp"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="3dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/pastelYellow60"
+
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/gilroy_semibold"
+                            android:includeFontPadding="false"
+                            android:text="03."
+                            android:textSize="25sp" />
+
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/gilroy_semibold"
+                            android:text="Monthly Scholarships:"
+                            android:textSize="18sp" />
+                    </LinearLayout>
+
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="BHARAT SAT goes beyond traditional assessments by rewarding the top-performing students at various levels, including District, State, and National. Detailed information on the awards can be found separately."
+                        android:textColor="#2A2A2A"
+                        android:textSize="14sp"
+                        android:visibility="visible" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+
+            <androidx.cardview.widget.CardView
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_10sdp"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="3dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/pastelYellow60"
+
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/gilroy_semibold"
+                            android:includeFontPadding="false"
+                            android:text="04."
+                            android:textSize="25sp" />
+
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/gilroy_semibold"
+                            android:text="Competitive and Diagnostic:"
+                            android:textSize="18sp" />
+                    </LinearLayout>
+
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="BHARAT SAT is not just about competition. It also serves as a diagnostic tool, helping students identify their strengths and areas for improvement. This dual nature of the examination makes it a valuable educational resource."
+                        android:textColor="#2A2A2A"
+                        android:textSize="14sp"
+                        android:visibility="visible" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+        </LinearLayout>
 
 
 

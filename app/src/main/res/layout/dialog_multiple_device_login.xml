@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center"
-    android:layout_margin="@dimen/_5sdp"
+    android:layout_margin="@dimen/_30sdp"
     android:background="@drawable/curve_background"
     android:orientation="vertical"
     android:padding="16dp">
@@ -13,6 +13,8 @@
         android:layout_height="match_parent"
         android:elevation="@dimen/_5sdp"
         app:cardBackgroundColor="@color/white"
+        app:strokeWidth="0.7dp"
+        app:strokeColor="@color/gray"
         app:cardCornerRadius="2dp">
 
         <LinearLayout
@@ -26,7 +28,7 @@
                 android:layout_gravity="center"
                 android:background="#1B00FFFF"
                 android:gravity="center"
-                android:paddingVertical="@dimen/_10sdp"
+                android:paddingVertical="@dimen/_7sdp"
                 android:text="Multiple Device Login"
                 android:textColor="@color/blue"
                 android:textSize="18sp"
@@ -36,7 +38,7 @@
             <ImageView
                 android:id="@+id/ivIcon"
                 android:layout_width="170dp"
-                android:layout_height="120dp"
+                android:layout_height="150dp"
                 android:layout_gravity="center"
                 android:contentDescription="Device Image"
                 android:scaleType="fitXY"
@@ -55,6 +57,30 @@
                 android:textColor="@color/black"
                 android:textSize="16sp" />
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingVertical="@dimen/_2sdp"
+                android:layout_marginHorizontal="@dimen/_10sdp"
+                >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:fontFamily="@font/gilroy_bold"
+                    android:text="["
+                    android:textColor="@color/blue"
+                    android:textSize="18sp" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/_14sdp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_devices"
+                    app:tint="@color/blue" />
+
             <TextView
                 android:id="@+id/tvDeviceInfo"
                 android:layout_width="wrap_content"
@@ -62,9 +88,23 @@
                 android:layout_gravity="center"
                 android:fontFamily="@font/gilroy_bold"
                 android:paddingVertical="@dimen/_5sdp"
-                android:text="[ Chrome On Windows ]"
+                android:text=" Chrome On Windows"
                 android:textColor="@color/blue"
                 android:textSize="16sp" />
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:fontFamily="@font/gilroy_bold"
+                    android:text=" ]"
+                    android:textColor="@color/blue"
+                    android:textSize="18sp" />
+
+
+            </LinearLayout>
+
 
 
             <com.google.android.material.card.MaterialCardView
@@ -108,7 +148,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:fontFamily="@font/gilroy_semibold"
+                    android:fontFamily="@font/gilroy_bold"
                     android:includeFontPadding="false"
 
 

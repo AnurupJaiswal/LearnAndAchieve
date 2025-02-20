@@ -36,17 +36,12 @@ class OrderHistoryFragment : Fragment(), FileDownloadListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         _binding = FragmentOrderHistoryBinding.inflate(inflater, container, false)
         return binding.root
     }
 
-
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-
 
         init()
     }
@@ -70,7 +65,7 @@ class OrderHistoryFragment : Fragment(), FileDownloadListener {
     }
 
     private fun fetchOrderHistory(token: String) {
-
+binding.progressBar.visibility =View.VISIBLE
         apiService.getOrderHistory(token)
             .enqueue(object : Callback<OrderHistoryResponse> {
                 override fun onResponse(
@@ -80,24 +75,28 @@ class OrderHistoryFragment : Fragment(), FileDownloadListener {
                     if (response.code() == StatusCodeConstant.OK) {
                         val orderHistory = response.body()
                         if (orderHistory != null) {
+                            binding.progressBar.visibility =View.GONE
+
                             if (orderHistory.data.isEmpty()) {
-                                // If data is empty, show empty layout and hide RecyclerView
+                                binding.progressBar.visibility =View.GONE
                                binding.llEmptyLayout.visibility = View.VISIBLE
                                 binding.rvOrderHistory.visibility = View.GONE
                             } else {
-                                // If data is present, show RecyclerView and hide empty layout
+                                binding.progressBar.visibility =View.GONE
                                 binding.llEmptyLayout.visibility = View.GONE
                                 binding.rvOrderHistory.visibility = View.VISIBLE
                                 setupRecyclerView(orderHistory.data)
                             }
                         }
                     } else {
+                        binding.progressBar.visibility =View.GONE
+
                         Utils.E("onFailure: ${response.message()}")
                     }
                 }
 
                 override fun onFailure(call: Call<OrderHistoryResponse>, t: Throwable) {
-
+                    binding.progressBar.visibility =View.GONE
                     Utils.E("onFailure: ${t.message}")
                 }
             })
