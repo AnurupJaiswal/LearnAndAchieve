@@ -11,6 +11,12 @@ data class QuestionComparisonData(
     val mockTestId: String,
     val mockTestName: String,
     val durationInMinutes: Int,
+    val bharatSatExamId: String,
+    val hallTicketNumber: String,
+    val bharatSatExamName: String,
+    val examStartTime: String,
+    val examEndTime: String,
+    val bharatSatExamDate: String,
     val subjects: List<QuestionComparisonSubject>,
     val subjectQuestions: List<SubjectQuestions>
 )

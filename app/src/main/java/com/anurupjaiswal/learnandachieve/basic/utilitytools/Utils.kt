@@ -746,4 +746,65 @@ object Utils {
             context.startActivity(intent)
         }
     }
+
+
+
+    fun formatExamDate(examDateStr: String): String {
+        return try {
+            // Define the API date format
+            val apiFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
+            apiFormat.timeZone = TimeZone.getTimeZone("UTC")
+            val examDate = apiFormat.parse(examDateStr)
+
+            // Include the year in the output format
+            val outputFormat = SimpleDateFormat("EEE, dd MMM yyyy", Locale.getDefault())
+            examDate?.let {
+                outputFormat.format(it)
+            } ?: ""
+        } catch (e: Exception) {
+            e.printStackTrace()
+            ""
+        }
+    }
+
+    fun formatExamTime(examStartTimeStr: String, examEndTimeStr: String): String {
+        return try {
+            // Define the API time format (UTC)
+            val apiFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.ENGLISH).apply {
+                timeZone = TimeZone.getTimeZone("UTC")
+            }
+
+            // Parse the start and end times from the API
+            val startTime = apiFormat.parse(examStartTimeStr)
+            val endTime = apiFormat.parse(examEndTimeStr)
+
+            // Define the output format in local time
+            val outputFormat = SimpleDateFormat("h.mm a", Locale.ENGLISH).apply {
+                timeZone = TimeZone.getDefault()  // Adjust to the device's local timezone
+            }
+
+            fun addSpaceBeforeAmPm(formatted: String): String {
+                // Ensure there is a space between the time and the AM/PM marker.
+                // Check if there is already a space before the last two characters.
+                return if (formatted.length >= 2 && formatted[formatted.length - 3] == ' ') {
+                    formatted
+                } else {
+                    formatted.substring(0, formatted.length - 2) + " " + formatted.substring(formatted.length - 2)
+                }
+            }
+
+            if (startTime != null && endTime != null) {
+                // Format both times
+                val formattedStartTime = addSpaceBeforeAmPm(outputFormat.format(startTime))
+                val formattedEndTime = addSpaceBeforeAmPm(outputFormat.format(endTime))
+                "$formattedStartTime - $formattedEndTime"
+            } else {
+                ""
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            ""
+        }
+    }
+
 }

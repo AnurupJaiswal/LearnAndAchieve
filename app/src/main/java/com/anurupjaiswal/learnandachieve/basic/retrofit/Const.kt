@@ -68,6 +68,7 @@ interface Const {
         const val BLOG_GET_ALL = "blog/getAll"
         const val GET_MOCK_TEST_QUESTIONS = "mockTest/getAllQuestionById"
         const val SUBMIT_MOCK_TEST = "mockTest/submitMockTest"
+        const val submitbharatSatExam = "bharatSatExam/submitbharatSatExam"
         const val VIEW_RESULT = "mockTest/viewResult"
         const val SHOW_RESULT = "mockTest/getShowResults"
 

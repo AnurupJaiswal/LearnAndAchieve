@@ -1,8 +1,14 @@
 package com.anurupjaiswal.learnandachieve.main_package.ui.fragment
 
+import android.content.ContentValues.TAG
 import android.content.res.Resources
 import android.graphics.Rect
+import android.graphics.Typeface
 import android.os.Bundle
+import android.os.CountDownTimer
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.StyleSpan
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -11,6 +17,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -20,15 +27,22 @@ import com.anurupjaiswal.learnandachieve.basic.retrofit.RetrofitClient
 import com.anurupjaiswal.learnandachieve.basic.utilitytools.StatusCodeConstant
 import com.anurupjaiswal.learnandachieve.basic.utilitytools.Utils
 import com.anurupjaiswal.learnandachieve.basic.utilitytools.Utils.E
+import com.anurupjaiswal.learnandachieve.databinding.DialogSubmitConfirmationBinding
+import com.anurupjaiswal.learnandachieve.databinding.FragmentBharatSatBinding
+import com.anurupjaiswal.learnandachieve.databinding.FragmentBharatSatExamQueBinding
+import com.anurupjaiswal.learnandachieve.databinding.FragmentBharatSatExamTicketBinding
 import com.anurupjaiswal.learnandachieve.databinding.FragmentQuestionComparisonBinding
 import com.anurupjaiswal.learnandachieve.main_package.adapter.QuestionComparisonAdapter
 import com.anurupjaiswal.learnandachieve.main_package.adapter.QuestionStatus
 import com.anurupjaiswal.learnandachieve.main_package.adapter.QuestionStatusAdapter
+import com.anurupjaiswal.learnandachieve.model.BharatSatExamNumberOfQuestionsData
 import com.anurupjaiswal.learnandachieve.model.NumberOfQuestionsData
 
 import com.anurupjaiswal.learnandachieve.model.QuestionComparisonResponse
 import com.anurupjaiswal.learnandachieve.model.QuestionComparisonSubject
 import com.anurupjaiswal.learnandachieve.model.QuestionItem
+import com.anurupjaiswal.learnandachieve.model.QuestionProgress
+import com.anurupjaiswal.learnandachieve.model.SubmitBharatSetExamRequest
 import com.anurupjaiswal.learnandachieve.model.SubmitMockTestRequest
 import com.anurupjaiswal.learnandachieve.model.SubmitMockTestResponse
 import com.anurupjaiswal.learnandachieve.model.SubmittedAnswer
@@ -36,14 +50,19 @@ import com.google.gson.Gson
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-class QuestionComparisonFragment : Fragment() {
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
+import java.util.TimeZone
+
+
+class BharatSatExamQueFragment : Fragment() {
     private var gridMapping = listOf<Pair<Int, Int>>()
     private var isDrawerOpen = false
-    private var _binding: FragmentQuestionComparisonBinding? = null
+    private var _binding: FragmentBharatSatExamQueBinding? = null
     private val binding get() = _binding!!
-    private var mockTestId: String? = null
-    private var package_id: String? = null
-    private var order_id: String? = null
+
+    private var countDownTimer: CountDownTimer? = null
     private lateinit var adapter: QuestionComparisonAdapter
     private var selectedSubjectId: String? = null
     private var mockTestData: QuestionComparisonResponse? = null
@@ -52,7 +71,8 @@ class QuestionComparisonFragment : Fragment() {
     private val viewedQuestions = mutableSetOf<String>()
     private var currentQuestionIndex = 0
     private var testStartTime: Long = 0L
-
+    private var bharatSatExamId: String? = null
+    private var eHallTicketId: String? = null
     private var currentSubjectIndex = 0
     private var allSubjects: List<QuestionComparisonSubject> = emptyList()
     private var currentQuestions: List<QuestionItem> = emptyList()
@@ -61,15 +81,22 @@ class QuestionComparisonFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentQuestionComparisonBinding.inflate(inflater, container, false)
+        _binding = FragmentBharatSatExamQueBinding.inflate(inflater, container, false)
         return binding.root
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mockTestId = arguments?.getString("mockTest_id")
-        package_id = arguments?.getString("package_id")
-        order_id = arguments?.getString("order_id")
+        arguments?.let {
+            bharatSatExamId = it.getString("bharatSatExamId", "")
+        }
+
+        arguments?.let {
+            eHallTicketId = it.getString("eHallTicketId", "")
+        }
+
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.rcvQuestionComparison.layoutManager = LinearLayoutManager(requireContext())
@@ -91,9 +118,28 @@ class QuestionComparisonFragment : Fragment() {
             }
         )
 
-        binding.rcvQuestionComparison.adapter = adapter
+        binding.llOpenDrawer.setOnClickListener {
+            toggleDrawer()
+        }
 
+        binding.mcvSumit.setOnClickListener {
+            val progress = getQuestionProgressAlt()
+            Log.d(
+                TAG,
+                "Attempted: ${progress.attempted}, Not Attempted: ${progress.total - progress.attempted}, Total: ${progress.total}"
+            )
+            showSubmitConfirmationDialog(progress)
+        }
 
+        binding.tvAllQue.setOnClickListener {
+            toggleDrawer()
+        }
+
+        binding.mcvPrevious.setOnClickListener { showPreviousQuestion() }
+        binding.mcvNext.setOnClickListener { showNextQuestion() }
+
+        Log.e(TAG, "onViewCreated:${bharatSatExamId}")
+        bharatSatExamId?.let { fetchQuestions(it) }
 
         binding.rcvQuestionComparison.adapter = adapter
         binding.rcvQuestionGrid.layoutManager = GridLayoutManager(requireContext(), 8)
@@ -102,26 +148,8 @@ class QuestionComparisonFragment : Fragment() {
         }
         binding.rcvQuestionGrid.adapter = questionStatusAdapter
 
-        binding.llDrawer.visibility =  View.GONE
-        binding.llOpenDrawer.setOnClickListener {
-            toggleDrawer()
-        }
+        binding.llDrawer.visibility = View.GONE
 
-        binding.mcvSumit.setOnClickListener {
-            submitMockTest()
-        }
-        binding.tvAllQue.setOnClickListener {
-            toggleDrawer()
-        }
-
-
-
-        mockTestId?.let {
-            fetchMockTestQuestions(it)
-        } ?: Log.e("QuestionComparison", "MockTest ID is null!")
-
-        binding.mcvPrevious.setOnClickListener { showPreviousQuestion() }
-        binding.mcvNext.setOnClickListener { showNextQuestion() }
 
         binding.root.setOnTouchListener { _, event ->
             if (isDrawerOpen && event.action == MotionEvent.ACTION_DOWN) {
@@ -135,72 +163,90 @@ class QuestionComparisonFragment : Fragment() {
             }
             false
         }
-
     }
-    private fun fetchMockTestQuestions(mockTestId: String) {
+
+    private fun fetchQuestions(bharatSatExamId: String) {
         binding.progressBar.visibility = View.VISIBLE
         binding.llMain.visibility = View.GONE
 
         val apiService = RetrofitClient.client
         val token = Utils.GetSession().token
-        apiService.getMockTestQuestions("Bearer $token", mockTestId).enqueue(object : Callback<QuestionComparisonResponse> {
-            override fun onResponse(call: Call<QuestionComparisonResponse>, response: Response<QuestionComparisonResponse>) {
-                when (response.code()) {
-                    StatusCodeConstant.OK -> {
-                        response.body()?.let { dataResponse ->
-                            mockTestData = dataResponse
-                            allSubjects = dataResponse.data.subjects
-                            setupSubjectTabs(allSubjects)
-                            val durationInMinutes = dataResponse.data.durationInMinutes ?: 0
-                            Utils.startCountdownTimer(durationInMinutes, binding.tvTimer)
-                            testStartTime = System.currentTimeMillis()
-                            if (allSubjects.isNotEmpty()) {
-                                calculateQuestionOffsets()
-                                onSubjectSelected(0) // Select first subject by default
-                                binding.progressBar.visibility = View.GONE
-                                binding.llMain.visibility = View.VISIBLE
+        apiService.getBharatSatQuestions("Bearer $token", bharatSatExamId)
+            .enqueue(object : Callback<QuestionComparisonResponse> {
+                override fun onResponse(call: Call<QuestionComparisonResponse>, response: Response<QuestionComparisonResponse>) {
+                    when (response.code()) {
+                        StatusCodeConstant.OK -> {
+                            response.body()?.let { dataResponse ->
+                                // Extract the "Date" header from the response.
+                                val dateHeader = response.headers()["Date"]
+                                if (dateHeader != null) {
+                                    // Example: "Sat, 22 Feb 2025 05:51:52 GMT"
+                                    val dateFormat = SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss z", Locale.ENGLISH)
+                                    testStartTime = try {
+                                        dateFormat.parse(dateHeader)?.time ?: System.currentTimeMillis()
+
+                                    } catch (e: Exception) {
+                                        System.currentTimeMillis()
+                                    }
+                                } else {
+                                    testStartTime = System.currentTimeMillis()
+                                }
+
+                                mockTestData = dataResponse
+                                allSubjects = dataResponse.data.subjects
+                                setupSubjectTabs(allSubjects)
+
+                                // Use exam start and end times from response to start countdown.
+                                startExamCountdown(dataResponse.data.examStartTime, dataResponse.data.examEndTime)
+
+                                if (allSubjects.isNotEmpty()) {
+                                    calculateQuestionOffsets()
+                                    onSubjectSelected(0) // Select first subject by default
+                                    binding.progressBar.visibility = View.GONE
+                                    binding.llMain.visibility = View.VISIBLE
+                                }
                             }
                         }
-                    }
-                    StatusCodeConstant.UNAUTHORIZED -> {
-                        binding.progressBar.visibility = View.GONE
-                        binding.llMain.visibility = View.VISIBLE
-                        Utils.E("fetchMockTestQuestions UNAUTHORIZED: ${response.message()}")
-                        Utils.UnAuthorizationToken(requireContext())
-                    }
-                    StatusCodeConstant.BAD_REQUEST -> {
-                        binding.progressBar.visibility = View.GONE
-                        binding.llMain.visibility = View.VISIBLE
-                        response.errorBody()?.let { errorBody ->
-                            val apiError = Gson().fromJson(errorBody.charStream(), APIError::class.java)
-                            val errorMessage = apiError.error ?: "Bad Request Error"
-                            Utils.E("fetchMockTestQuestions BAD_REQUEST: $errorMessage")
-                            Utils.T(requireContext(), errorMessage)
+                        StatusCodeConstant.UNAUTHORIZED -> {
+                            binding.progressBar.visibility = View.GONE
+                            binding.llMain.visibility = View.VISIBLE
+                            Utils.E("fetchMockTestQuestions UNAUTHORIZED: ${response.message()}")
+                            Utils.UnAuthorizationToken(requireContext())
+                        }
+                        StatusCodeConstant.BAD_REQUEST -> {
+                            binding.progressBar.visibility = View.GONE
+                            binding.llMain.visibility = View.VISIBLE
+                            response.errorBody()?.let { errorBody ->
+                                val apiError = Gson().fromJson(errorBody.charStream(), APIError::class.java)
+                                val errorMessage = apiError.error ?: "Bad Request Error"
+                                Utils.E("fetchMockTestQuestions BAD_REQUEST: $errorMessage")
+                                Utils.T(requireContext(), errorMessage)
+                            }
+                        }
+                        else -> {
+                            binding.progressBar.visibility = View.GONE
+                            binding.llMain.visibility = View.VISIBLE
+                            Utils.E("fetchbharatSatExamQuestions Error: ${response.code()} - ${response.message()}")
+                            Utils.T(requireContext(), "Error: ${response.code()}")
                         }
                     }
-                    else -> {
-                        binding.progressBar.visibility = View.GONE
-                        binding.llMain.visibility = View.VISIBLE
-                        Utils.E("fetchMockTestQuestions Error: ${response.code()} - ${response.message()}")
-                        Utils.T(requireContext(), "Error: ${response.code()}")
-                    }
                 }
-            }
 
-            override fun onFailure(call: Call<QuestionComparisonResponse>, t: Throwable) {
-                binding.progressBar.visibility = View.GONE
-                binding.llMain.visibility = View.VISIBLE
-                Utils.E("fetchMockTestQuestions API Call Failed: ${t.message}")
-                Utils.T(requireContext(), t.message ?: "Request failed. Try again later")
-            }
-        })
+                override fun onFailure(call: Call<QuestionComparisonResponse>, t: Throwable) {
+                    binding.progressBar.visibility = View.GONE
+                    binding.llMain.visibility = View.VISIBLE
+                    Utils.E("fetchbharatSatExamQuestions API Call Failed: ${t.message}")
+                    Utils.T(requireContext(), t.message ?: "Request failed. Try again later")
+                }
+            })
     }
 
     private fun setupSubjectTabs(subjects: List<QuestionComparisonSubject>) {
         val subjectContainer = binding.subjectContainer
         subjectContainer.removeAllViews()
         for ((index, subject) in subjects.withIndex()) {
-            val button = LayoutInflater.from(requireContext()).inflate(R.layout.item_subject_button, subjectContainer, false) as TextView
+            val button = LayoutInflater.from(requireContext())
+                .inflate(R.layout.item_subject_button, subjectContainer, false) as TextView
             button.text = subject.subjectName
             button.setOnClickListener {
                 onSubjectSelected(index)
@@ -212,6 +258,7 @@ class QuestionComparisonFragment : Fragment() {
             }
         }
     }
+
     private fun calculateQuestionOffsets() {
         questionNumberOffset = 0
         for (i in allSubjects.indices) {
@@ -229,6 +276,7 @@ class QuestionComparisonFragment : Fragment() {
             }
         }
     }
+
     private fun onSubjectSelected(subjectIndex: Int) {
         if (subjectIndex !in allSubjects.indices) return
         currentSubjectIndex = subjectIndex
@@ -251,6 +299,7 @@ class QuestionComparisonFragment : Fragment() {
             button.isSelected = (i == subjectIndex)
         }
     }
+
     private fun toggleDrawer() {
         if (isDrawerOpen) {
             closeDrawerWithAnimation()
@@ -258,20 +307,24 @@ class QuestionComparisonFragment : Fragment() {
             openDrawerWithAnimation()
         }
     }
+
     private fun openDrawerWithAnimation() {
         binding.llDrawer.apply {
             visibility = View.VISIBLE
-            translationX = Resources.getSystem().displayMetrics.widthPixels.toFloat() // Start off-screen
+            translationX =
+                Resources.getSystem().displayMetrics.widthPixels.toFloat() // Start off-screen
             animate().translationX(0f).setDuration(300).start() // Slide in
         }
         binding.llOpenDrawer.apply {
             visibility = View.VISIBLE
-            translationX = Resources.getSystem().displayMetrics.widthPixels.toFloat() // Start off-screen
+            translationX =
+                Resources.getSystem().displayMetrics.widthPixels.toFloat() // Start off-screen
             animate().translationX(0f).setDuration(300).start() // Slide in
         }
         binding.ivArrowQue.animate().rotation(180f).setDuration(300).start()
         isDrawerOpen = true
     }
+
     private fun closeDrawerWithAnimation() {
         val screenWidth = Resources.getSystem().displayMetrics.widthPixels.toFloat()
 
@@ -286,6 +339,7 @@ class QuestionComparisonFragment : Fragment() {
 
         isDrawerOpen = false
     }
+
     private fun showPreviousQuestion() {
         if (currentQuestionIndex > 0) {
             currentQuestionIndex--
@@ -295,6 +349,7 @@ class QuestionComparisonFragment : Fragment() {
         }
         updateQuestionDisplay()
     }
+
     private fun showNextQuestion() {
 
         if (currentQuestionIndex < currentQuestions.size - 1) {
@@ -375,8 +430,6 @@ class QuestionComparisonFragment : Fragment() {
             if (currentSubjectIndex == allSubjects.size - 1 && currentQuestionIndex == currentQuestions.size - 1) View.GONE else View.VISIBLE
     }
 
-
-
     private fun getEffectiveQuestionNumberIndex(): Int {
         var effective = questionNumberOffset
         for (j in 0 until currentQuestionIndex) {
@@ -395,31 +448,25 @@ class QuestionComparisonFragment : Fragment() {
     }
     override fun onDestroyView() {
         super.onDestroyView()
+        countDownTimer?.cancel()
         _binding = null
     }
-
-    private fun submitMockTest() {
+    private fun submitBharatSatExam() {
         // Validate required IDs.
-        if (mockTestId.isNullOrEmpty() || package_id.isNullOrEmpty() || order_id.isNullOrEmpty()) {
-            E("SubmitMockTes Missing required IDs")
+        if (bharatSatExamId.isNullOrEmpty() || eHallTicketId.isNullOrEmpty()) {
+            E("bharatSatExam: Missing required IDs (bharatSatExamId or eHallTicketId)")
             return
         }
 
         val token = Utils.GetSession().token
         val submittedAnswers = mutableListOf<SubmittedAnswer>()
 
-        // Loop through all subjects' questions from the fetched mockTestData.
+        // Loop through all subjects' questions from the fetched bharatSatExamData.
         mockTestData?.data?.subjectQuestions?.forEach { subjectQuestions ->
             subjectQuestions.questions.forEach { question ->
                 if (question.subQuestions.isEmpty()) {
-                    // For main questions without sub‑questions:
-                    // If an answer was given, use it; otherwise default to -1.
                     val answerStr = selectedAnswers[question.questionId] ?: ""
-                    val selectedOption = if (answerStr.isNotEmpty()) {
-                        answerStr.toIntOrNull() ?: -1
-                    } else {
-                        -1
-                    }
+                    val selectedOption = if (answerStr.isNotEmpty()) answerStr.toIntOrNull() ?: -1 else -1
                     submittedAnswers.add(
                         SubmittedAnswer(
                             question_id = question.questionId,
@@ -429,20 +476,14 @@ class QuestionComparisonFragment : Fragment() {
                         )
                     )
                 } else {
-                    // For questions with sub‑questions, iterate over each sub‑question.
                     question.subQuestions.forEach { subQuestion ->
                         val answerStr = selectedAnswers[subQuestion.subQuestionId] ?: ""
-                        val selectedOption = if (answerStr.isNotEmpty()) {
-                            answerStr.toIntOrNull() ?: -1
-                        } else {
-                            -1
-                        }
+                        val selectedOption = if (answerStr.isNotEmpty()) answerStr.toIntOrNull() ?: -1 else -1
                         submittedAnswers.add(
                             SubmittedAnswer(
                                 question_id = question.questionId,
                                 sub_question_id = subQuestion.subQuestionId,
                                 selectedOption = selectedOption,
-                                // Using the main question's type; adjust if needed.
                                 typeOfQuestion = question.typeOfQuestion
                             )
                         )
@@ -451,87 +492,81 @@ class QuestionComparisonFragment : Fragment() {
             }
         }
 
-        // Build the numberOfQuestionsData list from your subjects.
+        // Build the numberOfQuestionsData list for all subjects.
         val numberOfQuestionsData = allSubjects.map { subject ->
-            // Find the questions for this subject.
             val questions = mockTestData?.data?.subjectQuestions
                 ?.firstOrNull { it.subjectId == subject.subjectId }
                 ?.questions ?: emptyList()
-            NumberOfQuestionsData(
+            BharatSatExamNumberOfQuestionsData(
                 subjectId = subject.subjectId,
-                numberOfQuestions = questions.size
+                numberOfQuestionsBank = questions.size,
+                numberOfQuestionsBharatSat = questions.size
             )
         }
 
-        // Calculate elapsed time since test started.
-        val testEndTime = System.currentTimeMillis()
-        val elapsedMillis = testEndTime - testStartTime
-
-// Compute hours, minutes, and seconds.
-        val hours = elapsedMillis / (3600 * 1000)
-        val minutes = (elapsedMillis % (3600 * 1000)) / (60 * 1000)
-        val seconds = (elapsedMillis % (60 * 1000)) / 1000
-
-        val elapsedTimeString = String.format("%02d:%02d:%02d", hours, minutes, seconds)
-
-
-        val request = SubmitMockTestRequest(
-            mockTest_id = mockTestId!!,
-            package_id = package_id!!,
-            order_id = order_id!!,
-            submittedAnswers = submittedAnswers,
-            numberOfQuestionsData = numberOfQuestionsData,
-            submittedTime = elapsedTimeString
+        // Calculate elapsed time as the difference between examEndTime and testStartTime.
+        // Parse examEndTime from the API.
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault())
+        val examEndTimestamp = dateFormat.parse(mockTestData?.data?.examEndTime ?: "")?.time
+            ?: System.currentTimeMillis()
+        val elapsedMillis = examEndTimestamp - testStartTime
+        val elapsedTimeString = String.format(
+            "%02d:%02d:%02d",
+            elapsedMillis / (3600 * 1000),
+            (elapsedMillis % (3600 * 1000)) / (60 * 1000),
+            (elapsedMillis % (60 * 1000)) / 1000
         )
 
-        //    binding.progressBar.visibility = View.VISIBLE
+        // Format times: startTime and endTime in "h:mm:ss a" format,
+        // and submitted_date in "d/M/yyyy, h:mm:ss a" format.
+        val timeFormatter = SimpleDateFormat("h:mm:ss a", Locale.getDefault())
+        val dateFormatter = SimpleDateFormat("d/M/yyyy, h:mm:ss a", Locale.getDefault())
+        val startTimeString = timeFormatter.format(Date(testStartTime)).lowercase()
+        val endTimeString = timeFormatter.format(Date(examEndTimestamp)).lowercase()
+        val submittedDate = dateFormatter.format(Date(examEndTimestamp)).lowercase()
+
+        val request = SubmitBharatSetExamRequest(
+            bharatSatExamId = bharatSatExamId!!,
+            eHallTicketId = eHallTicketId!!,
+            startTime = startTimeString,
+            endTime = endTimeString,
+            submitted_date = submittedDate,
+            submittedTime = elapsedTimeString,
+            submittedAnswers = submittedAnswers,
+            numberOfQuestionsData = numberOfQuestionsData
+        )
+
         Utils.toggleProgressBarAndText(true, binding.loading, binding.tvSumit, binding.root)
 
-        RetrofitClient.client.submitMockTest("Bearer $token", request)
+        RetrofitClient.client.submitbharatSatExam("Bearer $token", request)
             .enqueue(object : Callback<SubmitMockTestResponse> {
                 override fun onResponse(
                     call: Call<SubmitMockTestResponse>,
                     response: Response<SubmitMockTestResponse>
                 ) {
                     Utils.toggleProgressBarAndText(false, binding.loading, binding.tvSumit, binding.root)
-
-
                     when (response.code()) {
                         StatusCodeConstant.OK -> {
-                            Utils.T(requireContext(), "Mock Test submitted successfully!")
-                            findNavController().popBackStack()
+                            val navController = findNavController()
+                            val navOptions = NavOptions.Builder()
+                                .setPopUpTo(R.id.home, inclusive = false)
+                                .build()
+                            navController.navigate(R.id.BharatSatSubmitSuccessFragment, null, navOptions)
 
-                            /*   val bundle = Bundle().apply {
-                                   putString("mockTest_id", mockTest.mockTest_id)
-                                   putString("package_id", mockTest.package_id)
-                                   putString("order_id", mockTest.order_id)
-                               }
-                               NavigationManager.navigateToFragment(findNavController(), R.id.QuestionComparisonFragment, bundle)
-
-   */
                         }
-
                         StatusCodeConstant.UNAUTHORIZED -> {
-                            Utils.E("submitMockTest UNAUTHORIZED: ${response.message()}")
+                            Utils.E("bharatSatExam UNAUTHORIZED: ${response.message()}")
                             Utils.UnAuthorizationToken(requireContext())
-                            Utils.toggleProgressBarAndText(false, binding.loading, binding.tvSumit, binding.root)
-
                         }
-
                         StatusCodeConstant.BAD_REQUEST -> {
                             response.errorBody()?.let { errorBody ->
                                 val apiError = Gson().fromJson(errorBody.charStream(), APIError::class.java)
                                 val errorMessage = apiError.error ?: "Bad Request Error"
-                                Utils.E("submitMockTest BAD_REQUEST: $errorMessage")
-                                Utils.toggleProgressBarAndText(false, binding.loading, binding.tvSumit, binding.root)
-
+                                Utils.E("bharatSatExam BAD_REQUEST: $errorMessage")
                             }
                         }
-
                         else -> {
-                            Utils.toggleProgressBarAndText(false, binding.loading, binding.tvSumit, binding.root)
-
-                            Utils.E("submitMockTest Error: ${response.code()} - ${response.errorBody()?.string()}")
+                            Utils.E("bharatSatExam Error: ${response.code()} - ${response.errorBody()?.string()}")
                             Utils.T(requireContext(), "Submission failed. Please try again.")
                         }
                     }
@@ -539,11 +574,155 @@ class QuestionComparisonFragment : Fragment() {
 
                 override fun onFailure(call: Call<SubmitMockTestResponse>, t: Throwable) {
                     binding.progressBar.visibility = View.GONE
-                    Utils.E("submitMockTest Failure: ${t.message}")
+                    Utils.E("bharatSatExam Failure: ${t.message}")
                     Utils.T(requireContext(), "Network error. Please try again.")
                 }
             })
-
     }
 
+
+
+
+    private fun getQuestionProgressAlt(): QuestionProgress {
+        var totalCount = 0
+        var attemptedCount = 0
+
+        allSubjects.forEach { subject ->
+            val subjectQuestions = mockTestData?.data?.subjectQuestions
+                ?.firstOrNull { it.subjectId == subject.subjectId }
+                ?.questions ?: emptyList()
+
+            subjectQuestions.forEach { question ->
+
+                if (question.subQuestions.isNullOrEmpty()) {
+                    totalCount++
+                    if (selectedAnswers.containsKey(question.questionId)) {
+                        attemptedCount++
+                    }
+                } else {
+                    // If there are sub-questions, count each one individually.
+                    question.subQuestions.forEach { subQuestion ->
+                        totalCount++
+                        if (selectedAnswers.containsKey(subQuestion.subQuestionId)) {
+                            attemptedCount++
+                        }
+                    }
+                }
+            }
+        }
+        return QuestionProgress(attempted = attemptedCount, total = totalCount)
+    }
+
+    private fun showSubmitConfirmationDialog(progress: QuestionProgress) {
+        // Inflate the custom dialog layout using view binding
+        val dialogBinding = DialogSubmitConfirmationBinding.inflate(layoutInflater)
+        // Set the progress values in the dialog
+        dialogBinding.tvAttemptedQuestions.text = "No. of attempted questions : ${progress.attempted}"
+        val notAttempted = progress.total - progress.attempted
+        dialogBinding.tvNotAttemptedQuestions.text = "Not attempted questions : $notAttempted"
+        // Also pass the timer value from the main layout to the dialog
+        dialogBinding.tvTimer.text = binding.tvTimer.text
+        // Build the dialog
+        val dialog = androidx.appcompat.app.AlertDialog.Builder(requireContext())
+            .setView(dialogBinding.root)
+            .create()
+        dialogBinding.mcvCancel.setOnClickListener {
+            dialog.dismiss()
+        }
+        dialogBinding.mcvLogout.setOnClickListener {
+            dialog.dismiss()
+      submitBharatSatExam()
+
+
+        }
+        dialog.show()
+    }
+
+    private fun startExamCountdown(examStartTime: String, examEndTime: String) {
+
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault())
+        dateFormat.timeZone = TimeZone.getTimeZone("UTC") // Adjust if needed
+        val startTimestamp = dateFormat.parse(examStartTime)?.time ?: System.currentTimeMillis()
+        val endTimestamp = dateFormat.parse(examEndTime)?.time ?: System.currentTimeMillis()
+        val currentTime = System.currentTimeMillis()
+        Log.d(TAG, "startTimestamp: $startTimestamp, endTimestamp: $endTimestamp, currentTime Device Time : $currentTime")
+        if (currentTime < startTimestamp) {
+            binding.tvTimer.text = "Exam not started yet"
+            return
+        }
+        val timeLeft = endTimestamp - testStartTime
+        Log.d(TAG, "startTimestamp: $startTimestamp, endTimestamp: $endTimestamp, testStartTime : $testStartTime, timeLeft : $timeLeft")
+
+        if (timeLeft <= 0) {
+            binding.tvTimer.text = "00hr 00min 00secs left"
+            return
+        }
+        countDownTimer = object : CountDownTimer(timeLeft, 1000) {
+            override fun onTick(millisUntilFinished: Long) {
+                val seconds = (millisUntilFinished / 1000) % 60
+                val minutes = (millisUntilFinished / (1000 * 60)) % 60
+                val hours = (millisUntilFinished / (1000 * 3600))
+                updateTimerText(hours, minutes, seconds)
+            }
+            override fun onFinish() {
+                binding.tvTimer.text = "00hr 00min 00secs left"
+            }
+        }.start()
+    }
+    private fun updateTimerText(hours: Long, minutes: Long, seconds: Long) {
+        // Format string e.g. "01hr 22min 46secs left"
+
+        val timeString = String.format("%02dhr %02dmin %02dsecs left", hours, minutes, seconds)
+        val spannable = SpannableString(timeString)
+
+        // Bold numeric parts:
+        // Bold hours digits (first 2 characters)
+        spannable.setSpan(
+            StyleSpan(Typeface.BOLD),
+            0, 2,
+            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
+        // Bold minutes digits: find the start index after "hr " (which is at index 4)
+        val minStart = timeString.indexOf(" ", 0) + 1 // index after first space
+        spannable.setSpan(
+            StyleSpan(Typeface.BOLD),
+            minStart, minStart + 2,
+            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
+        // Bold seconds digits: find the start index of seconds digits.
+        // We'll use lastIndexOf for "secs" and subtract 2.
+        val secsIndex = timeString.indexOf("secs")
+        val secDigitsStart = secsIndex - 2
+        spannable.setSpan(
+            StyleSpan(Typeface.BOLD),
+            secDigitsStart, secDigitsStart + 2,
+            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
+
+        // Italicize unit labels:
+        // Italicize "hr"
+        val hrIndex = timeString.indexOf("hr")
+        spannable.setSpan(
+            StyleSpan(Typeface.ITALIC),
+            hrIndex, hrIndex + 2,
+            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
+        // Italicize "min"
+        val minLabelIndex = timeString.indexOf("min")
+        spannable.setSpan(
+            StyleSpan(Typeface.ITALIC),
+            minLabelIndex, minLabelIndex + 3,
+            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
+        // Italicize "secs"
+        val secsLabelIndex = timeString.indexOf("secs")
+        spannable.setSpan(
+            StyleSpan(Typeface.ITALIC),
+            secsLabelIndex, secsLabelIndex + 4,
+            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
+
+        // Finally update the TextView.
+        binding.tvTimer.text = spannable
+    }
 }

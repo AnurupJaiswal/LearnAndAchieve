@@ -157,13 +157,20 @@ class DashboardActivity : BaseActivity(), PaymentResultListener {
             }
         }
         updateCartBadge()
+
+
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                if (!navController.navigateUp()) {
-                    finish()
+                if (navController.currentDestination?.id == R.id.BharatSatSubmitSuccessFragment) {
+                    // Navigate directly to Home Fragment
+                    navController.popBackStack(R.id.home, false)
+                } else {
+                    // For other fragments, try to navigate up; if not possible, finish the activity.
+                    if (!navController.navigateUp()) {
+                        finish()
+                    }
                 }
             }
-
         })
 
          binding.ivPremiumCenterIcon.setOnClickListener{

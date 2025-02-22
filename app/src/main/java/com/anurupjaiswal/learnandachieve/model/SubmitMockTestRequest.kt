@@ -11,6 +11,8 @@ data class SubmitMockTestRequest(
     @SerializedName("submittedTime") val submittedTime: String
 )
 
+
+
 data class SubmittedAnswer(
     @SerializedName("question_id") val question_id: String,
     @SerializedName("sub_question_id") val sub_question_id: String? = null,

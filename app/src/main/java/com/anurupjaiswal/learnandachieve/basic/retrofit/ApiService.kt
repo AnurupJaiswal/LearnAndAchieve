@@ -29,6 +29,7 @@ import com.anurupjaiswal.learnandachieve.model.RegistrationVerifyOtpResponse
 import com.anurupjaiswal.learnandachieve.model.ShowResultReponce
 import com.anurupjaiswal.learnandachieve.model.SignupResponse
 import com.anurupjaiswal.learnandachieve.model.StateApiResponse
+import com.anurupjaiswal.learnandachieve.model.SubmitBharatSetExamRequest
 import com.anurupjaiswal.learnandachieve.model.SubmitMockTestRequest
 import com.anurupjaiswal.learnandachieve.model.SubmitMockTestResponse
 import com.anurupjaiswal.learnandachieve.model.TalukaApiResponse
@@ -61,6 +62,11 @@ interface ApiService {
     @POST(Const.SUBMIT_MOCK_TEST)
     fun submitMockTest(
         @Header(Constants.Authorization) token: String, @Body request: SubmitMockTestRequest
+    ): Call<SubmitMockTestResponse>
+
+ @POST(Const.submitbharatSatExam)
+    fun submitbharatSatExam(
+        @Header(Constants.Authorization) token: String, @Body request: SubmitBharatSetExamRequest
     ): Call<SubmitMockTestResponse>
 
 
@@ -318,7 +324,16 @@ interface ApiService {
         @Url fileUrl: String,
         @Header("Authorization") token: String
     ): Call<ResponseBody>
+    @GET("bharatSatExam/getAllQuestion")
+
+    fun getBharatSatQuestions(
+        @Header("Authorization") token: String,
+        @Query("bharatSatExamId") examId: String
+    ): Call<QuestionComparisonResponse>
+
 }
+
+
 
 
 

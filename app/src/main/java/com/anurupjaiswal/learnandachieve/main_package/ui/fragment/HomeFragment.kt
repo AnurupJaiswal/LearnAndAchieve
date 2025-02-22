@@ -138,7 +138,7 @@ class HomeFragment : Fragment() {
             getUserDetails(token!!)
              binding.llHallTicket.setOnClickListener {
                  NavigationManager.navigateToFragment(
-                     findNavController(), R.id.BharatSatExamInstructionsFragment)
+                     findNavController(), R.id.BharatSatExamTicketFragment)
              }
         } else {
             
@@ -706,11 +706,12 @@ class HomeFragment : Fragment() {
                             )
 
                             val examDate = getUser.bharatSatExamDate?.substring(0, 10)
-                            if (examDate == today) {
-                                binding.llHallTicket.visibility = View.VISIBLE
-                            } else {
-                                binding.llHallTicket.visibility = View.VISIBLE
-                            }
+                            if (examDate != null) {
+                                    binding.llHallTicket.visibility = View.VISIBLE
+                                } else {
+                                    binding.llHallTicket.visibility = View.GONE
+                                }
+
                         } else {
 
                             E("Error: 'getUser' is null in response.")

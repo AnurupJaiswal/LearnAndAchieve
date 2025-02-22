@@ -180,5 +180,15 @@
         tools:layout="@layout/fragment_bharat_sat_exam_instructions"
         android:name="com.anurupjaiswal.learnandachieve.main_package.ui.fragment.BharatSatExamInstructionsFragment"
         android:label="BharatSatExamInstructionsFragment" />
+  <fragment
+        android:id="@+id/BharatSatExamQueFragment"
+        tools:layout="@layout/fragment_bharat_sat_exam_que"
+        android:name="com.anurupjaiswal.learnandachieve.main_package.ui.fragment.BharatSatExamQueFragment"
+        android:label="BharatSatExamQueFragment" />
+ <fragment
+        android:id="@+id/BharatSatSubmitSuccessFragment"
+        tools:layout="@layout/dialog_submit_confirmation"
+        android:name="com.anurupjaiswal.learnandachieve.main_package.ui.fragment.BharatSatSubmitSuccessFragment"
+        android:label="BharatSatSubmitSuccessFragment" />
 
 </navigation>

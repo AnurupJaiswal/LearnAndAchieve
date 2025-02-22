@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/transparent"
+    android:orientation="vertical">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/curve_background"
+        android:elevation="@dimen/_2sdp"
+        android:orientation="vertical"
+        android:padding="@dimen/_10sdp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:weightSum="2">
+
+            <TextView
+                android:id="@+id/tvTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_weight="0.9"
+                android:text="Are you sure?"
+                android:textColor="#000000"
+                android:textSize="@dimen/_12sdp"
+                android:textStyle="bold" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/tvTimer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/gilroy_semibold"
+                    android:gravity="start"
+                    android:maxLines="1"
+                    android:text="1 hr 15 mins 38 secs left"
+                    android:textColor="#007BFF"
+                    android:textSize="@dimen/_12ssp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <View
+                    android:id="@+id/underline"
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:background="@color/blue"
+                    app:layout_constraintEnd_toEndOf="@id/tvTimer"
+                    app:layout_constraintStart_toStartOf="@id/tvTimer"
+                    app:layout_constraintTop_toBottomOf="@id/tvTimer" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        </LinearLayout>
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_15ssp"
+            app:cardBackgroundColor="#E8FFE8"
+
+            app:cardCornerRadius="@dimen/_10sdp"
+            app:strokeWidth="0dp">
+
+            <TextView
+                android:id="@+id/tvAttemptedQuestions"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#FFEBEB"
+                android:fontFamily="@font/gilroy_semibold"
+                android:gravity="center"
+                android:padding="@dimen/_10sdp"
+                android:text="No. of attempted questions : 32"
+                android:textColor="@color/light_red"
+                android:textSize="16sp" />
+
+
+        </com.google.android.material.card.MaterialCardView>
+
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_5sdp"
+            app:cardBackgroundColor="#FFDEDE"
+            app:cardCornerRadius="@dimen/_10sdp"
+            app:strokeWidth="0dp">
+
+            <TextView
+                android:id="@+id/tvNotAttemptedQuestions"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#FFEBEB"
+                android:fontFamily="@font/gilroy_semibold"
+                android:gravity="center"
+                android:padding="@dimen/_10sdp"
+                android:text="Not attempted questions : 08"
+                android:textColor="@color/light_red"
+                android:textSize="16sp" />
+
+        </com.google.android.material.card.MaterialCardView>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_20sdp"
+            android:orientation="horizontal"
+            android:weightSum="2">
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/mcvCancel"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/_10sdp"
+                android:layout_weight="1"
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="@dimen/_10sdp"
+                app:strokeColor="@color/primaryColor"
+                app:strokeWidth="1dp">
+
+                <TextView
+                    android:id="@+id/tvButtonText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:fontFamily="@font/gilroy_semibold"
+                    android:paddingVertical="@dimen/_11sdp"
+                    android:text="NO"
+                    android:textColor="@color/primaryColor"
+                    android:textSize="14sp"
+                    tools:ignore="TextContrastCheck" />
+
+
+            </com.google.android.material.card.MaterialCardView>
+
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/mcvLogout"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/_35sdp"
+                android:layout_marginEnd="@dimen/_10sdp"
+                android:layout_weight="1"
+                app:cardBackgroundColor="@color/primaryColor"
+                app:cardCornerRadius="@dimen/_10sdp"
+                app:strokeColor="@color/gray"
+                app:strokeWidth="0dp">
+
+
+                <ProgressBar
+                    android:id="@+id/loading"
+                    android:layout_width="@dimen/_35sdp"
+                    android:layout_height="@dimen/_35sdp"
+                    android:layout_centerInParent="true"
+                    android:layout_gravity="center"
+                    android:indeterminateTint="@android:color/white"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/Logout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:fontFamily="@font/gilroy_semibold"
+                    android:text="YES"
+                    android:textColor="@color/white"
+                    android:textSize="14sp"
+                    tools:ignore="TextContrastCheck" />
+
+
+            </com.google.android.material.card.MaterialCardView>
+
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
+</LinearLayout>

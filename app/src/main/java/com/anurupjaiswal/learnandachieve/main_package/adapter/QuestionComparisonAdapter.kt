@@ -155,6 +155,29 @@ subTextView.textSize = 14f
         }
     }
 
+    fun getAttemptCounts(): Pair<Int, Int> {
+        var attemptedCount = 0
+        var notAttemptedCount = 0
+
+        // Iterate through each main question.
+        questions.forEach { question ->
+            // Check main question. (Assumes question.questionId is the key used in selectedAnswers.)
+            if (selectedAnswers[question.questionId]?.isNotEmpty() == true) {
+                attemptedCount++
+            } else {
+                notAttemptedCount++
+            }
+            // If there are sub‑questions, iterate through them as well.
+            question.subQuestions?.forEach { subQuestion ->
+                if (selectedAnswers[subQuestion.subQuestionId]?.isNotEmpty() == true) {
+                    attemptedCount++
+                } else {
+                    notAttemptedCount++
+                }
+            }
+        }
+        return Pair(attemptedCount, notAttemptedCount)
+    }
 
     // ✅ Parse HTML text safely
     private fun parseHtml(htmlText: String?): String {
