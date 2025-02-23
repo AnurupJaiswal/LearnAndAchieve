@@ -1,9 +1,12 @@
 package com.anurupjaiswal.learnandachieve.main_package.ui.fragment
 
+import android.app.Dialog
 import android.content.ContentValues.TAG
 import android.content.res.Resources
+import android.graphics.Color
 import android.graphics.Rect
 import android.graphics.Typeface
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.text.Spannable
@@ -15,6 +18,8 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
+import android.view.WindowManager
 import android.widget.TextView
 import android.widget.Toast
 import androidx.navigation.NavOptions
@@ -451,6 +456,7 @@ class BharatSatExamQueFragment : Fragment() {
         countDownTimer?.cancel()
         _binding = null
     }
+
     private fun submitBharatSatExam() {
         // Validate required IDs.
         if (bharatSatExamId.isNullOrEmpty() || eHallTicketId.isNullOrEmpty()) {
@@ -616,27 +622,34 @@ class BharatSatExamQueFragment : Fragment() {
     private fun showSubmitConfirmationDialog(progress: QuestionProgress) {
         // Inflate the custom dialog layout using view binding
         val dialogBinding = DialogSubmitConfirmationBinding.inflate(layoutInflater)
+
         // Set the progress values in the dialog
-        dialogBinding.tvAttemptedQuestions.text = "No. of attempted questions : ${progress.attempted}"
+        dialogBinding.tvAttemptedQuestions.text = "No. of attempted questions: ${progress.attempted}"
         val notAttempted = progress.total - progress.attempted
-        dialogBinding.tvNotAttemptedQuestions.text = "Not attempted questions : $notAttempted"
-        // Also pass the timer value from the main layout to the dialog
+        dialogBinding.tvNotAttemptedQuestions.text = "Not attempted questions: $notAttempted"
         dialogBinding.tvTimer.text = binding.tvTimer.text
-        // Build the dialog
-        val dialog = androidx.appcompat.app.AlertDialog.Builder(requireContext())
-            .setView(dialogBinding.root)
-            .create()
-        dialogBinding.mcvCancel.setOnClickListener {
-            dialog.dismiss()
-        }
-        dialogBinding.mcvLogout.setOnClickListener {
-            dialog.dismiss()
-      submitBharatSatExam()
 
+        // Create a Dialog instance
+        val dialog = Dialog(requireContext())
+        // Remove default title
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        // Set the custom view for the dialog
+        dialog.setContentView(dialogBinding.root)
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
+        // Set click listeners
+        dialogBinding.mcvCancel.setOnClickListener { dialog.dismiss() }
+        dialogBinding.mcvOk.setOnClickListener {
+            dialog.dismiss()
+            submitBharatSatExam()
         }
+
+        // Display the dialog
         dialog.show()
+        val width = (resources.displayMetrics.widthPixels * 0.9).toInt()
+        dialog.window?.setLayout(width, WindowManager.LayoutParams.WRAP_CONTENT)
     }
+
 
     private fun startExamCountdown(examStartTime: String, examEndTime: String) {
 
