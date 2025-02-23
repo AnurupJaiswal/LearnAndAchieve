@@ -1,6 +1,7 @@
 package com.anurupjaiswal.learnandachieve.basic.retrofit
 
 import android.os.Build
+import com.anurupjaiswal.learnandachieve.basic.network.ConnectivityInterceptor
 import com.google.gson.GsonBuilder
 import com.anurupjaiswal.learnandachieve.basic.utilitytools.Constants
 import okhttp3.Interceptor
@@ -37,6 +38,7 @@ object RetrofitClient {
                 .connectTimeout(2, TimeUnit.MINUTES)
                 .readTimeout(2, TimeUnit.MINUTES)
                 .addInterceptor(userAgentInterceptor) // **Apply User-Agent Interceptor**
+                .addInterceptor(ConnectivityInterceptor())
 
             if (Const.Development == Constants.Debug) {
                 clientBuilder.addInterceptor(interceptor)

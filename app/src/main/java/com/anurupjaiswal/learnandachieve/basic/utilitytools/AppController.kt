@@ -8,24 +8,19 @@ import android.net.NetworkCapabilities
 import android.util.Log
 import com.anurupjaiswal.learnandachieve.basic.database.UserDataHelper
 
+
+
 class AppController : Application() {
 
-
-    /**
-     * @return
-     */
     init {
-        Log.e("","AppCanteroller")
+        Log.e("AppController", "AppController instance created")
         instance = this
     }
-
-    /**
-     * @return
-     */
     val isOnline: Boolean
         get() {
             try {
-                val connectivityManager = applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+                val connectivityManager =
+                    applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
                 val network = connectivityManager.activeNetwork ?: return false
                 val capabilities = connectivityManager.getNetworkCapabilities(network) ?: return false
 
@@ -41,33 +36,17 @@ class AppController : Application() {
     override fun onCreate() {
         super.onCreate()
         instance = this
-        Log.e("","AppCanteroller    onCreate")
+        Log.e("AppController", "onCreate")
+        // Initialize your database helper or other singletons here
         UserDataHelper(this)
-
-
     }
 
-
-
     companion object {
-        var context: Context? = null
-
-        @get:Synchronized
         lateinit var instance: AppController
             private set
 
-        @JvmName("getContext1")
         fun getContext(): Context {
-            return instance
-        }
-
-        /**
-         * @param ctx
-         * @return
-         */
-        fun getInstance(ctx: Context): AppController {
-            context = ctx.applicationContext
-            return instance
+            return instance.applicationContext
         }
     }
 }

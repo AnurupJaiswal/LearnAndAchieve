@@ -13,6 +13,7 @@
     import com.anurupjaiswal.learnandachieve.R
     import com.anurupjaiswal.learnandachieve.basic.database.User
     import com.anurupjaiswal.learnandachieve.basic.database.UserDataHelper
+    import com.anurupjaiswal.learnandachieve.basic.network.RetryCallback
     import com.anurupjaiswal.learnandachieve.basic.retrofit.APIError
     import com.anurupjaiswal.learnandachieve.basic.retrofit.ApiService
     import com.anurupjaiswal.learnandachieve.basic.retrofit.RetrofitClient
@@ -194,7 +195,8 @@
 
             val Token = "Bearer $authToken"
 
-            apiService?.getUserDetails(Token)?.enqueue(object : Callback<GetUserResponse> {
+            val call = apiService?.getUserDetails(Token)
+            call?.enqueue(RetryCallback(call, callback = object : Callback<GetUserResponse> {
                 override fun onResponse(
                     call: Call<GetUserResponse>,
                     response: Response<GetUserResponse>
@@ -208,8 +210,10 @@
 
                                 E("User ID: ${getUser.user_id}")
                                 E("Full API Response: ${response.body()}")
-                                val BharatSAT = getUser.smartSchoolCredentials?.username?.isNotEmpty() ?: false
-                                binding.rlPradnyaTab.visibility = if (BharatSAT) View.VISIBLE else View.GONE
+                                val BharatSAT =
+                                    getUser.smartSchoolCredentials?.username?.isNotEmpty() ?: false
+                                binding.rlPradnyaTab.visibility =
+                                    if (BharatSAT) View.VISIBLE else View.GONE
 
                                 val userData = User().apply {
                                     _id = getUser.user_id
@@ -237,31 +241,30 @@
                                     className = getUser.class_name
                                 }
 
-                                // Insert or update into the local database
+                                // Insert or update the user into the local database.
                                 UserDataHelper.instance.insertData(userData)
                                 E("User data inserted into local database successfully.")
                             } else {
-                                // Log or handle case where 'getUser' is null
+                                // Log or handle the case where 'getUser' is null.
                                 E("Error: 'getUser' is null in response.")
                             }
-
                         } else {
+                            // Handle non-OK HTTP responses.
                             handleGetUserResponseApiError(response)
                         }
                     } catch (e: Exception) {
                         e.printStackTrace()
-                        Utils.T(requireContext(), "Error processing the request.")
+                        E("Error processing the request.")
                     }
                 }
 
                 override fun onFailure(call: Call<GetUserResponse>, t: Throwable) {
-                    call.cancel()
-                    // Hide loading state
-                    t.printStackTrace()
-                    Utils.T(requireContext(), t.message ?: "Request failed. Please try again later.")
-                }
-            })
 
+                    t.printStackTrace()
+
+                    E( t.message ?: "Request failed. Please try again later.")
+                }
+            }))
 
         }
         private fun handleGetUserResponseApiError(response: Response<GetUserResponse>) {

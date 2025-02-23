@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -12,7 +11,6 @@ import com.anurupjaiswal.learnandachieve.R
 import com.anurupjaiswal.learnandachieve.basic.retrofit.APIError
 import com.anurupjaiswal.learnandachieve.basic.retrofit.RetrofitClient
 import com.anurupjaiswal.learnandachieve.basic.utilitytools.NavigationManager
-import com.anurupjaiswal.learnandachieve.basic.utilitytools.NetworkUtil
 import com.anurupjaiswal.learnandachieve.basic.utilitytools.StatusCodeConstant
 import com.anurupjaiswal.learnandachieve.basic.utilitytools.Utils
 import com.anurupjaiswal.learnandachieve.basic.utilitytools.Utils.E
@@ -52,22 +50,10 @@ class MockTestFragment : Fragment() {
 
     private fun init() {
         setupRecyclerView()
-        if (NetworkUtil.isInternetAvailable(requireContext())) {
-            fetchMockTests()
-        } else {
-            showNoInternetMessage()
-        }
 
-        // Listen for changes in network status
-        NetworkUtil.registerNetworkReceiver(requireContext()) { isConnected ->
-            if (isConnected) {
-                binding.noInternetText.visibility = View.GONE
-                fetchMockTests() // Re-fetch data when internet is back
-            } else {
-                binding.rvMockTest.visibility = View.GONE
-                binding.noInternetText.visibility = View.VISIBLE
-            }
-        }
+        fetchMockTests()
+
+
     }
     private fun showNoInternetMessage() {
         binding.progressBar.visibility = View.GONE
@@ -165,7 +151,6 @@ class MockTestFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-        NetworkUtil.unregisterNetworkCallback(requireContext())
 
     }
 }

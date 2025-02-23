@@ -20,6 +20,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.view.WindowManager
+import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.navigation.NavOptions
@@ -51,6 +52,8 @@ import com.anurupjaiswal.learnandachieve.model.SubmitBharatSetExamRequest
 import com.anurupjaiswal.learnandachieve.model.SubmitMockTestRequest
 import com.anurupjaiswal.learnandachieve.model.SubmitMockTestResponse
 import com.anurupjaiswal.learnandachieve.model.SubmittedAnswer
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.card.MaterialCardView
 import com.google.gson.Gson
 import retrofit2.Call
 import retrofit2.Callback
@@ -66,7 +69,7 @@ class BharatSatExamQueFragment : Fragment() {
     private var isDrawerOpen = false
     private var _binding: FragmentBharatSatExamQueBinding? = null
     private val binding get() = _binding!!
-
+    private var dialogTimerTextView: TextView? = null
     private var countDownTimer: CountDownTimer? = null
     private lateinit var adapter: QuestionComparisonAdapter
     private var selectedSubjectId: String? = null
@@ -457,12 +460,15 @@ class BharatSatExamQueFragment : Fragment() {
         _binding = null
     }
 
-    private fun submitBharatSatExam() {
-        // Validate required IDs.
+    private fun submitBharatSatExam(loading: ProgressBar, tvOk: TextView, dialog: Dialog) {
+
         if (bharatSatExamId.isNullOrEmpty() || eHallTicketId.isNullOrEmpty()) {
             E("bharatSatExam: Missing required IDs (bharatSatExamId or eHallTicketId)")
             return
         }
+
+        Utils.toggleProgressBarAndText(true,loading, tvOk, binding.root)
+
 
         val token = Utils.GetSession().token
         val submittedAnswers = mutableListOf<SubmittedAnswer>()
@@ -542,8 +548,6 @@ class BharatSatExamQueFragment : Fragment() {
             numberOfQuestionsData = numberOfQuestionsData
         )
 
-        Utils.toggleProgressBarAndText(true, binding.loading, binding.tvSumit, binding.root)
-
         RetrofitClient.client.submitbharatSatExam("Bearer $token", request)
             .enqueue(object : Callback<SubmitMockTestResponse> {
                 override fun onResponse(
@@ -553,6 +557,8 @@ class BharatSatExamQueFragment : Fragment() {
                     Utils.toggleProgressBarAndText(false, binding.loading, binding.tvSumit, binding.root)
                     when (response.code()) {
                         StatusCodeConstant.OK -> {
+                            Utils.toggleProgressBarAndText(false,loading, tvOk, binding.root)
+dialog.dismiss()
                             val navController = findNavController()
                             val navOptions = NavOptions.Builder()
                                 .setPopUpTo(R.id.home, inclusive = false)
@@ -561,10 +567,16 @@ class BharatSatExamQueFragment : Fragment() {
 
                         }
                         StatusCodeConstant.UNAUTHORIZED -> {
+                            Utils.toggleProgressBarAndText(false,loading, tvOk, binding.root)
+                            dialog.dismiss()
+
                             Utils.E("bharatSatExam UNAUTHORIZED: ${response.message()}")
                             Utils.UnAuthorizationToken(requireContext())
                         }
                         StatusCodeConstant.BAD_REQUEST -> {
+                            Utils.toggleProgressBarAndText(false,loading, tvOk, binding.root)
+                            dialog.dismiss()
+
                             response.errorBody()?.let { errorBody ->
                                 val apiError = Gson().fromJson(errorBody.charStream(), APIError::class.java)
                                 val errorMessage = apiError.error ?: "Bad Request Error"
@@ -572,6 +584,9 @@ class BharatSatExamQueFragment : Fragment() {
                             }
                         }
                         else -> {
+                            Utils.toggleProgressBarAndText(false,loading, tvOk, binding.root)
+                            dialog.dismiss()
+
                             Utils.E("bharatSatExam Error: ${response.code()} - ${response.errorBody()?.string()}")
                             Utils.T(requireContext(), "Submission failed. Please try again.")
                         }
@@ -579,7 +594,8 @@ class BharatSatExamQueFragment : Fragment() {
                 }
 
                 override fun onFailure(call: Call<SubmitMockTestResponse>, t: Throwable) {
-                    binding.progressBar.visibility = View.GONE
+                    Utils.toggleProgressBarAndText(false,loading, tvOk, binding.root)
+                    dialog.dismiss()
                     Utils.E("bharatSatExam Failure: ${t.message}")
                     Utils.T(requireContext(), "Network error. Please try again.")
                 }
@@ -627,21 +643,22 @@ class BharatSatExamQueFragment : Fragment() {
         dialogBinding.tvAttemptedQuestions.text = "No. of attempted questions: ${progress.attempted}"
         val notAttempted = progress.total - progress.attempted
         dialogBinding.tvNotAttemptedQuestions.text = "Not attempted questions: $notAttempted"
-        dialogBinding.tvTimer.text = binding.tvTimer.text
+        dialogTimerTextView = dialogBinding.tvTimer
 
-        // Create a Dialog instance
         val dialog = Dialog(requireContext())
-        // Remove default title
+
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        // Set the custom view for the dialog
+
         dialog.setContentView(dialogBinding.root)
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog.setCancelable(false)
+        dialogBinding.mcvCancel.setOnClickListener { dialog.dismiss()
+            dialogTimerTextView = null  // Clean up reference
 
-        // Set click listeners
-        dialogBinding.mcvCancel.setOnClickListener { dialog.dismiss() }
+        }
         dialogBinding.mcvOk.setOnClickListener {
-            dialog.dismiss()
-            submitBharatSatExam()
+
+            submitBharatSatExam(dialogBinding.loading,dialogBinding.tvOk,dialog)
         }
 
         // Display the dialog
@@ -664,6 +681,7 @@ class BharatSatExamQueFragment : Fragment() {
             return
         }
         val timeLeft = endTimestamp - testStartTime
+
         Log.d(TAG, "startTimestamp: $startTimestamp, endTimestamp: $endTimestamp, testStartTime : $testStartTime, timeLeft : $timeLeft")
 
         if (timeLeft <= 0) {
@@ -679,11 +697,14 @@ class BharatSatExamQueFragment : Fragment() {
             }
             override fun onFinish() {
                 binding.tvTimer.text = "00hr 00min 00secs left"
+                dialogTimerTextView?.text = "00hr 00min 00secs left"
             }
         }.start()
     }
+
     private fun updateTimerText(hours: Long, minutes: Long, seconds: Long) {
         // Format string e.g. "01hr 22min 46secs left"
+
 
         val timeString = String.format("%02dhr %02dmin %02dsecs left", hours, minutes, seconds)
         val spannable = SpannableString(timeString)
@@ -734,8 +755,8 @@ class BharatSatExamQueFragment : Fragment() {
             secsLabelIndex, secsLabelIndex + 4,
             Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
         )
-
-        // Finally update the TextView.
         binding.tvTimer.text = spannable
+        dialogTimerTextView?.text = spannable
+
     }
 }

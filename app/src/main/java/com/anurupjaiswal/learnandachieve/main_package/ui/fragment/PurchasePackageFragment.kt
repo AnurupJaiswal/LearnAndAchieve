@@ -6,14 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 
-import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.anurupjaiswal.learnandachieve.R
 import com.anurupjaiswal.learnandachieve.basic.retrofit.ApiService
 import com.anurupjaiswal.learnandachieve.basic.retrofit.RetrofitClient
 import com.anurupjaiswal.learnandachieve.basic.utilitytools.NavigationManager
-import com.anurupjaiswal.learnandachieve.basic.utilitytools.NetworkUtil
 import com.anurupjaiswal.learnandachieve.basic.utilitytools.StatusCodeConstant
 import com.anurupjaiswal.learnandachieve.basic.utilitytools.Utils
 import com.anurupjaiswal.learnandachieve.databinding.FragmentPurchasePackageBinding
@@ -50,22 +48,10 @@ class PurchasePackageFragment : Fragment() {
     private fun init() {
         apiService = RetrofitClient.client
         binding.rcvPurchasePackage.layoutManager = LinearLayoutManager(context)
-        if (NetworkUtil.isInternetAvailable(requireContext())) {
-            fetchPackages()
-        } else {
-            showNoInternetMessage()
-        }
+        fetchPackages()
+
 
         // Listen for changes in network status
-        NetworkUtil.registerNetworkReceiver(requireContext()) { isConnected ->
-            if (isConnected) {
-                binding.noInternetText.visibility = View.GONE
-                fetchPackages() // Re-fetch data when internet is back
-            } else {
-                showNoInternetMessage()
-
-            }
-        }
     }
 
     private fun fetchPackages() {
@@ -127,7 +113,6 @@ class PurchasePackageFragment : Fragment() {
         super.onDestroyView()
 
         _binding = null
-        NetworkUtil.unregisterNetworkCallback(requireContext())
 
     }
 }

@@ -166,7 +166,7 @@
                     android:visibility="gone" />
 
                 <TextView
-                    android:id="@+id/Logout"
+                    android:id="@+id/tvOk"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"

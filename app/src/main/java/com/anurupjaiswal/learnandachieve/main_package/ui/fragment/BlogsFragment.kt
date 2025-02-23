@@ -16,9 +16,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.anurupjaiswal.learnandachieve.R
 import com.anurupjaiswal.learnandachieve.basic.retrofit.RetrofitClient
-import com.anurupjaiswal.learnandachieve.basic.utilitytools.AppController
 import com.anurupjaiswal.learnandachieve.basic.utilitytools.NavigationManager
-import com.anurupjaiswal.learnandachieve.basic.utilitytools.NetworkUtil
 import com.anurupjaiswal.learnandachieve.basic.utilitytools.Utils
 import com.anurupjaiswal.learnandachieve.databinding.FragmentBlogsBinding
 import com.anurupjaiswal.learnandachieve.main_package.adapter.BlogAdapter
@@ -73,26 +71,11 @@ class BlogsFragment : Fragment() {
     fun init() {
         setupRecyclerView()
 
-        if (NetworkUtil.isInternetAvailable(requireContext())) {
-            showLoading(true)
-            setupCategorySelection()
-            fetchBlogCategories()
+        showLoading(true)
+        setupCategorySelection()
+        fetchBlogCategories()
 
-        } else {
-            showNoInternetMessage()
 
-        }
-
-        NetworkUtil.registerNetworkReceiver(requireContext()) { isConnected ->
-            if (isConnected) {
-                binding.noInternetText.visibility = View.GONE
-                setupCategorySelection()
-                fetchBlogCategories()
-            } else {
-                showNoInternetMessage()
-
-            }
-        }
 
 
     }
@@ -383,7 +366,6 @@ class BlogsFragment : Fragment() {
         super.onDestroyView()
         _binding = null
         popupWindow?.dismiss()
-        NetworkUtil.unregisterNetworkCallback(requireContext())
 
     }
 }
