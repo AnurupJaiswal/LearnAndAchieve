@@ -29,6 +29,7 @@ import com.anurupjaiswal.learnandachieve.basic.database.UserDataHelper
 import com.anurupjaiswal.learnandachieve.basic.retrofit.APIError
 import com.anurupjaiswal.learnandachieve.basic.retrofit.ApiService
 import com.anurupjaiswal.learnandachieve.basic.retrofit.RetrofitClient
+import com.anurupjaiswal.learnandachieve.basic.security.SecureBaseFragment
 import com.anurupjaiswal.learnandachieve.basic.utilitytools.AppController
 import com.anurupjaiswal.learnandachieve.basic.utilitytools.Constants
 import com.anurupjaiswal.learnandachieve.basic.utilitytools.NavigationManager
@@ -55,7 +56,7 @@ import java.util.Date
 import java.util.Locale
 import kotlin.math.abs
 
-class HomeFragment : Fragment() {
+class HomeFragment : SecureBaseFragment() {
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
@@ -768,5 +769,8 @@ class HomeFragment : Fragment() {
 
             }
         }
+    }
+    override fun getSecureRootView(): View {
+        return binding.root
     }
 }
