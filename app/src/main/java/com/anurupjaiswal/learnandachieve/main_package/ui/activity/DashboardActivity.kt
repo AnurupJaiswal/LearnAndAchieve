@@ -2,6 +2,8 @@ package com.anurupjaiswal.learnandachieve.main_package.ui.activity
 
 
 import android.annotation.SuppressLint
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -9,6 +11,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.navOptions
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
@@ -46,7 +49,8 @@ class DashboardActivity : BaseActivity(), PaymentResultListener {
     private var currentIconIndex = 0
     private var cartCount = 0
     private lateinit var apiService: ApiService
-
+    private var pradnyaLearningUsername: String? = null
+    private var pradnyaLearningPassword: String? = null
     var Token: String? = null
 
     lateinit var navController: NavController
@@ -63,8 +67,8 @@ class DashboardActivity : BaseActivity(), PaymentResultListener {
         apiService = RetrofitClient.client
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as? NavHostFragment
-        navController = navHostFragment?.navController ?: throw IllegalStateException("NavController not found!")
-
+        navController = navHostFragment?.navController
+            ?: throw IllegalStateException("NavController not found!")
 
 
         // AppBarConfiguration for top-level destinations
@@ -93,7 +97,6 @@ class DashboardActivity : BaseActivity(), PaymentResultListener {
             when (destination.id) {
 
 
-
                 R.id.home -> {
 
                     setViewsVisibility(
@@ -101,14 +104,13 @@ class DashboardActivity : BaseActivity(), PaymentResultListener {
                         isToolbarVisible = true,
                         isBackButtonVisible = false
                     ) // Hide Back Button
-                    window?.statusBarColor = ContextCompat.getColor(this, R.color.white) // Default white color
+                    window?.statusBarColor =
+                        ContextCompat.getColor(this, R.color.white) // Default white color
 
                 }
 
-                 R.id.account -> {
-                     navController.popBackStack(R.id.account,false)
+                R.id.account -> {
 
-                     NavigationManager.navigateToFragment(navController,R.id.account)
 
                     setViewsVisibility(
                         isBottomNavVisible = true,
@@ -116,11 +118,12 @@ class DashboardActivity : BaseActivity(), PaymentResultListener {
                         isBackButtonVisible = true
                     ) // Show Back Button
 
-                     window?.statusBarColor = ContextCompat.getColor(this, R.color.white) // Default white color
+                    window?.statusBarColor =
+                        ContextCompat.getColor(this, R.color.white) // Default white color
 
                 }
 
-                R.id.PurchasePackage, R.id.mockTest, -> {
+                R.id.PurchasePackage, R.id.mockTest -> {
 
                     setViewsVisibility(
                         isBottomNavVisible = true,
@@ -128,7 +131,8 @@ class DashboardActivity : BaseActivity(), PaymentResultListener {
                         isBackButtonVisible = true
                     ) // Show Back Button
 
-                    window?.statusBarColor = ContextCompat.getColor(this, R.color.white) // Default white color
+                    window?.statusBarColor =
+                        ContextCompat.getColor(this, R.color.white) // Default white color
 
 
                 }
@@ -140,7 +144,10 @@ class DashboardActivity : BaseActivity(), PaymentResultListener {
                         isBackButtonVisible = false
                     ) // Hide everything
 
-                    window?.statusBarColor = ContextCompat.getColor(this, R.color.primaryColor) // Specific color for this fragment
+                    window?.statusBarColor = ContextCompat.getColor(
+                        this,
+                        R.color.primaryColor
+                    ) // Specific color for this fragment
 
                 }
 
@@ -151,12 +158,17 @@ class DashboardActivity : BaseActivity(), PaymentResultListener {
                         isBackButtonVisible = true
                     ) // Show Back Button
 
-                    window?.statusBarColor = ContextCompat.getColor(this, R.color.white) // Default white color
+                    window?.statusBarColor =
+                        ContextCompat.getColor(this, R.color.white) // Default white color
 
                 }
             }
         }
         updateCartBadge()
+
+
+
+
 
 
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
@@ -172,15 +184,112 @@ class DashboardActivity : BaseActivity(), PaymentResultListener {
                 }
             }
         })
+//
+//         binding.ivPremiumCenterIcon.setOnClickListener{
+//             Utils.openAppOrPlayStore(this, Constants.PradnyaLearningPackageName,pradnyaLearningUsername!!,pradnyaLearningUsername!!)
+//         }
 
-         binding.ivPremiumCenterIcon.setOnClickListener{
-             Utils.openAppOrPlayStore(this, Constants.PradnyaLearningPackageName)
-         }
+
+        binding.ivPremiumCenterIcon.setOnClickListener {
+            val customUri =
+                Uri.parse("pradnyalearning://open?username=$pradnyaLearningUsername&password=$pradnyaLearningPassword")
+            E("$customUri")
+            // Create an intent with the custom URI and target package
+            val intent = Intent(Intent.ACTION_VIEW, customUri).apply {
+                setPackage(Constants.PradnyaLearningPackageName)
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            }
+
+            // Check if the app can handle the intent
+            if (intent.resolveActivity(this.packageManager) != null) {
+                this.startActivity(intent)
+            } else {
+                // Fallback: if not installed, open the Play Store
+                Utils.openPlayStore(this, Constants.PradnyaLearningPackageName)
+            }
+        }
+
 
 
         binding.ivBack.setOnClickListener {
             onBackPressedDispatcher.onBackPressed()
         }
+
+
+        binding.bottomNavigationView.setOnItemSelectedListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.home -> {
+                    if (navController.currentDestination?.id != R.id.home) {
+                        navController.navigate(
+                            R.id.home,
+                            null,
+                            navOptions {
+                                popUpTo(navController.graph.startDestinationId) {
+                                    inclusive = false
+                                }
+                                launchSingleTop = true
+                            }
+                        )
+                    }
+                    true
+                }
+
+                R.id.mockTest -> {
+                    if (navController.currentDestination?.id != R.id.mockTest) {
+                        navController.navigate(
+                            R.id.mockTest,
+                            null,
+                            navOptions {
+                                popUpTo(navController.graph.startDestinationId) {
+                                    inclusive = false
+                                }
+                                launchSingleTop = true
+                            }
+                        )
+                    }
+                    true
+                }
+
+                R.id.PurchasePackage -> {
+                    if (navController.currentDestination?.id != R.id.PurchasePackage) {
+                        navController.navigate(
+                            R.id.PurchasePackage,
+                            null,
+                            navOptions {
+                                popUpTo(navController.graph.startDestinationId) {
+                                    inclusive = false
+                                }
+                                launchSingleTop = true
+                            }
+                        )
+                    }
+                    true
+                }
+
+                R.id.account -> {
+                    // If not already on AccountFragment, navigate to it;
+                    // otherwise, if already there, pop any deeper fragments.
+                    if (navController.currentDestination?.id != R.id.account) {
+                        navController.navigate(
+                            R.id.account,
+                            null,
+                            navOptions {
+                                popUpTo(navController.graph.startDestinationId) {
+                                    inclusive = false
+                                }
+                                launchSingleTop = true
+                            }
+                        )
+                    } else {
+                        navController.popBackStack(R.id.account, false)
+                    }
+                    true
+                }
+
+                else -> false
+            }
+        }
+
     }
 
 
@@ -260,21 +369,25 @@ class DashboardActivity : BaseActivity(), PaymentResultListener {
     }
 
 
-    fun getCartAllCount(authToken:String) {
-
+    fun getCartAllCount(authToken: String) {
 
 
         apiService.getCartData(authToken).enqueue(object : Callback<AllCartResponse> {
-            override fun onResponse(call: Call<AllCartResponse>, response: Response<AllCartResponse>) {
+            override fun onResponse(
+                call: Call<AllCartResponse>,
+                response: Response<AllCartResponse>
+            ) {
                 try {
                     when (response.code()) {
                         StatusCodeConstant.OK -> {
                             val allCartResponse = response.body()
                             updateCartCount(allCartResponse!!.cartCount)
                         }
+
                         StatusCodeConstant.UNAUTHORIZED -> {
                             Utils.UnAuthorizationToken(this@DashboardActivity)
                         }
+
                         else -> {
                             val errorBody = response.errorBody()?.string()
                             var errorMessage = "Unknown error"
@@ -282,7 +395,8 @@ class DashboardActivity : BaseActivity(), PaymentResultListener {
                                 try {
                                     val gson = Gson()
                                     val apiError = gson.fromJson(errorBody, APIError::class.java)
-                                    errorMessage = apiError.message ?: apiError.error ?: "Unknown error"
+                                    errorMessage =
+                                        apiError.message ?: apiError.error ?: "Unknown error"
                                 } catch (e: Exception) {
                                     errorMessage = errorBody
                                 }
@@ -324,7 +438,7 @@ class DashboardActivity : BaseActivity(), PaymentResultListener {
 
     private fun getUserDetails(authToken: String) {
 
-      val Token = "Bearer $authToken"
+        val Token = "Bearer $authToken"
 
         apiService?.getUserDetails(Token)?.enqueue(object : Callback<GetUserResponse> {
             override fun onResponse(
@@ -337,10 +451,15 @@ class DashboardActivity : BaseActivity(), PaymentResultListener {
 
                         if (userModel?.user != null) {
                             val getUser = userModel.user
-
-                            E("User ID: ${getUser.user_id}")
+                            pradnyaLearningUsername = getUser.smartSchoolCredentials.username
+                            pradnyaLearningPassword = getUser.smartSchoolCredentials.password
+                            E("Anurup's pradnyaLearningUsername:$pradnyaLearningUsername")
+                            E("Anurup's pradnyaLearningPassword:$pradnyaLearningPassword")
+                            E("pradnyaLearningUsername:${getUser.smartSchoolCredentials.username}")
+                            E("pradnyaLearningPassword: ${getUser.smartSchoolCredentials.password}")
                             E("Full API Response: ${response.body()}")
-                            BharatSAT = getUser.smartSchoolCredentials?.username?.isNotEmpty() ?: false
+                            BharatSAT =
+                                getUser.smartSchoolCredentials?.username?.isNotEmpty() ?: false
                             if (BharatSAT && premiumIconJob == null) {
                                 startPremiumIconChange()
                             }
@@ -393,12 +512,16 @@ class DashboardActivity : BaseActivity(), PaymentResultListener {
                 call.cancel()
                 // Hide loading state
                 t.printStackTrace()
-                Utils.T(this@DashboardActivity, t.message ?: "Request failed. Please try again later.")
+                Utils.T(
+                    this@DashboardActivity,
+                    t.message ?: "Request failed. Please try again later."
+                )
             }
         })
 
 
     }
+
     private fun handleGetUserResponseApiError(response: Response<GetUserResponse>) {
         when (response.code()) {
             StatusCodeConstant.BAD_REQUEST -> {
@@ -432,6 +555,7 @@ class DashboardActivity : BaseActivity(), PaymentResultListener {
             }
         }
     }
+
     private fun updatePremiumIconVisibility() {
         val isBottomNavVisible = binding.bottomNavigationView.visibility == View.VISIBLE
         val visibility = if (isBottomNavVisible && BharatSAT) View.VISIBLE else View.GONE

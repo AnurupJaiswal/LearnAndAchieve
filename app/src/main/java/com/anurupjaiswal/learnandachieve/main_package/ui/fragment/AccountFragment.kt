@@ -1,7 +1,9 @@
     package com.anurupjaiswal.learnandachieve.main_package.ui.fragment
 
     import android.app.AlertDialog
+    import android.content.Intent
     import android.health.connect.datatypes.units.Energy
+    import android.net.Uri
     import android.os.Bundle
     import android.view.View
     import android.widget.ProgressBar
@@ -42,6 +44,9 @@
         private val binding get() = _binding!!
         private lateinit var navController: NavController
         private var apiService: ApiService?  = null
+        private var pradnyaLearningUsername: String?  = null
+        private var pradnyaLearningPassword: String?  = null
+
 
         override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
             super.onViewCreated(view, savedInstanceState)
@@ -166,7 +171,22 @@
                 }
 
                  binding.rlPradnyaTab->{
-                     Utils.openAppOrPlayStore(requireContext(),Constants.PradnyaLearningPackageName)
+                     val customUri =
+                         Uri.parse("pradnyalearning://open?username=$pradnyaLearningUsername&password=$pradnyaLearningPassword")
+                     E("$customUri")
+                     // Create an intent with the custom URI and target package
+                     val intent = Intent(Intent.ACTION_VIEW, customUri).apply {
+                         setPackage(Constants.PradnyaLearningPackageName)
+                         flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                     }
+
+                     // Check if the app can handle the intent
+                     if (intent.resolveActivity(requireContext().packageManager) != null) {
+                         requireContext().startActivity(intent)
+                     } else {
+                         // Fallback: if not installed, open the Play Store
+                         Utils.openPlayStore(requireContext(), Constants.PradnyaLearningPackageName)
+                     }
                  }
             }
 
@@ -214,7 +234,8 @@
                                     getUser.smartSchoolCredentials?.username?.isNotEmpty() ?: false
                                 binding.rlPradnyaTab.visibility =
                                     if (BharatSAT) View.VISIBLE else View.GONE
-
+                                pradnyaLearningUsername = getUser.smartSchoolCredentials.username
+                                pradnyaLearningPassword = getUser.smartSchoolCredentials.password
                                 val userData = User().apply {
                                     _id = getUser.user_id
                                     token = authToken
