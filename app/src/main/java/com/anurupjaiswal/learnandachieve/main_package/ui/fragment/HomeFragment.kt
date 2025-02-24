@@ -26,6 +26,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.anurupjaiswal.learnandachieve.R
 import com.anurupjaiswal.learnandachieve.basic.database.User
 import com.anurupjaiswal.learnandachieve.basic.database.UserDataHelper
+import com.anurupjaiswal.learnandachieve.basic.network.RetryCallback
 import com.anurupjaiswal.learnandachieve.basic.retrofit.APIError
 import com.anurupjaiswal.learnandachieve.basic.retrofit.ApiService
 import com.anurupjaiswal.learnandachieve.basic.retrofit.RetrofitClient
@@ -247,86 +248,93 @@ class HomeFragment : SecureBaseFragment() {
     }
 
 
-    private fun getPackages(authToken: String) {
-
+    fun getPackages(authToken: String) {
         val userId = Utils.GetSession()._id
         E("token $token")
         E("userId $userId")
 
+        // Get the call instance from your ApiService
+        val call = apiservice?.getPackages(authToken, limit = 10, offset = 0)
+        if (call == null) {
+            E("GetPackages: API service call is null")
+            return
+        }
 
-        apiservice?.getPackages(authToken, limit = 10, offset = 0)
-            ?.enqueue(object : retrofit2.Callback<PackageResponse> {
-                override fun onResponse(
-                    call: Call<PackageResponse>,
-                    response: Response<PackageResponse>
-                ) {
-                    try {
-                        when (response.code()) {
-                            StatusCodeConstant.OK -> {
-                                val packageResponse = response.body()
-                                if (packageResponse != null) {
-                                    val packageList = packageResponse.packages
-                                    val adapter = PopularPackagesAdapter(
-                                        requireContext(),
-                                        packageList,
-                                        authToken,
-                                        onPackageDetailsClick = { packageId, token ->
-                                            navigateToPackageDetails(packageId, token)
-                                        }
-                                    )
-                                    binding.mostPopularPackageRecyclerView.adapter = adapter
-                                    adapter.notifyDataSetChanged()  // Notify that the data has been updated
-                                }
-                            }
-                            StatusCodeConstant.BAD_REQUEST -> {
-                                val errorBody = response.errorBody()?.string()
-                                var errorMessage = "Unknown error"
-                                if (!errorBody.isNullOrEmpty()) {
-                                    try {
-                                        val gson = Gson()
-                                        val apiError = gson.fromJson(errorBody, APIError::class.java)
-                                        errorMessage = apiError.message ?: apiError.error ?: "Unknown error"
-                                    } catch (e: Exception) {
-                                        errorMessage = errorBody
+        // Optionally show loading indicator
+        showLoading(true)
+
+        // Enqueue the call wrapped in RetryCallback for automatic retry on connectivity failures
+        call.enqueue(RetryCallback(call, callback = object : retrofit2.Callback<PackageResponse> {
+            override fun onResponse(
+                call: retrofit2.Call<PackageResponse>,
+                response: retrofit2.Response<PackageResponse>
+            ) {
+                // Hide loading indicator when response is received
+                showLoading(false)
+                try {
+                    when (response.code()) {
+                        StatusCodeConstant.OK -> {
+                            val packageResponse = response.body()
+                            if (packageResponse != null) {
+                                val packageList = packageResponse.packages
+                                val adapter = PopularPackagesAdapter(
+                                    requireContext(),
+                                    packageList,
+                                    authToken,
+                                    onPackageDetailsClick = { packageId, token ->
+                                        navigateToPackageDetails(packageId, token)
                                     }
-                                }
-                             //   Utils.T(requireContext(), "Response: $errorMessage")
-                                E("GetPackages: Bad Request Error: $errorMessage")
-                            }
-                            StatusCodeConstant.UNAUTHORIZED -> {
-                                // Call the unauthorized token handling function
-                                Utils.UnAuthorizationToken(requireContext())
-                            }
-                            else -> {
-                                val errorBody = response.errorBody()?.string()
-                                var errorMessage = "Unknown error"
-                                if (!errorBody.isNullOrEmpty()) {
-                                    try {
-                                        val gson = Gson()
-                                        val apiError = gson.fromJson(errorBody, APIError::class.java)
-                                        errorMessage = apiError.message ?: apiError.error ?: "Unknown error"
-                                    } catch (e: Exception) {
-                                        errorMessage = errorBody
-                                    }
-                                }
-                    //            Utils.T(requireContext(), "Response: $errorMessage")
-                                E("GetPackages: Error: $errorMessage")
+                                )
+                                binding.mostPopularPackageRecyclerView.adapter = adapter
+                                adapter.notifyDataSetChanged()  // Notify that the data has been updated
                             }
                         }
-                    } catch (e: Exception) {
-                        e.printStackTrace()
+                        StatusCodeConstant.BAD_REQUEST -> {
+                            val errorBody = response.errorBody()?.string()
+                            var errorMessage = "Unknown error"
+                            if (!errorBody.isNullOrEmpty()) {
+                                try {
+                                    val gson = Gson()
+                                    val apiError = gson.fromJson(errorBody, APIError::class.java)
+                                    errorMessage = apiError.message ?: apiError.error ?: "Unknown error"
+                                } catch (e: Exception) {
+                                    errorMessage = errorBody
+                                }
+                            }
+                            E("GetPackages: Bad Request Error: $errorMessage")
+                        }
+                        StatusCodeConstant.UNAUTHORIZED -> {
+                            // Handle unauthorized token
+                            Utils.UnAuthorizationToken(requireContext())
+                        }
+                        else -> {
+                            val errorBody = response.errorBody()?.string()
+                            var errorMessage = "Unknown error"
+                            if (!errorBody.isNullOrEmpty()) {
+                                try {
+                                    val gson = Gson()
+                                    val apiError = gson.fromJson(errorBody, APIError::class.java)
+                                    errorMessage = apiError.message ?: apiError.error ?: "Unknown error"
+                                } catch (e: Exception) {
+                                    errorMessage = errorBody
+                                }
+                            }
+                            E("GetPackages: Error: $errorMessage")
+                        }
                     }
+                } catch (e: Exception) {
+                    e.printStackTrace()
                 }
+            }
 
-                override fun onFailure(call: Call<PackageResponse>, t: Throwable) {
-                    call.cancel()
-                    t.printStackTrace()
-                //    Utils.T(requireContext(), "Response: ${t.message}")
-                    E("GetPackages: Error: ${t.message}")
-                }
-            })
-
-
+            override fun onFailure(call: retrofit2.Call<PackageResponse>, t: Throwable) {
+                // Hide loading indicator and cancel call on failure.
+                showLoading(false)
+                call.cancel()
+                t.printStackTrace()
+                E("GetPackages: Error: ${t.message}")
+            }
+        }))
     }
 
 
@@ -574,94 +582,89 @@ class HomeFragment : SecureBaseFragment() {
         }
     }
 
+
     fun getAllBlogData(authToken: String) {
+        // Get the API call instance from your ApiService.
+        val call = apiservice?.getAllBlogApp(authToken)
 
+        if (call == null) {
+            E("API service call is null")
+            return
+        }
 
-        apiservice?.getAllBlogApp(authToken)?.enqueue(object : Callback<GetAllBlogAppResponse> {
+        // Optionally show a loading indicator before starting the call.
+        showLoading(true)
+
+        // Enqueue the call wrapped in a RetryCallback.
+        call.enqueue(RetryCallback(call, callback = object : Callback<GetAllBlogAppResponse> {
             override fun onResponse(
                 call: Call<GetAllBlogAppResponse>,
                 response: Response<GetAllBlogAppResponse>
             ) {
+                // Hide the loading indicator
+                showLoading(false)
+
                 if (response.isSuccessful && response.body() != null) {
                     val blogDataList = response.body()?.data?.BlogData
-                    val blogCategoryDataList =
-                        response.body()?.data?.blogCategoryData // This is the list of categories
+                    val blogCategoryDataList = response.body()?.data?.blogCategoryData
 
                     binding.llBlogContainer.visibility = View.VISIBLE
                     if (!blogDataList.isNullOrEmpty()) {
 
-                        // Function to get category name by matching blog_category_id
+                        // Helper function to get category name by matching blog_category_id
                         fun getCategoryNameById(blogCategoryId: String): String? {
                             return blogCategoryDataList?.find { it.blog_Category_id == blogCategoryId }?.categoryName
                         }
 
-                        // Handling blogDataList
+                        // Process the first blog item if available.
                         if (blogDataList.size > 0) {
                             binding.tvBlogTitle1.text = blogDataList[0].title
-
-                            // Get category name for blog 1
-                            val categoryName1 =
-                                getCategoryNameById(blogDataList[0].blog_category_id)
-
+                            val categoryName1 = getCategoryNameById(blogDataList[0].blog_category_id)
                             binding.cvBlogCard1.setOnClickListener {
-                                // Pass both blog_id and categoryName to navigateToBlogDetails
                                 navigateToBlogDetails(blogDataList[0].blog_id, categoryName1)
                             }
                         }
+                        // Process the second blog item if available.
                         if (blogDataList.size > 1) {
                             binding.tvBlogTitle2.text = blogDataList[1].title
-
-                            // Get category name for blog 2
-                            val categoryName2 =
-                                getCategoryNameById(blogDataList[1].blog_category_id)
-
+                            val categoryName2 = getCategoryNameById(blogDataList[1].blog_category_id)
                             binding.cvBlogCard2.setOnClickListener {
-                                // Pass both blog_id and categoryName to navigateToBlogDetails
                                 navigateToBlogDetails(blogDataList[1].blog_id, categoryName2)
                             }
                         }
+                        // Process the third blog item if available.
                         if (blogDataList.size > 2) {
                             binding.tvBlogTitle3.text = blogDataList[2].title
-
-                            // Get category name for blog 3
-                            val categoryName3 =
-                                getCategoryNameById(blogDataList[2].blog_category_id)
-
+                            val categoryName3 = getCategoryNameById(blogDataList[2].blog_category_id)
                             binding.cvBlogCard3.setOnClickListener {
-                                // Pass both blog_id and categoryName to navigateToBlogDetails
                                 navigateToBlogDetails(blogDataList[2].blog_id, categoryName3)
                             }
                         }
+                        // Process the fourth blog item if available.
                         if (blogDataList.size > 3) {
                             binding.tvBlogTitle4.text = blogDataList[3].title
-
-                            val categoryName4 =
-                                getCategoryNameById(blogDataList[3].blog_category_id)
+                            val categoryName4 = getCategoryNameById(blogDataList[3].blog_category_id)
                             binding.cvBlogCard4.setOnClickListener {
-                                // Pass both blog_id and categoryName to navigateToBlogDetails
                                 navigateToBlogDetails(blogDataList[3].blog_id, categoryName4)
                             }
-                            showLoading(false)
-
                         }
                     } else {
-                        showLoading(false)
-
                         Log.e("HomeFragment", "Blog data list is empty or null")
                     }
                 } else {
                     showLoading(false)
-
                     E("Response failed or body is null")
                 }
             }
 
             override fun onFailure(call: Call<GetAllBlogAppResponse>, t: Throwable) {
+                // Hide loading indicator and log the error.
                 showLoading(false)
-                t.message?.let { E(it) }
+                E(t.message ?: "Unknown error")
             }
-        })
+        }))
     }
+
 
     private fun navigateToBlogDetails(blogId: String, categoryName: String?) {
         val bundle = Bundle().apply {

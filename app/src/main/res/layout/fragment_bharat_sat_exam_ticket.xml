@@ -376,7 +376,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/mcvTickit"
         android:orientation="vertical"
-        android:visibility="gone">
+        android:visibility="visible">
 
 
         <TextView
@@ -440,6 +440,18 @@
 
             </LinearLayout>
 
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/gilroy_bold"
+                android:gravity="center"
+                android:text=":"
+                android:layout_gravity="center"
+                android:textColor="@color/dark_blue"
+                android:textSize="@dimen/_16ssp" />
+
+
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -481,6 +493,16 @@
                 </com.google.android.material.card.MaterialCardView>
             </LinearLayout>
 
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/gilroy_bold"
+                android:gravity="center"
+                android:text=":"
+                android:layout_gravity="center"
+                android:textColor="@color/dark_blue"
+                android:textSize="@dimen/_16ssp" />
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -522,6 +544,18 @@
                 </com.google.android.material.card.MaterialCardView>
 
             </LinearLayout>
+
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/gilroy_bold"
+                android:gravity="center"
+                android:text=":"
+                android:layout_gravity="center"
+                android:textColor="@color/dark_blue"
+                android:textSize="@dimen/_16ssp" />
 
             <LinearLayout
                 android:layout_width="0dp"

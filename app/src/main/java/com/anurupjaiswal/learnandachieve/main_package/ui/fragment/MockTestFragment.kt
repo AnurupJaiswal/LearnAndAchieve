@@ -62,10 +62,11 @@ class MockTestFragment : Fragment() {
     }
 
     private fun showProgressBar(isVisible: Boolean) {
-        binding.progressBar.visibility = if (isVisible) View.VISIBLE else View.GONE
-        binding.rvMockTest.visibility = if (isVisible) View.GONE else View.VISIBLE
+        _binding?.let { binding ->
+            binding.progressBar.visibility = if (isVisible) View.VISIBLE else View.GONE
+            binding.rvMockTest.visibility = if (isVisible) View.GONE else View.VISIBLE
+        }
     }
-
     private fun setupRecyclerView() {
         adapter = MockTestAdapter(
             mockTestList,
