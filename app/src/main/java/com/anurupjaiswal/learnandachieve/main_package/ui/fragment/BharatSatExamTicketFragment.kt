@@ -52,8 +52,11 @@ class BharatSatExamTicketFragment : Fragment() {
 
 
         apiService = RetrofitClient.client
-
+val currentUser = GetSession()
         val token = "Bearer ${Utils.GetSession().token}"
+        binding.tvMedium.text = currentUser.medium
+        binding.tvClass.text = "${currentUser.className}th"
+        binding.tvName.text = "${currentUser.firstName}${currentUser.lastName}"
         getUserDetails(token)
 
         binding.rlBharatSatExam.setOnClickListener {
