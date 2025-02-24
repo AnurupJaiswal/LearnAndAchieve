@@ -467,7 +467,7 @@ class BharatSatExamQueFragment : Fragment() {
             return
         }
 
-        Utils.toggleProgressBarAndText(true,loading, tvOk, binding.root)
+        Utils.toggleProgressBarAndText(true,loading, tvOk,binding.root)
 
 
         val token = Utils.GetSession().token
@@ -606,6 +606,7 @@ dialog.dismiss()
 
 
     private fun getQuestionProgressAlt(): QuestionProgress {
+
         var totalCount = 0
         var attemptedCount = 0
 
