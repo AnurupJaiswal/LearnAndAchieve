@@ -8,6 +8,7 @@ import com.anurupjaiswal.learnandachieve.basic.utilitytools.Utils
 
 abstract class SecureBaseFragment : Fragment() {
 
+
     // Child fragments must supply their root view for security handling
     protected abstract fun getSecureRootView(): View
 

@@ -88,7 +88,7 @@ open class BaseActivity : AppCompatActivity() {
             if (connectivityLiveData.value == ConnectionStatus.AVAILABLE) {
                 bottomSheetDialog?.dismiss()
             } else {
-                Toast.makeText(this, "Still no internet connection", Toast.LENGTH_SHORT).show()
+                Utils.T(this, "Still No Internet Connection")
             }
         }
         bottomSheetDialog?.show()

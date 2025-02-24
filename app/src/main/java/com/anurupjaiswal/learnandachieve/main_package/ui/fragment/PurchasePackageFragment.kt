@@ -14,6 +14,7 @@ import com.anurupjaiswal.learnandachieve.basic.retrofit.RetrofitClient
 import com.anurupjaiswal.learnandachieve.basic.utilitytools.NavigationManager
 import com.anurupjaiswal.learnandachieve.basic.utilitytools.StatusCodeConstant
 import com.anurupjaiswal.learnandachieve.basic.utilitytools.Utils
+import com.anurupjaiswal.learnandachieve.basic.utilitytools.Utils.E
 import com.anurupjaiswal.learnandachieve.databinding.FragmentPurchasePackageBinding
 import com.anurupjaiswal.learnandachieve.main_package.adapter.PurchasePackageAdapter
 import com.anurupjaiswal.learnandachieve.model.PackageResponse
@@ -62,6 +63,7 @@ class PurchasePackageFragment : Fragment() {
             ?.enqueue(object : Callback<PackageResponse> {
                 override fun onResponse(call: Call<PackageResponse>, response: Response<PackageResponse>) {
                     showProgressBar(false)
+                    if (_binding == null) return
                     when (response.code()) {
                         StatusCodeConstant.OK -> response.body()?.packages?.let { packageList ->
                             if (packageList.isNotEmpty()) {
@@ -84,12 +86,16 @@ class PurchasePackageFragment : Fragment() {
                              binding.noInternetText.text = "Not Available"
                         }
                         StatusCodeConstant.UNAUTHORIZED -> Utils.UnAuthorizationToken(requireContext())
-                        else -> showNoInternetMessage()
+                        else ->
+
+                            showProgressBar(false)
+
                     }
                 }
 
                 override fun onFailure(call: Call<PackageResponse>, t: Throwable) {
-                    showNoInternetMessage()
+                    E(t.message!!)
+                    showProgressBar(false)
                 }
             })
     }
@@ -102,16 +108,10 @@ class PurchasePackageFragment : Fragment() {
 
 
 
-    private fun showNoInternetMessage() {
-        binding.noInternetText.text = "No Internet Connection"
-        binding.progressBar.visibility = View.GONE
-        binding.rcvPurchasePackage.visibility = View.GONE
-        binding.noInternetText.visibility = View.VISIBLE
-    }
+
 
     override fun onDestroyView() {
         super.onDestroyView()
-
         _binding = null
 
     }
