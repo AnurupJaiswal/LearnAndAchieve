@@ -1,12 +1,9 @@
 package com.anurupjaiswal.learnandachieve.main_package.adapter
 
-import android.animation.ObjectAnimator
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.anurupjaiswal.learnandachieve.R
 import com.anurupjaiswal.learnandachieve.databinding.ItemFaqQuestionBinding
 import com.anurupjaiswal.learnandachieve.model.FAQQuestion
 
@@ -44,13 +41,15 @@ class QuestionsAdapter(
         holder.binding.imgArrow.rotation = rotationAngle
 
         // Handle click on the question to toggle the answer visibility
+
         holder.binding.tvQuestion.setOnClickListener {
+
             // Collapse the previously expanded question if necessary
             val previousExpandedPosition = expandedPosition
             expandedPosition = if (isExpanded) -1 else position
-
             // Notify the adapter to update the visibility
             notifyItemChanged(previousExpandedPosition)
+
             notifyItemChanged(expandedPosition)
         }
     }

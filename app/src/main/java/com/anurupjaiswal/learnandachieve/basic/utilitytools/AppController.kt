@@ -6,14 +6,15 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.util.Log
+import androidx.appcompat.app.AppCompatDelegate
 import com.anurupjaiswal.learnandachieve.basic.database.UserDataHelper
-
+import com.anurupjaiswal.learnandachieve.basic.utilitytools.Utils.E
 
 
 class AppController : Application() {
 
     init {
-        Log.e("AppController", "AppController instance created")
+       E("AppController AppController instance created")
         instance = this
     }
     val isOnline: Boolean
@@ -28,7 +29,7 @@ class AppController : Application() {
                         capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) ||
                         capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)
             } catch (e: Exception) {
-                Log.e("Connectivity", "CheckConnectivity Exception: ${e.message}")
+              E("Connectivity CheckConnectivity Exception: ${e.message}")
             }
             return false
         }
@@ -37,7 +38,7 @@ class AppController : Application() {
         super.onCreate()
         instance = this
         Log.e("AppController", "onCreate")
-        // Initialize your database helper or other singletons here
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         UserDataHelper(this)
     }
 

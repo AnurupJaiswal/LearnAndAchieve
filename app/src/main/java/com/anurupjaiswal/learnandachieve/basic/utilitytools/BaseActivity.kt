@@ -17,6 +17,7 @@ import com.anurupjaiswal.learnandachieve.R
 import com.anurupjaiswal.learnandachieve.basic.network.ConnectionStatus
 import com.anurupjaiswal.learnandachieve.basic.network.ConnectivityLiveData
 import com.anurupjaiswal.learnandachieve.basic.retrofit.Const
+import com.anurupjaiswal.learnandachieve.databinding.BottomSheetInternetBinding
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
 
@@ -79,18 +80,20 @@ open class BaseActivity : AppCompatActivity() {
     private fun showNoInternetBottomSheet() {
         if (bottomSheetDialog?.isShowing == true) return
 
+        val binding = BottomSheetInternetBinding.inflate(layoutInflater)
         bottomSheetDialog = BottomSheetDialog(this).apply {
-            setContentView(layoutInflater.inflate(R.layout.bottom_sheet_internet, null))
+            setContentView(binding.root)
             setCancelable(false)
         }
 
-        bottomSheetDialog?.findViewById<MaterialCardView>(R.id.mcvRetry)?.setOnClickListener {
+        binding.mcvRetry.setOnClickListener {
             if (connectivityLiveData.value == ConnectionStatus.AVAILABLE) {
                 bottomSheetDialog?.dismiss()
             } else {
                 Utils.T(this, "Still No Internet Connection")
             }
         }
+
         bottomSheetDialog?.show()
     }
 }

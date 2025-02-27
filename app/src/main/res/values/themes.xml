@@ -10,6 +10,7 @@
         <item name="android:windowLightStatusBar">true</item>
         <item name="android:windowBackground">@color/white
         </item> <!-- Use this for setting background color -->
+        <item name="android:forceDarkAllowed">false</item>
 
         <item name="android:overScrollMode">never</item>
         <item name="android:textColor">@color/black</item>

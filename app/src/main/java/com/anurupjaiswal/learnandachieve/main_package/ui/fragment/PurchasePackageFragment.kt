@@ -105,11 +105,6 @@ class PurchasePackageFragment : Fragment() {
         binding.rcvPurchasePackage.visibility = if (isVisible) View.GONE else View.VISIBLE
     }
 
-
-
-
-
-
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

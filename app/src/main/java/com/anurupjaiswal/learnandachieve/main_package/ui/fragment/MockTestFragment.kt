@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.collection.floatIntMapOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -30,7 +31,7 @@ class MockTestFragment : Fragment() {
     private val binding get() = _binding!!
     private lateinit var adapter: MockTestAdapter
     private val mockTestList = mutableListOf<MockTestItem>()
-
+    private var mockTestCall: Call<MockTestResponse>? = null
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -47,18 +48,14 @@ class MockTestFragment : Fragment() {
         init()
     }
 
-
     private fun init() {
         setupRecyclerView()
-
         fetchMockTests()
-
-
-    }
-    private fun showNoInternetMessage() {
-        binding.progressBar.visibility = View.GONE
-        binding.rvMockTest.visibility = View.GONE
-        binding.noInternetText.visibility = View.VISIBLE
+        binding.mcvGotoPackages.setOnClickListener {
+            NavigationManager.navigateToFragment(
+                findNavController(), R.id.PurchasePackage
+            )
+        }
     }
 
     private fun showProgressBar(isVisible: Boolean) {
@@ -98,12 +95,12 @@ class MockTestFragment : Fragment() {
     private fun fetchMockTests() {
         showProgressBar(true)
 
-        val authToken = "Bearer ${Utils.GetSession().token}"  // Assuming the token is stored in session
+        val authToken = "Bearer ${Utils.GetSession().token}"
 
         RetrofitClient.client.getMockTests(authToken, limit = 20, offset = 0)
             .enqueue(object : Callback<MockTestResponse> {
                 override fun onResponse(call: Call<MockTestResponse>, response: Response<MockTestResponse>) {
-                    showProgressBar(false)
+                    showProgressBar(    false)
 
                     when (response.code()) {
 
@@ -111,9 +108,17 @@ class MockTestFragment : Fragment() {
                             showProgressBar(false)
                             response.body()?.let { mockTestResponse ->
                                 if (mockTestResponse.data.isNotEmpty()){
-                                    mockTestList.clear()
-                                    mockTestList.addAll(mockTestResponse.data)
-                                    adapter.notifyDataSetChanged()
+                                    _binding?.let { binding ->
+                                        binding.llEmptyLayout.visibility = View.GONE
+                                        binding.rvMockTest.visibility = View.VISIBLE
+                                        mockTestList.clear()
+                                        mockTestList.addAll(mockTestResponse.data)
+                                        adapter.notifyDataSetChanged()
+                                    }
+
+                                }else{
+                                    binding.rvMockTest.visibility = View.GONE
+                                    binding.llEmptyLayout.visibility = View.VISIBLE
                                 }
 
                             }

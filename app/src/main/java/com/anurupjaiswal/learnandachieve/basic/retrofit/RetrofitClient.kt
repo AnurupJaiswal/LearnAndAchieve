@@ -16,8 +16,8 @@ object RetrofitClient {
     private var retrofit: Retrofit? = null
 
     private fun getUserAgent(): String {
-        val deviceModel = Build.MODEL ?: "Unknown" // Example: CPH2001
-        val osVersion = Build.VERSION.RELEASE ?: "Unknown" // Example: 11
+        val deviceModel = Build.MODEL ?: "Unknown"
+        val osVersion = Build.VERSION.RELEASE ?: "Unknown"
         return "Device: $deviceModel | OS: android $osVersion | browser: Chrome/0 Mobile"
     }
 

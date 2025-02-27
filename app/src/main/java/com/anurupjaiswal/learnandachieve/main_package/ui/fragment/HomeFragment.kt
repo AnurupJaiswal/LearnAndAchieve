@@ -131,7 +131,7 @@ class HomeFragment : SecureBaseFragment() {
         )
         if ((requireActivity().application as AppController).isOnline) {
             showLoading(true)
-            binding.llBlogContainer.visibility = View.VISIBLE
+          //
 
             fetchStudyMaterials(token!!)
             getPackages(token!!)
@@ -248,96 +248,6 @@ class HomeFragment : SecureBaseFragment() {
     }
 
 
-    fun getPackages(authToken: String) {
-        val userId = Utils.GetSession()._id
-        E("token $token")
-        E("userId $userId")
-
-        // Get the call instance from your ApiService
-        val call = apiservice?.getPackages(authToken, limit = 10, offset = 0)
-        if (call == null) {
-            E("GetPackages: API service call is null")
-            return
-        }
-
-        // Optionally show loading indicator
-        showLoading(true)
-
-        // Enqueue the call wrapped in RetryCallback for automatic retry on connectivity failures
-        call.enqueue(RetryCallback(call, callback = object : retrofit2.Callback<PackageResponse> {
-            override fun onResponse(
-                call: retrofit2.Call<PackageResponse>,
-                response: retrofit2.Response<PackageResponse>
-            ) {
-                // Hide loading indicator when response is received
-                showLoading(false)
-                try {
-                    when (response.code()) {
-                        StatusCodeConstant.OK -> {
-                            val packageResponse = response.body()
-                            if (packageResponse != null) {
-                                val packageList = packageResponse.packages
-                                val adapter = PopularPackagesAdapter(
-                                    requireContext(),
-                                    packageList,
-                                    authToken,
-                                    onPackageDetailsClick = { packageId, token ->
-                                        navigateToPackageDetails(packageId, token)
-                                    }
-                                )
-                                binding.mostPopularPackageRecyclerView.adapter = adapter
-                                adapter.notifyDataSetChanged()  // Notify that the data has been updated
-                            }
-                        }
-                        StatusCodeConstant.BAD_REQUEST -> {
-                            val errorBody = response.errorBody()?.string()
-                            var errorMessage = "Unknown error"
-                            if (!errorBody.isNullOrEmpty()) {
-                                try {
-                                    val gson = Gson()
-                                    val apiError = gson.fromJson(errorBody, APIError::class.java)
-                                    errorMessage = apiError.message ?: apiError.error ?: "Unknown error"
-                                } catch (e: Exception) {
-                                    errorMessage = errorBody
-                                }
-                            }
-                            E("GetPackages: Bad Request Error: $errorMessage")
-                        }
-                        StatusCodeConstant.UNAUTHORIZED -> {
-                            // Handle unauthorized token
-                            Utils.UnAuthorizationToken(requireContext())
-                        }
-                        else -> {
-                            val errorBody = response.errorBody()?.string()
-                            var errorMessage = "Unknown error"
-                            if (!errorBody.isNullOrEmpty()) {
-                                try {
-                                    val gson = Gson()
-                                    val apiError = gson.fromJson(errorBody, APIError::class.java)
-                                    errorMessage = apiError.message ?: apiError.error ?: "Unknown error"
-                                } catch (e: Exception) {
-                                    errorMessage = errorBody
-                                }
-                            }
-                            E("GetPackages: Error: $errorMessage")
-                        }
-                    }
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                }
-            }
-
-            override fun onFailure(call: retrofit2.Call<PackageResponse>, t: Throwable) {
-                // Hide loading indicator and cancel call on failure.
-                showLoading(false)
-                call.cancel()
-                t.printStackTrace()
-                E("GetPackages: Error: ${t.message}")
-            }
-        }))
-    }
-
-
     private fun observeLayoutChanges(cards: List<CardView>) {
         val cardHeights = mutableListOf<Float>()
 
@@ -359,6 +269,7 @@ class HomeFragment : SecureBaseFragment() {
             }
         })
     }
+
 
     private fun setupGestureDetector(cards: List<CardView>) {
         gestureDetector =
@@ -521,47 +432,43 @@ class HomeFragment : SecureBaseFragment() {
 
     }
 
-
     private fun fetchStudyMaterials(authToken: String) {
-
-        apiservice?.getStudyMaterials(
-            limit = 10, offset = 0, authToken
-        )?.enqueue(object : Callback<GetAllStudyMaterial> {
-            override fun onResponse(
-                call: Call<GetAllStudyMaterial>,
-                response: Response<GetAllStudyMaterial>
-            ) {
-                try {
-                    if (response.code() == StatusCodeConstant.OK) { // Explicitly check for OK status
-                        val studyMaterialsResponse = response.body()
-
-                        studyMaterialsResponse?.data?.let { studyMaterials ->
-                            val adapter =
-                                StudyMaterialAdapter(studyMaterials) { subjectId, medium, subjectName ->
-
+        apiservice?.getStudyMaterials(limit = 10, offset = 0, authToken)
+            ?.enqueue(object : Callback<GetAllStudyMaterial> {
+                override fun onResponse(
+                    call: Call<GetAllStudyMaterial>,
+                    response: Response<GetAllStudyMaterial>
+                ) {
+                    try {
+                        if (response.code() == StatusCodeConstant.OK) { // Explicitly check for OK status
+                            val studyMaterialsResponse = response.body()
+                            studyMaterialsResponse?.data?.let { studyMaterials ->
+                                val adapter = StudyMaterialAdapter(studyMaterials) { subjectId, medium, subjectName ->
                                     navigateTOModule(subjectId, medium, subjectName)
                                 }
-
-                            binding.rcvStudyMaterial.adapter = adapter
+                                binding.rcvStudyMaterial.adapter = adapter
+                            }
+                        } else {
+                            handleStudyMaterialsApiError(response)
                         }
-                    } else {
-                        handleStudyMaterialsApiError(response)
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                        showLoading(true)
+                      E("Error processing the request.")
                     }
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                    showLoading(true)
-
-                    Utils.T(context, "Error processing the request.")
                 }
-            }
 
-            override fun onFailure(call: Call<GetAllStudyMaterial>, t: Throwable) {
-                call.cancel()
-                t.printStackTrace()
-                Utils.T(context, t.message ?: "Request failed. Please try again later.")
-            }
-        })
+                override fun onFailure(call: Call<GetAllStudyMaterial>, t: Throwable) {
+                    call.cancel()
+                    t.printStackTrace()
+                    if (isAdded) { // Check if fragment is still added to its activity
+                        E(t.message ?: "Request failed. Please try again later.")
+                    }
+                }
+
+            })
     }
+
 
     private fun handleStudyMaterialsApiError(response: Response<GetAllStudyMaterial>) {
         showLoading(false)
@@ -582,7 +489,6 @@ class HomeFragment : SecureBaseFragment() {
         }
     }
 
-
     fun getAllBlogData(authToken: String) {
         // Get the API call instance from your ApiService.
         val call = apiservice?.getAllBlogApp(authToken)
@@ -595,12 +501,14 @@ class HomeFragment : SecureBaseFragment() {
         // Optionally show a loading indicator before starting the call.
         showLoading(true)
 
-        // Enqueue the call wrapped in a RetryCallback.
-        call.enqueue(RetryCallback(call, callback = object : Callback<GetAllBlogAppResponse> {
+        // Enqueue the call directly without a retry callback.
+        call.enqueue(object : Callback<GetAllBlogAppResponse> {
             override fun onResponse(
                 call: Call<GetAllBlogAppResponse>,
                 response: Response<GetAllBlogAppResponse>
             ) {
+                if (_binding == null) return
+
                 // Hide the loading indicator
                 showLoading(false)
 
@@ -662,7 +570,7 @@ class HomeFragment : SecureBaseFragment() {
                 showLoading(false)
                 E(t.message ?: "Unknown error")
             }
-        }))
+        })
     }
 
 
@@ -679,13 +587,16 @@ class HomeFragment : SecureBaseFragment() {
         )
     }
 
+
     private fun showLoading(isLoading: Boolean) {
-        if (isLoading) {
-            binding.progressBar.visibility = View.VISIBLE
-            binding.llHomeContainer.visibility = View.INVISIBLE
-        } else {
-            binding.progressBar.visibility = View.GONE
-            binding.llHomeContainer.visibility = View.VISIBLE
+        _binding?.let { binding ->
+            if (isLoading) {
+                binding.progressBar.visibility = View.VISIBLE
+           //     binding.llHomeContainer.visibility = View.INVISIBLE
+            } else {
+                binding.progressBar.visibility = View.GONE
+               // binding.llHomeContainer.visibility = View.VISIBLE
+            }
         }
     }
 
@@ -772,6 +683,95 @@ class HomeFragment : SecureBaseFragment() {
 
             }
         }
+    }
+
+    fun getPackages(authToken: String) {
+        val userId = Utils.GetSession()._id
+        E("token $token")
+        E("userId $userId")
+
+        // Get the call instance from your ApiService
+        val call = apiservice?.getPackages(authToken, limit = 10, offset = 0)
+        if (call == null) {
+            E("GetPackages: API service call is null")
+            return
+        }
+
+        // Optionally show loading indicator
+        showLoading(true)
+
+        // Enqueue the call wrapped in RetryCallback for automatic retry on connectivity failures
+        call.enqueue(RetryCallback(call, callback = object : retrofit2.Callback<PackageResponse> {
+            override fun onResponse(
+                call: retrofit2.Call<PackageResponse>,
+                response: retrofit2.Response<PackageResponse>
+            ) {
+                // Hide loading indicator when response is received
+                showLoading(false)
+                try {
+                    when (response.code()) {
+                        StatusCodeConstant.OK -> {
+                            val packageResponse = response.body()
+                            if (packageResponse != null) {
+                                val packageList = packageResponse.packages
+                                val adapter = PopularPackagesAdapter(
+                                    requireContext(),
+                                    packageList,
+                                    authToken,
+                                    onPackageDetailsClick = { packageId, token ->
+                                        navigateToPackageDetails(packageId, token)
+                                    }
+                                )
+                                binding.mostPopularPackageRecyclerView.adapter = adapter
+                                adapter.notifyDataSetChanged()  // Notify that the data has been updated
+                            }
+                        }
+                        StatusCodeConstant.BAD_REQUEST -> {
+                            val errorBody = response.errorBody()?.string()
+                            var errorMessage = "Unknown error"
+                            if (!errorBody.isNullOrEmpty()) {
+                                try {
+                                    val gson = Gson()
+                                    val apiError = gson.fromJson(errorBody, APIError::class.java)
+                                    errorMessage = apiError.message ?: apiError.error ?: "Unknown error"
+                                } catch (e: Exception) {
+                                    errorMessage = errorBody
+                                }
+                            }
+                            E("GetPackages: Bad Request Error: $errorMessage")
+                        }
+                        StatusCodeConstant.UNAUTHORIZED -> {
+                            // Handle unauthorized token
+                            Utils.UnAuthorizationToken(requireContext())
+                        }
+                        else -> {
+                            val errorBody = response.errorBody()?.string()
+                            var errorMessage = "Unknown error"
+                            if (!errorBody.isNullOrEmpty()) {
+                                try {
+                                    val gson = Gson()
+                                    val apiError = gson.fromJson(errorBody, APIError::class.java)
+                                    errorMessage = apiError.message ?: apiError.error ?: "Unknown error"
+                                } catch (e: Exception) {
+                                    errorMessage = errorBody
+                                }
+                            }
+                            E("GetPackages: Error: $errorMessage")
+                        }
+                    }
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            }
+
+            override fun onFailure(call: retrofit2.Call<PackageResponse>, t: Throwable) {
+                // Hide loading indicator and cancel call on failure.
+                showLoading(false)
+                call.cancel()
+                t.printStackTrace()
+                E("GetPackages: Error: ${t.message}")
+            }
+        }))
     }
     override fun getSecureRootView(): View {
         return binding.root

@@ -218,7 +218,6 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/bg_drawerlayout_arrow"
                     android:gravity="center"
-
                     android:paddingHorizontal="5dp"
                     android:paddingVertical="@dimen/_10sdp">
 
@@ -326,7 +325,6 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:layout_gravity="center"/>
-
 
     <TextView
         android:id="@+id/noInternetText"

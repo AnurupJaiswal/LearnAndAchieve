@@ -13,6 +13,7 @@
         android:padding="@dimen/_10sdp"
         android:fontFamily="@font/gilroy_semibold"
         />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rcvPurchasePackage"
         android:layout_width="match_parent"

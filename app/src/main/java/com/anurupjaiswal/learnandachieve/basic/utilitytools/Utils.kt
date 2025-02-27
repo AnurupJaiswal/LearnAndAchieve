@@ -555,21 +555,13 @@ object Utils {
         // Inflate the custom layout for the toast using ViewBinding
         val binding = CustomToastBinding.inflate(LayoutInflater.from(c))
 
-        // Set the message to the TextView in the custom layout
         binding.toastMessage.text = msg
-
-        // Set the logo if needed (optional)
-        // binding.toastLogo.setImageResource(R.drawable.ic_logo)
-
         // Create the custom toast
         val toast = Toast(c)
         toast.duration = Toast.LENGTH_SHORT
         toast.setView(binding.root)
 
-        // Set the position of the toast (above the default position)
-      //  toast.setGravity(Gravity.TOP or Gravity.CENTER_HORIZONTAL, 0, 110)
 
-        // Show the custom toast
         toast.show()
     }
 
@@ -710,25 +702,6 @@ object Utils {
 
     }
 
-    fun openAppOrPlayStore(context: Context, packageName: String) {
-        val packageManager = context.packageManager
-        try {
-            // Check if the app is installed
-            packageManager.getPackageInfo(packageName, PackageManager.GET_ACTIVITIES)
-
-            // If installed, launch the app
-            val launchIntent = packageManager.getLaunchIntentForPackage(packageName)
-            if (launchIntent != null) {
-                context.startActivity(launchIntent)
-            } else {
-                // If no launch intent found, open Play Store
-                openPlayStore(context, packageName)
-            }
-        } catch (e: PackageManager.NameNotFoundException) {
-            // If app is not installed, open Play Store
-            openPlayStore(context, packageName)
-        }
-    }
 
 
     fun openPlayStore(context: Context, packageName: String) {

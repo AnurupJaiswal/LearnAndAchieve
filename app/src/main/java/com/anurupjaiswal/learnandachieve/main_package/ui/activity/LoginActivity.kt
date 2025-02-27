@@ -242,7 +242,12 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
                         currentToken = userModel?.token.toString()
 //                        Utils.T(activity,"${userModel?.message}") // Show Toast
 
-                        val currentLoginDevice = userModel?.data!!.firstOrNull()?.browser ?: "No active device"
+                        val rawBrowser = userModel?.data?.firstOrNull()?.browser
+                        val currentLoginDevice = rawBrowser?.let {
+                            if (it.contains("Mobile")) "Mobile on ${it.replace("Mobile ", "")}"
+                            else "Desktop on $it"
+                        } ?: "Device Name Not Found"
+
                         showMultipleDeviceLoginDialog(currentLoginDevice)
                     } else {
                         handleErrorResponse(response)

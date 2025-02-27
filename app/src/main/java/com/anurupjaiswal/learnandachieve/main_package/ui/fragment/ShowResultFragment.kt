@@ -33,6 +33,7 @@ class ShowResultFragment : Fragment() {
     private var mockTestId: String? = null
     private var package_id: String? = null
     private var order_id: String? = null
+
     // List to hold API data
     private var showResultDataList: List<ShowResultData> = listOf()
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,6 +42,7 @@ class ShowResultFragment : Fragment() {
         package_id = arguments?.getString("package_id")
         order_id = arguments?.getString("order_id")
     }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -54,31 +56,41 @@ class ShowResultFragment : Fragment() {
 
     private fun setupRecyclerView() {
         binding.rvResults.layoutManager = LinearLayoutManager(requireContext())
-        binding.rvResults.adapter = ShowResultAdapter(showResultDataList) { mockTestSubmissionsId, mockTestId ->
-            val bundle = Bundle().apply {
-                putString("mockTestSubmissions_id", mockTestSubmissionsId)
-                putString("mockTest_id", mockTestId)
+        binding.rvResults.adapter =
+            ShowResultAdapter(showResultDataList) { mockTestSubmissionsId, mockTestId ->
+                val bundle = Bundle().apply {
+                    putString("mockTestSubmissions_id", mockTestSubmissionsId)
+                    putString("mockTest_id", mockTestId)
+                }
+                NavigationManager.navigateToFragment(
+                    findNavController(),
+                    R.id.PerformanceSummaryFragment,
+                    bundle
+                )
             }
-            NavigationManager.navigateToFragment(findNavController(), R.id.PerformanceSummaryFragment, bundle)
-        }
     }
 
     // Update the adapter with new data from the API
     private fun updateRecyclerView(newData: List<ShowResultData>) {
         showResultDataList = newData
-        binding.rvResults.adapter = ShowResultAdapter(showResultDataList) { mockTestSubmissionsId, mockTestId ->
-            val bundle = Bundle().apply {
-                putString("mockTestSubmissions_id", mockTestSubmissionsId)
-                putString("mockTest_id", mockTestId)
+        binding.rvResults.adapter =
+            ShowResultAdapter(showResultDataList) { mockTestSubmissionsId, mockTestId ->
+                val bundle = Bundle().apply {
+                    putString("mockTestSubmissions_id", mockTestSubmissionsId)
+                    putString("mockTest_id", mockTestId)
+                }
+                NavigationManager.navigateToFragment(
+                    findNavController(),
+                    R.id.PerformanceSummaryFragment,
+                    bundle
+                )
             }
-            NavigationManager.navigateToFragment(findNavController(), R.id.PerformanceSummaryFragment, bundle)
-        }
     }
 
 
     private fun fetchResults() {
         // Replace these with your actual token and IDs
-val token = Utils.GetSession().token
+        val token = Utils.GetSession().token
 
 
         // Make the API call with enqueue (callback style)
@@ -92,9 +104,9 @@ val token = Utils.GetSession().token
                         StatusCodeConstant.OK -> {
                             response.body()?.let { apiResponse ->
                                 if (apiResponse.data.isEmpty()) {
- binding.tvMsg.visibility = View.VISIBLE
+                                    binding.llEmptyLayout.visibility = View.VISIBLE
                                 } else {
-                                    binding.tvMsg.visibility = View.GONE
+                                    binding.llEmptyLayout.visibility = View.GONE
 
                                     updateRecyclerView(apiResponse.data)
                                 }
@@ -108,7 +120,8 @@ val token = Utils.GetSession().token
 
                         StatusCodeConstant.BAD_REQUEST -> {
                             response.errorBody()?.let { errorBody ->
-                                val apiError = Gson().fromJson(errorBody.charStream(), APIError::class.java)
+                                val apiError =
+                                    Gson().fromJson(errorBody.charStream(), APIError::class.java)
                                 val errorMessage = apiError.error ?: "Bad Request Error"
                                 Utils.E("getShowResults BAD_REQUEST: $errorMessage")
                                 Utils.T(requireContext(), errorMessage) // Show user-friendly error
@@ -116,7 +129,11 @@ val token = Utils.GetSession().token
                         }
 
                         else -> {
-                            Utils.E("getShowResults Error: ${response.code()} - ${response.errorBody()?.string()}")
+                            Utils.E(
+                                "getShowResults Error: ${response.code()} - ${
+                                    response.errorBody()?.string()
+                                }"
+                            )
                         }
                     }
                 }
